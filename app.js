@@ -1,9 +1,14 @@
+// app.js
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const profileInfoRouter = require('./requests/profileInfo');
 
 dotenv.config();
+
+app.use(bodyParser.json({ limit: '10mb' }));
 
 function createConnection() {
     mongoose.connect(process.env.MONGO_URI, {
@@ -36,12 +41,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// profileInfoRouter'ı kullanın
+app.use('/api/profileInfo', profileInfoRouter);
+
 // login.js ve register.js dosyalarını dahil ediyoruz
 const login = require('./requests/login');
 const register = require('./requests/register');
 
-app.post('/api/login', login); // login.js'deki login fonksiyonu burada kullanılacak
-app.post('/api/register', register); // register.js'deki register fonksiyonu burada kullanılacak
+app.post('/api/login', login);
+app.post('/api/register', register);
 
 const port = 3000;
 app.listen(port, () => {
