@@ -1,12 +1,35 @@
-// app.js
 const express = require('express');
-const app = express();
+const multer = require('multer');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const path = require('path');
+const fs = require('fs');
 const bodyParser = require('body-parser');
 const profileInfoRouter = require('./requests/profileInfo');
+const hidrolikInfoRouter = require('./requests/hidrolikInfo');
+const login = require('./requests/login');
+const register = require('./requests/register');
+const insertHidrolik = require('./requests/insertHidrolik');
+const orderNumbers = require('./requests/orderNumbers');
+const insertMachineData = require('./requests/insertMachineData');
+const uploadPhoto = require('./requests/uploadProfilePhoto'); // Eksik olan import satırı
 
 dotenv.config();
+
+const app = express();
+const PORT = 3000;
+
+// Multer ayarları
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
 
 app.use(bodyParser.json({ limit: '10mb' }));
 
@@ -28,7 +51,17 @@ connection.once('open', () => {
 
 app.use(express.json());
 
-const UserModel = require('./models/UserSchema');
+// Middleware: İstekleri loglama
+app.use((req, res, next) => {
+    const logMessage = `[${new Date().toISOString()}] ${req.method} ${req.url}`;
+    console.log(logMessage);
+    fs.appendFile(path.join(__dirname, 'log', 'log.txt'), logMessage + '\n', (err) => {
+        if (err) {
+            console.error('Log dosyasına yazılırken bir hata oluştu:', err);
+        }
+    });
+    next();
+});
 
 app.use((req, res, next) => {
     res.sendResponse = (status, data) => {
@@ -43,17 +76,26 @@ app.use((req, res, next) => {
 
 // profileInfoRouter'ı kullanın
 app.use('/api/profileInfo', profileInfoRouter);
+app.use('/api/hidrolikInfo', hidrolikInfoRouter);
 
 // login.js ve register.js dosyalarını dahil ediyoruz
-const login = require('./requests/login');
-const register = require('./requests/register');
-
 app.post('/api/login', login);
 app.post('/api/register', register);
+app.post('/api/insertHidrolik', insertHidrolik);
+app.post('/api/orderNumbers', orderNumbers);
+app.post('/api/insertMachineData', insertMachineData);
+app.post('/api/uploadProfilePhoto', upload.single('profilePhoto'), uploadPhoto);
 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Sunucu çalışıyor, https://localhost:${port}`);
+// Log klasörünü oluştur ve log dosyasını oluştur
+const logDirectory = path.join(__dirname, 'log');
+if (!fs.existsSync(logDirectory)) {
+    fs.mkdirSync(logDirectory);
+}
+const logFilePath = path.join(logDirectory, 'log.txt');
+fs.writeFileSync(logFilePath, ''); // Dosyayı sıfırla
+
+app.listen(PORT, () => {
+    console.log(`Sunucu çalışıyor, http://localhost:${PORT}`);
 });
 
 process.on('SIGINT', () => {

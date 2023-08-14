@@ -2,7 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const HidrolikSchema = new Schema({
-    Creator: String
+    OrderNumber: String,
+    OrderDate: String,
+    Type: String,
+    PDF: String,
+    InCharge: String,
+    PartList: String
 });
 
-module.exports = mongoose.model('Hidrolik', HidrolikSchema);
+module.exports = mongoose.model('hidrolik', HidrolikSchema);
