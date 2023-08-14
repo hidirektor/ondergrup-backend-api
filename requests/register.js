@@ -7,8 +7,6 @@ const connectionPool = mysql.createPool({
     connectionLimit: 10
 });
 
-const uploadProfilePhoto = require('./uploadProfilePhoto');
-
 async function register(req, res) {
     const { Role, UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At } = req.body;
 
@@ -34,15 +32,6 @@ async function register(req, res) {
                         if (insertError) {
                             console.error('MySQL sorgu hatası:', insertError);
                             return res.status(500).json({ error: 'Sunucu hatası' });
-                        }
-
-                        try {
-                            await uploadProfilePhoto(UserName, Profile_Photo);
-
-                            res.status(200).json({ message: 'Kullanıcı başarıyla eklendi' });
-                        } catch (uploadError) {
-                            console.error('Profil fotoğrafı yükleme hatası:', uploadError);
-                            return res.status(500).json({ error: 'Profil fotoğrafı yüklenirken bir hata oluştu.' });
                         }
                     }
                 );
