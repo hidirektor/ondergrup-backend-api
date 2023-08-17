@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require('path');
 const baseUrl = "http://localhost:3000/data/";
 
-const uploadFile = require("../requests/util/upload");
+const uploadFile = require("../middleware/upload");
 
 const upload = async (req, res) => {
     try {
@@ -20,8 +20,8 @@ const upload = async (req, res) => {
             return res.status(400).send({ message: "Please provide a username!" });
         }
 
-        const newFileName = `${username}_profilePhoto${path.extname(req.file.originalname)}`;
-        const userDirectory = path.join(__basedir, `/data/${username}/`);
+        const newFileName = `${username}${path.extname(req.file.originalname)}`;
+        const userDirectory = path.join(__basedir, `/data/profilePhoto/`);
 
         if (!fs.existsSync(userDirectory)) {
             fs.mkdirSync(userDirectory, { recursive: true });
@@ -72,8 +72,16 @@ const getListFiles = (req, res) => {
 };
 
 const download = (req, res) => {
-    const fileName = req.params.name;
-    const directoryPath = __basedir + "/data/";
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).send({
+            message: "Please provide a username in the request body!",
+        });
+    }
+
+    const fileName = `${username}.jpg`;
+    const directoryPath = __basedir + `/data/profilePhoto/`;
 
     res.download(directoryPath + fileName, fileName, (err) => {
         if (err) {
@@ -81,6 +89,31 @@ const download = (req, res) => {
                 message: "Could not download the file. " + err,
             });
         }
+    });
+};
+
+const downloadPhoto = (req, res) => {
+    const { username } = req.body;
+
+    const directoryPath = __basedir + `/data/profilePhoto/`;
+
+    if (!username) {
+        return res.status(400).json({ error: 'Username is required.' });
+    }
+
+    fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+            return res.status(500).json({ error: 'An error occurred while reading the directory.' });
+        }
+
+        const matchingFiles = files.filter(file => file.startsWith(username));
+
+        if (matchingFiles.length === 0) {
+            return res.status(404).json({ error: 'No matching photo found.' });
+        }
+
+        const photoPath = path.join(directoryPath, matchingFiles[0]);
+        res.sendFile(photoPath);
     });
 };
 
@@ -120,7 +153,8 @@ const removeSync = (req, res) => {
 
 router.post('/upload', upload);
 router.get('/listFiles', getListFiles);
-router.get('/download/:name', download);
+router.post('/download', download);
+router.post('/downloadPhoto', downloadPhoto);
 router.delete('/remove/:name', remove);
 router.delete('/removeSync/:name', removeSync);
 

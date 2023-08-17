@@ -8,11 +8,15 @@ const bodyParser = require('body-parser');
 const profileInfoRouter = require('./requests/profileInfo');
 const hidrolikInfoRouter = require('./requests/hidrolikInfo');
 const fileSystemRouter = require('./requests/fileSystem');
+const fileViewRouter = require('./requests/fileView');
 const login = require('./requests/login');
 const register = require('./requests/register');
 const insertHidrolik = require('./requests/insertHidrolik');
 const orderNumbers = require('./requests/orderNumbers');
 const insertMachineData = require('./requests/insertMachineData');
+const getStatistics = require('./requests/getStatistics');
+const getHydraulicInfo = require('./requests/getHydraulicInfo');
+const updateProfile = require('./requests/update');
 
 global.__basedir = __dirname;
 dotenv.config();
@@ -67,6 +71,7 @@ app.use((req, res, next) => {
 app.use('/api/profileInfo', profileInfoRouter);
 app.use('/api/hidrolikInfo', hidrolikInfoRouter);
 app.use('/api/fileSystem', fileSystemRouter);
+app.use('/api', fileViewRouter);
 
 // login.js ve register.js dosyalarını dahil ediyoruz
 app.post('/api/login', login);
@@ -74,6 +79,9 @@ app.post('/api/register', register);
 app.post('/api/insertHidrolik', insertHidrolik);
 app.post('/api/orderNumbers', orderNumbers);
 app.post('/api/insertMachineData', insertMachineData);
+app.post('/api/getStatistics', getStatistics);
+app.post('/api/getHydraulicInfo', getHydraulicInfo);
+app.post('/api/updateProfile', updateProfile);
 
 // Log klasörünü oluştur ve log dosyasını oluştur
 const logDirectory = path.join(__dirname, 'log');

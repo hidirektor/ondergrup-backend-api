@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -16,7 +16,7 @@ async function login(req, res) {
 
     try {
         connectionPool.query(
-            'SELECT * FROM Users WHERE username = ? AND password = ?',
+            'SELECT * FROM Users WHERE UserName = ? AND Password = ?',
             [Username, Password],
             (error, results) => {
                 if (error) {
