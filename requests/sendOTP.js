@@ -106,7 +106,7 @@ async function sendOTP(req, res) {
                     }
 
                     console.log('E-posta gönderildi:', info.response);
-                    res.status(200).json({ message: 'E-posta gönderildi' });
+                    res.status(200).json({ message: 'E-posta gönderildi', otpCode: otpCode });
                 });
             });
         });

@@ -20,6 +20,7 @@ const updateProfile = require('./requests/update');
 const wholeProfile = require('./requests/getWholeProfileInfo');
 const update = require('./requests/update');
 const sendOTP = require('./requests/sendOTP');
+const updatePass = require('./requests/updatePass');
 
 global.__basedir = __dirname;
 dotenv.config();
@@ -88,6 +89,7 @@ app.post('/api/updateProfile', updateProfile);
 app.post('/api/getWholeProfile', wholeProfile);
 app.post('/api/update', update);
 app.post('/api/sendOTP', sendOTP);
+app.post('/api/updatePass', updatePass);
 
 // Log klasörünü oluştur ve log dosyasını oluştur
 const logDirectory = path.join(__dirname, 'log');
