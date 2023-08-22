@@ -7,7 +7,7 @@ const connectionPool = mysql.createPool({
     connectionLimit: 10
 });
 
-async function register(req, res) {
+async function update(req, res) {
     const { UserName, Email, Password, NameSurname, Phone, CompanyName, Created_At } = req.body;
 
     try {
@@ -24,20 +24,32 @@ async function register(req, res) {
                     return res.status(400).json({ error: 'Böyle bir kullanıcı bulunamadı' });
                 }
 
-                const Profile_Photo = 'C:/Users/hidir/WebstormProjects/OnderGrupServerSide/data/profilePhoto/${UserName}.jpg';
+                const Profile_Photo = `C:/Server Side/data/profilePhoto/${UserName}.jpg`;
 
-                connectionPool.query(
-                    'UPDATE Users SET UserName = ?, Email = ?, Password = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?, Created_At = ? WHERE UserName = ?',
-                    [UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName],
-                    async (updateError, updateResults) => {
-                        if (updateError) {
-                            console.error('MySQL sorgu hatası:', updateError);
-                            return res.status(500).json({ error: 'Sunucu hatası' });
-                        }
+                let updateQuery, updateValues;
 
-                        return res.status(200).json({ message: 'Kullanıcı güncellendi' });
+                if (Password !== 'null') {
+                    updateQuery = `
+                    UPDATE Users
+                    SET UserName = ?, Email = ?, Password = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?, Created_At = ?
+                    WHERE UserName = ?`;
+                    updateValues = [UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName];
+                } else {
+                    updateQuery = `
+                    UPDATE Users
+                    SET UserName = ?, Email = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?, Created_At = ?
+                    WHERE UserName = ?`;
+                    updateValues = [UserName, Email, NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName];
+                }
+
+                connectionPool.query(updateQuery, updateValues, async (updateError, updateResults) => {
+                    if (updateError) {
+                        console.error('MySQL sorgu hatası:', updateError);
+                        return res.status(500).json({ error: 'Sunucu hatası' });
                     }
-                );
+
+                    return res.status(200).json({ message: 'Profil güncellendi' });
+                });
             }
         );
     } catch (err) {
@@ -46,4 +58,4 @@ async function register(req, res) {
     }
 }
 
-module.exports = register;
+module.exports = update;

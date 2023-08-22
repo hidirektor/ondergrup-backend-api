@@ -24,8 +24,7 @@ async function register(req, res) {
                     return res.status(400).json({ error: 'Bu kullanıcı adı zaten kullanılıyor' });
                 }
 
-                //const Profile_Photo = `C:/Server Side/data/profilePhoto/${UserName}.jpg`;
-                const Profile_Photo = 'C:/Users/hidir/WebstormProjects/OnderGrupServerSide/data/profilePhoto/${UserName}.jpg';
+                const Profile_Photo = `C:/Server Side/data/profilePhoto/${UserName}.jpg`;
 
                 connectionPool.query(
                     'INSERT INTO Users (Role, UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',

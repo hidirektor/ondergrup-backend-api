@@ -17,6 +17,8 @@ const insertMachineData = require('./requests/insertMachineData');
 const getStatistics = require('./requests/getStatistics');
 const getHydraulicInfo = require('./requests/getHydraulicInfo');
 const updateProfile = require('./requests/update');
+const wholeProfile = require('./requests/getWholeProfileInfo');
+const update = require('./requests/update');
 
 global.__basedir = __dirname;
 dotenv.config();
@@ -82,6 +84,8 @@ app.post('/api/insertMachineData', insertMachineData);
 app.post('/api/getStatistics', getStatistics);
 app.post('/api/getHydraulicInfo', getHydraulicInfo);
 app.post('/api/updateProfile', updateProfile);
+app.post('/api/getWholeProfile', wholeProfile);
+app.post('/api/update', update)
 
 // Log klasörünü oluştur ve log dosyasını oluştur
 const logDirectory = path.join(__dirname, 'log');
