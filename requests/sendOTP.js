@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
 const path = require('path');
