@@ -48,6 +48,90 @@ const upload = async (req, res) => {
     }
 };
 
+const uploadPDF = async (req, res) => {
+    try {
+        await uploadFile(req, res);
+
+        if (req.file == undefined) {
+            return res.status(400).send({ message: "Please upload a file!" });
+        }
+
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).send({ message: "Please provide a username!" });
+        }
+
+        const newFileName = `${username}${path.extname(req.file.originalname)}`;
+        const userDirectory = path.join(__basedir, `/data/hydraulicUnits/`);
+
+        if (!fs.existsSync(userDirectory)) {
+            fs.mkdirSync(userDirectory, { recursive: true });
+        }
+
+        const filePath = path.join(userDirectory, newFileName);
+        fs.renameSync(req.file.path, filePath);
+
+        res.status(200).send({
+            message: "Uploaded the file successfully: " + newFileName,
+        });
+    } catch (err) {
+        console.log(err);
+
+        if (err.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "File size cannot be larger than 2MB!",
+            });
+        }
+
+        res.status(500).send({
+            message: `Could not upload the file. ${err}`,
+        });
+    }
+};
+
+const uploadExcel = async (req, res) => {
+    try {
+        await uploadFile(req, res);
+
+        if (req.file == undefined) {
+            return res.status(400).send({ message: "Please upload a file!" });
+        }
+
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).send({ message: "Please provide a username!" });
+        }
+
+        const newFileName = `${username}${path.extname(req.file.originalname)}`;
+        const userDirectory = path.join(__basedir, `/data/partList/`);
+
+        if (!fs.existsSync(userDirectory)) {
+            fs.mkdirSync(userDirectory, { recursive: true });
+        }
+
+        const filePath = path.join(userDirectory, newFileName);
+        fs.renameSync(req.file.path, filePath);
+
+        res.status(200).send({
+            message: "Uploaded the file successfully: " + newFileName,
+        });
+    } catch (err) {
+        console.log(err);
+
+        if (err.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "File size cannot be larger than 2MB!",
+            });
+        }
+
+        res.status(500).send({
+            message: `Could not upload the file. ${err}`,
+        });
+    }
+};
+
 const getListFiles = (req, res) => {
     const directoryPath = __basedir + "/data/";
 
@@ -152,6 +236,8 @@ const removeSync = (req, res) => {
 };
 
 router.post('/upload', upload);
+router.post('/uploadPDF', uploadPDF);
+router.post('/uploadExcel', uploadExcel);
 router.get('/listFiles', getListFiles);
 router.post('/download', download);
 router.post('/downloadPhoto', downloadPhoto);

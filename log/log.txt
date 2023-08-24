@@ -1,2 +1,11 @@
-<POST> | <Java/11.0.20> | /api/sendOTP | <23/08/2023, 01:05:29>
-<POST> | <Java/11.0.20> | /api/updatePass | <23/08/2023, 01:05:43>
+<POST> | <Java/11.0.20> | /api/login | <24/08/2023, 12:35:28>
+<POST> | <Java/11.0.20> | /api/profileInfo/:Role | <24/08/2023, 12:35:28>
+<POST> | <Java/11.0.20> | /api/profileInfo/:Role | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/profileInfo/:Email | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/profileInfo/:Created_At | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/profileInfo/:NameSurname | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/profileInfo/:Phone | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/profileInfo/:CompanyName | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/getStatistics | <24/08/2023, 12:35:29>
+<POST> | <Java/11.0.20> | /api/getHydraulicInfo | <24/08/2023, 12:35:29>
+<GET> | <Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36> | /api/viewer/127.xlsx | <24/08/2023, 12:35:39>
