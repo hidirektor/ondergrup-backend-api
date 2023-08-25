@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const https = require('https');
 const path = require('path');
 const fs = require('fs');
 const cors = require("cors");
@@ -71,13 +72,11 @@ app.use((req, res, next) => {
     next();
 });
 
-// profileInfoRouter'ı kullanın
 app.use('/api/profileInfo', profileInfoRouter);
 app.use('/api/hidrolikInfo', hidrolikInfoRouter);
 app.use('/api/fileSystem', fileSystemRouter);
 app.use('/api', fileViewRouter);
 
-// login.js ve register.js dosyalarını dahil ediyoruz
 app.post('/api/login', login);
 app.post('/api/register', register);
 app.post('/api/insertHidrolik', insertHidrolik);
@@ -91,16 +90,23 @@ app.post('/api/update', update);
 app.post('/api/sendOTP', sendOTP);
 app.post('/api/updatePass', updatePass);
 
-// Log klasörünü oluştur ve log dosyasını oluştur
 const logDirectory = path.join(__dirname, 'log');
 if (!fs.existsSync(logDirectory)) {
     fs.mkdirSync(logDirectory);
 }
 const logFilePath = path.join(logDirectory, 'log.txt');
-fs.writeFileSync(logFilePath, ''); // Dosyayı sıfırla
+fs.writeFileSync(logFilePath, '');
 
-app.listen(PORT, () => {
-    console.log(`Sunucu çalışıyor, http://localhost:${PORT}`);
+const serverOptions = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem'),
+    passphrase: process.env.CERT_PASS,
+};
+
+const server = https.createServer(serverOptions, app);
+
+server.listen(PORT, () => {
+    console.log(`Sunucu çalışıyor, https://localhost:${PORT}`);
 });
 
 process.on('SIGINT', () => {

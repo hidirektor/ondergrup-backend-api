@@ -3,10 +3,10 @@ const router = express.Router();
 const mysql = require('mysql2');
 
 const pool = mysql.createPool({
-    host: "89.252.138.99",
-    user: "hidirekt_onder",
-    password: "zDRd*~[z}+sX",
-    database: "hidirekt_ondergrup",
+    host: process.env.DB_SERVER,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     connectionLimit: 10
 });
 
