@@ -1,6 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
+const mysql = require('mysql2');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
@@ -31,20 +31,19 @@ const PORT = 3000;
 
 app.use(bodyParser.json({ limit: '10mb' }));
 
-function createConnection() {
-    mongoose.connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-    return mongoose.connection;
-}
-
-const connection = createConnection();
-connection.on('error', (err) => {
-    console.error('Veritabanına bağlanılamadı:', err);
+const connection = mysql.createConnection({
+    host: process.env.DB_SERVER,
+    user: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
 });
-connection.once('open', () => {
-    console.log('Veritabanına başarıyla bağlanıldı.');
+
+connection.connect((err) => {
+    if (err) {
+        console.error('Veritabanına bağlanılamadı:', err);
+    } else {
+        console.log('Veritabanına başarıyla bağlanıldı.');
+    }
 });
 
 app.use(express.json());
@@ -100,7 +99,7 @@ fs.writeFileSync(logFilePath, '');
 const serverOptions = {
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem'),
-    passphrase: process.env.CERT_PASS,
+    pasphrase: '',
 };
 
 const server = https.createServer(serverOptions, app);

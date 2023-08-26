@@ -7,14 +7,6 @@ const connection = mysql.createConnection({
     database: process.env.DB_DATABASE
 });
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Veritabanına bağlanırken hata:', err);
-    } else {
-        console.log('Veritabanına başarıyla bağlandı');
-    }
-});
-
 function insertHidrolik(req, res) {
     const { OrderNumber, OrderDate, Type, InCharge, PDF, PartList } = req.body;
     const Siparis_Tarihi = new Date().toISOString().slice(0, 19).replace('T', ' ');
