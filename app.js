@@ -46,6 +46,10 @@ connection.connect((err) => {
     }
 });
 
+connection.on('error', (err) => {
+    console.error('Veritabanı hatası:', err);
+});
+
 app.use(express.json());
 
 // Middleware: İstekleri loglama
@@ -99,7 +103,6 @@ fs.writeFileSync(logFilePath, '');
 const serverOptions = {
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem'),
-    pasphrase: '',
 };
 
 const server = https.createServer(serverOptions, app);

@@ -1,2 +1,0 @@
-<POST> | <PostmanRuntime/7.32.3> | /api/login | <26/08/2023, 19:16:17>
-<POST> | <PostmanRuntime/7.32.3> | /api/sendOTP | <26/08/2023, 19:16:30>
