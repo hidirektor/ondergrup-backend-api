@@ -99,7 +99,6 @@ fs.writeFileSync(logFilePath, '');
 const serverOptions = {
     key: fs.readFileSync('./key.pem'),
     cert: fs.readFileSync('./cert.pem'),
-    pasphrase: '',
 };
 
 const server = https.createServer(serverOptions, app);
