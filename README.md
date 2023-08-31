@@ -87,7 +87,7 @@ Aşağıdaki dokümanı kullanarak programın kullanımına ve hata kodlarına i
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] API Limit
+- [x] API Limit
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
