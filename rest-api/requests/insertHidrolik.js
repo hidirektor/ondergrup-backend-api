@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
 });
 
 function insertHidrolik(req, res) {
-    const { OrderNumber, OrderDate, Type, InCharge, PDF, PartList } = req.body;
+    const { OrderNumber, OrderDate, Type, InCharge, PDF, PartList, InChargeName } = req.body;
     const Siparis_Tarihi = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     const PDF_URL = path.join(__dirname, 'data', 'hydraulicUnits', PDF);
@@ -18,7 +18,7 @@ function insertHidrolik(req, res) {
     const insertQuery = `INSERT INTO HidrolikUnit (unitID, UserName, Siparis_Numarasi, Siparis_Tarihi, Unite_Tipi, Pdf_File, Excel_File, Created_By)
                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    connection.query(insertQuery, [OrderNumber, InCharge, OrderNumber, Siparis_Tarihi, Type, PDF_URL, Excel_URL, InCharge], (err, results) => {
+    connection.query(insertQuery, [OrderNumber, InCharge, OrderNumber, Siparis_Tarihi, Type, PDF_URL, Excel_URL, InChargeName], (err, results) => {
         if (err) {
             console.error('Sorgu hatası:', err);
             res.status(500).json({ error: 'Sunucu hatası' });
