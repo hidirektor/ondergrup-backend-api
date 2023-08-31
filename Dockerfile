@@ -6,6 +6,6 @@ COPY rest-api /usr/src/app
 
 RUN npm install
 
-CMD node app.js
+CMD node server.js
 
 EXPOSE 3000
