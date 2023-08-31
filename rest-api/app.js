@@ -111,8 +111,6 @@ app.listen(PORT, () => {
     console.log(`Sunucu çalışıyor, http://localhost:${PORT}`);
 });
 
-console.log('asdasfgasdasd');
-
 process.on('SIGINT', () => {
     connection.close((err) => {
         if (err) {
