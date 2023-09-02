@@ -43,6 +43,10 @@ module.exports = {
     getWholeProfileInfo: async (req, res, next) => {
         const { username } = req.body;
         try {
+            const [roleResult] = await connectionPool.promise().query(
+                'SELECT Role as selectedRole FROM Users WHERE UserName = ?', [username]
+            );
+
             const [nameSurnameResult] = await connectionPool.promise().query(
                 'SELECT NameSurname as selectedNameSurname FROM Users WHERE UserName = ?', [username]
             );
@@ -64,6 +68,7 @@ module.exports = {
             );
 
             const profileData = {
+                "Role": roleResult[0].selectedRole,
                 "NameSurname": nameSurnameResult[0].selectedNameSurname,
                 "UserName": usernameResult[0].selectedUserName,
                 "Email": emailResult[0].selectedEmail,
