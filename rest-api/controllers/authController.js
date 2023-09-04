@@ -26,6 +26,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const secretKey = process.env.SECRET_KEY;
+
 function generateNumericOTP(length) {
     const chars = '0123456789';
     let otp = '';

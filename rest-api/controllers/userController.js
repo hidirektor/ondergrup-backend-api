@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const jwt = require('jsonwebtoken');
 
 const connectionPool = mysql.createPool({
     host: process.env.DB_SERVER,
@@ -7,6 +8,8 @@ const connectionPool = mysql.createPool({
     database: process.env.DB_DATABASE,
     connectionLimit: 10
 });
+
+const secretKey = process.env.SECRET_KEY;
 
 module.exports = {
     profileInfo: async (req, res, next) => {
