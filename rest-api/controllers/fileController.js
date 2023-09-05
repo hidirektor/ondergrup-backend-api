@@ -28,6 +28,10 @@ module.exports = {
                 fs.mkdirSync(userDirectory, { recursive: true });
             }
 
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+
             const filePath = path.join(userDirectory, newFileName);
             fs.renameSync(req.file.path, filePath);
 

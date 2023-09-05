@@ -1,10 +1,10 @@
-const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const otpGenerator = require('otp-generator');
 const nodemailer = require('nodemailer');
 const path = require("path");
+const CryptoJS = require('crypto-js');
 
 dotenv.config();
 
@@ -26,7 +26,11 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const secretKey = process.env.SECRET_KEY;
+const decryptPassword = (encryptedPassword) => {
+    const decryptedBytes = CryptoJS.AES.decrypt(encryptedPassword, process.env.SECRET_KEY);
+    const decryptedPassword = decryptedBytes.toString(CryptoJS.enc.Utf8);
+    return decryptedPassword;
+};
 
 function generateNumericOTP(length) {
     const chars = '0123456789';
@@ -43,6 +47,8 @@ function generateNumericOTP(length) {
 module.exports = {
     createUser: async (req, res, next) => {
         const { Role, UserName, Email, Password, NameSurname, Phone, CompanyName, Created_At } = req.body;
+
+        const pass = CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString();
 
         try {
             connectionPool.query(
@@ -62,7 +68,7 @@ module.exports = {
 
                     connectionPool.query(
                         'INSERT INTO Users (Role, UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                        [Role, UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At],
+                        [Role, UserName, Email, pass, NameSurname, Phone, Profile_Photo, CompanyName, Created_At],
                         async (insertError, insertResults) => {
                             if (insertError) {
                                 console.error('MySQL sorgu hatası:', insertError);
@@ -86,8 +92,8 @@ module.exports = {
 
         try {
             connectionPool.query(
-                'SELECT * FROM Users WHERE UserName = ? AND Password = ?',
-                [Username, Password],
+                'SELECT * FROM Users WHERE UserName = ?',
+                [Username],
                 (error, results) => {
                     if (error) {
                         console.error('MySQL sorgu hatası:', error);
@@ -95,7 +101,16 @@ module.exports = {
                     }
 
                     if (results.length > 0) {
-                        return res.status(200).json({ message: 'Giriş başarılı' });
+                        const user = results[0];
+                        const encryptedPasswordInDB = user.Password;
+
+                        const decryptedPasswordInDB = decryptPassword(encryptedPasswordInDB);
+
+                        if (Password === decryptedPasswordInDB) {
+                            return res.status(200).json({ message: 'Giriş başarılı' });
+                        } else {
+                            return res.status(401).json({ error: 'Geçersiz kullanıcı adı veya şifre' });
+                        }
                     } else {
                         return res.status(401).json({ error: 'Geçersiz kullanıcı adı veya şifre' });
                     }

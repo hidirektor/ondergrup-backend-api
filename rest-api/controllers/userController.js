@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
+const CryptoJS = require('crypto-js');
 
 const connectionPool = mysql.createPool({
     host: process.env.DB_SERVER,
@@ -113,7 +114,7 @@ module.exports = {
                     UPDATE Users
                     SET UserName = ?, Email = ?, Password = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?, Created_At = ?
                     WHERE UserName = ?`;
-                        updateValues = [UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName];
+                        updateValues = [UserName, Email, CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString(), NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName];
                     } else {
                         updateQuery = `
                     UPDATE Users
@@ -162,13 +163,13 @@ module.exports = {
                     }
 
                     const user = results[0];
-                    if (user.Password === Password) {
+                    if (user.Password === CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString()) {
                         connection.release();
                         return res.status(400).json({ error: 'Eski şifre ile yeni şifre aynı olamaz' });
                     }
 
                     const updatePassQuery = `UPDATE Users SET Password = ? WHERE Email = ?`;
-                    connection.query(updatePassQuery, [Password, Email], function(err, updateResult) {
+                    connection.query(updatePassQuery, [CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString(), Email], function(err, updateResult) {
                         connection.release();
 
                         if (err) {
