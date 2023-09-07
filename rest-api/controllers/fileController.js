@@ -38,8 +38,6 @@ module.exports = {
             res.status(200).send({
                 message: "Uploaded the file successfully: " + newFileName,
             });
-            console.log(newFileName);
-            console.log(userDirectory);
         } catch (err) {
             console.log(err);
 
