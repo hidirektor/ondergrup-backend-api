@@ -10,8 +10,6 @@ const connectionPool = mysql.createPool({
     connectionLimit: 10
 });
 
-const secretKey = process.env.SECRET_KEY;
-
 module.exports = {
     profileInfo: async (req, res, next) => {
         const field = req.params.field;

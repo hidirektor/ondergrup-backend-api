@@ -122,6 +122,31 @@ module.exports = {
         }
     },
 
+    getPass: async (req, res, next) => {
+        const { Password } = req.body;
+
+        if (!Password) {
+            return res.status(400).json({ error: 'Lütfen bir parola sağlayın.' });
+        }
+
+        const cipheredPass = CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString();
+
+        try {
+            const SECRET_KEY = process.env.SECRET_KEY;
+
+            if (!SECRET_KEY) {
+                return res.status(500).json({ error: 'Sunucu hatası: SECRET_KEY eksik.' });
+            }
+
+            if(cipheredPass != null) {
+                return res.status(200).json({pass: cipheredPass});
+            }
+        } catch(err) {
+            console.error('Sorgu hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
     sendOTP: async (req, res, next)=> {
         const { Email } = req.body;
 
@@ -151,7 +176,7 @@ module.exports = {
                         return res.status(500).json({ error: 'Sunucu hatası' });
                     }
 
-                    const userDirectory = path.join(__basedir, 'icons', 'ondergrupMain.png');
+                    const userDirectory = path.join(__basedir, 'rest-api/icons', 'ondergrupMain.png');
 
                     const emailTemplate = `
                     <div style="font-family: Helvetica, Arial, sans-serif; min-width: 1000px; overflow: auto; line-height: 2">

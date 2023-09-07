@@ -23,6 +23,7 @@ module.exports = {
 
             const newFileName = `${username}${path.extname(req.file.originalname)}`;
             const userDirectory = path.join(__basedir, `/data/profilePhoto/`);
+            const filePath = path.join(userDirectory, newFileName);
 
             if (!fs.existsSync(userDirectory)) {
                 fs.mkdirSync(userDirectory, { recursive: true });
@@ -32,12 +33,13 @@ module.exports = {
                 fs.unlinkSync(filePath);
             }
 
-            const filePath = path.join(userDirectory, newFileName);
             fs.renameSync(req.file.path, filePath);
 
             res.status(200).send({
                 message: "Uploaded the file successfully: " + newFileName,
             });
+            console.log(newFileName);
+            console.log(userDirectory);
         } catch (err) {
             console.log(err);
 
