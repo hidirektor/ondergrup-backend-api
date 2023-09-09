@@ -122,6 +122,39 @@ module.exports = {
         }
     },
 
+    directLoginUser: async (req, res, next)=> {
+        const { Username, Password } = req.body;
+
+        try {
+            connectionPool.query(
+                'SELECT * FROM Users WHERE UserName = ?',
+                [Username],
+                (error, results) => {
+                    if (error) {
+                        console.error('MySQL sorgu hatası:', error);
+                        return res.status(500).json({ error: 'Sunucu hatası' });
+                    }
+
+                    if (results.length > 0) {
+                        const user = results[0];
+                        const encryptedPasswordInDB = user.Password;
+
+                        if (Password === encryptedPasswordInDB) {
+                            return res.status(200).json({ message: 'Giriş başarılı' });
+                        } else {
+                            return res.status(401).json({ error: 'Geçersiz kullanıcı adı veya şifre' });
+                        }
+                    } else {
+                        return res.status(401).json({ error: 'Geçersiz kullanıcı adı veya şifre' });
+                    }
+                }
+            );
+        } catch (err) {
+            console.error('Sorgu hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
     getPass: async (req, res, next) => {
         const { Password } = req.body;
 
