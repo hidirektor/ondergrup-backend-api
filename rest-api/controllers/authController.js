@@ -139,7 +139,7 @@ module.exports = {
                         const user = results[0];
                         const encryptedPasswordInDB = user.Password;
 
-                        if (Password === encryptedPasswordInDB) {
+                        if (decryptPassword(Password) === decryptPassword(encryptedPasswordInDB)) {
                             return res.status(200).json({ message: 'Giriş başarılı' });
                         } else {
                             return res.status(401).json({ error: 'Geçersiz kullanıcı adı veya şifre' });

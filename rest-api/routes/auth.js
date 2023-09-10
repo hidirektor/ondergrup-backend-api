@@ -5,6 +5,6 @@ router.post('/register', authController.createUser)
 router.post('/login', authController.loginUser)
 router.post('/directLogin', authController.directLoginUser)
 router.post('/sendOTP', authController.sendOTP)
-router.get('/getCipheredPass', authController.getPass)
+router.post('/getCipheredPass', authController.getPass)
 
 module.exports = router;
