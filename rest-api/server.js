@@ -71,7 +71,7 @@ app.use((req, res, next) => {
 });
 
 
-//app.listen(process.env.PORT || process.env.PORT, () => console.log(`Sunucu başlatıldı: http://localhost:${process.env.PORT }`))
-httpsServer.listen(process.env.PORT || process.env.HTTPS_PORT, () => {
-    console.log(`HTTPS sunucu başlatıldı: https://localhost:${process.env.PORT || process.env.HTTPS_PORT}`);
-});
+app.listen(process.env.PORT || process.env.PORT, () => console.log(`Sunucu başlatıldı: http://localhost:${process.env.PORT }`))
+//httpsServer.listen(process.env.PORT || process.env.HTTPS_PORT, () => {
+    //console.log(`HTTPS sunucu başlatıldı: https://localhost:${process.env.PORT || process.env.HTTPS_PORT}`);
+//});
