@@ -75,6 +75,7 @@ module.exports = {
             }
 
             const filePath = path.join(userDirectory, newFileName);
+            console.log(filePath);
             fs.renameSync(req.file.path, filePath);
 
             res.status(200).send({
@@ -313,5 +314,22 @@ module.exports = {
         }
 
         res.sendFile(filePath);
+    },
+
+    readFile: async (req, res, next) => {
+        const fileName = req.params.fileName;
+        const pdfFilePath = __basedir + '/data/hydraulicUnits/' + fileName;
+        const fileExtension = path.extname(fileName).toLowerCase();
+        let targetPage = '';
+
+        if (fileExtension === '.pdf') {
+            targetPage = 'pdfViewer.html';
+            return res.sendFile(path.join(__basedir, '/middleware/html', targetPage));
+        } else if (fileExtension === '.xlsx') {
+            targetPage = 'excelViewer.html';
+            return res.sendFile(path.join(__basedir, '/middleware/html', targetPage));
+        } else {
+            return res.status(404).sendFile(path.join(__basedir, 'middleware/html', '404.html'));
+        }
     }
 }
