@@ -69,13 +69,18 @@ module.exports = {
                 'SELECT CompanyName as selectedCompanyName FROM Users WHERE UserName = ?', [username]
             );
 
+            const [createdAtResult] = await connectionPool.promise().query(
+                'SELECT Created_At as selectedCreatedAt FROM Users WHERE UserName = ?', [username]
+            );
+
             const profileData = {
                 "Role": roleResult[0].selectedRole,
                 "NameSurname": nameSurnameResult[0].selectedNameSurname,
                 "UserName": usernameResult[0].selectedUserName,
                 "Email": emailResult[0].selectedEmail,
                 "Phone": phoneResult[0].selectedPhone,
-                "CompanyName": companyNameResult[0].selectedCompanyName
+                "CompanyName": companyNameResult[0].selectedCompanyName,
+                "CreatedAt": createdAtResult[0].selectedCreatedAt
             };
 
             return res.status(200).json(profileData);

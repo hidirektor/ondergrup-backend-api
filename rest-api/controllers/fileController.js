@@ -207,6 +207,28 @@ module.exports = {
         });
     },
 
+    getPhoto: async(req, res, next) => {
+        const username = req.params.username;
+
+        const directoryPath = __basedir + `/data/profilePhoto/`;
+
+        fs.readdir(directoryPath, (err, files) => {
+            if (err) {
+                return res.status(500).json({ error: 'An error occurred while reading the directory.' });
+            }
+
+            const matchingFiles = files.filter(file => file.startsWith(username));
+
+            if (matchingFiles.length === 0) {
+                return res.status(404).json({ error: 'No matching photo found.' });
+            }
+
+            const photoPath = path.join(directoryPath, matchingFiles[0]);
+
+            res.sendFile(photoPath);
+        });
+    },
+
     remove: async(req, res, next) => {
         const fileName = req.params.name;
         const directoryPath = __basedir + "/data/";

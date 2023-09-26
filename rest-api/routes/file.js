@@ -12,5 +12,6 @@ router.delete('/removeSync/:name', fileController.removeSync)
 router.get('/view/:fileName', fileController.view)
 router.get('/viewer/:fileName', fileController.viewer)
 router.get('/tv/:fileName', fileController.readFile)
+router.get('/getPhoto/:username', fileController.getPhoto)
 
 module.exports = router;

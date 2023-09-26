@@ -17,9 +17,6 @@ const machineRouter = require("./routes/machine");
 global.__basedir = __dirname;
 dotenv.config();
 
-const sslCertPath = path.join(__dirname, 'certificate.crt');
-const sslKeyPath = path.join(__dirname, 'private.key');
-
 app.use(express.json({limit: '10mb'}));
 app.use(express.urlencoded({limit: "10mb", extended: true}));
 
@@ -29,13 +26,6 @@ const connection = mysql.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
 });
-
-const httpsOptions = {
-    key: fs.readFileSync(sslKeyPath),
-    cert: fs.readFileSync(sslCertPath)
-};
-
-const httpsServer = https.createServer(httpsOptions, app);
 
 connection.connect((err) => {
     if (err) {
@@ -72,6 +62,3 @@ app.use((req, res, next) => {
 
 
 app.listen(process.env.PORT || process.env.PORT, () => console.log(`Sunucu başlatıldı: http://localhost:${process.env.PORT }`))
-//httpsServer.listen(process.env.PORT || process.env.HTTPS_PORT, () => {
-    //console.log(`HTTPS sunucu başlatıldı: https://localhost:${process.env.PORT || process.env.HTTPS_PORT}`);
-//});
