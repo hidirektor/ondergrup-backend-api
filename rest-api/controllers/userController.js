@@ -108,7 +108,7 @@ module.exports = {
                         return res.status(400).json({ error: 'Böyle bir kullanıcı bulunamadı' });
                     }
 
-                    const Profile_Photo = `C:/Server Side/data/profilePhoto/${UserName}.jpg`;
+                    const Profile_Photo = `/usr/src/app/data/profilePhoto/${UserName}.jpg`;
 
                     let updateQuery, updateValues;
 
