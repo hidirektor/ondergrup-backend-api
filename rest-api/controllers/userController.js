@@ -92,7 +92,7 @@ module.exports = {
     },
 
     updateProfile: async (req, res, next) => {
-        const { UserName, Email, Password, NameSurname, Phone, CompanyName, Created_At } = req.body;
+        const { UserName, Email, Password, NameSurname, Phone, CompanyName } = req.body;
 
         try {
             connectionPool.query(
@@ -115,15 +115,15 @@ module.exports = {
                     if (Password !== 'null') {
                         updateQuery = `
                     UPDATE Users
-                    SET UserName = ?, Email = ?, Password = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?, Created_At = ?
+                    SET UserName = ?, Email = ?, Password = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?
                     WHERE UserName = ?`;
-                        updateValues = [UserName, Email, CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString(), NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName];
+                        updateValues = [UserName, Email, CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString(), NameSurname, Phone, Profile_Photo, CompanyName, UserName];
                     } else {
                         updateQuery = `
                     UPDATE Users
-                    SET UserName = ?, Email = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?, Created_At = ?
+                    SET UserName = ?, Email = ?, NameSurname = ?, Phone = ?, Profile_Photo = ?, CompanyName = ?
                     WHERE UserName = ?`;
-                        updateValues = [UserName, Email, NameSurname, Phone, Profile_Photo, CompanyName, Created_At, UserName];
+                        updateValues = [UserName, Email, NameSurname, Phone, Profile_Photo, CompanyName, UserName];
                     }
 
                     connectionPool.query(updateQuery, updateValues, async (updateError, updateResults) => {
