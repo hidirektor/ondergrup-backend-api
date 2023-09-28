@@ -86,6 +86,47 @@ module.exports = {
         }
     },
 
+    createSubUser: async (req, res, next) => {
+        const { Role, UserName, Email, Password, NameSurname, Phone, CompanyName, OwnerName, Created_At } = req.body;
+
+        const pass = CryptoJS.AES.encrypt(Password, process.env.SECRET_KEY).toString();
+
+        try {
+            connectionPool.query(
+                'SELECT * FROM Users WHERE UserName = ?',
+                [UserName],
+                async (error, results) => {
+                    if (error) {
+                        console.error('MySQL sorgu hatası:', error);
+                        return res.status(500).json({ error: 'Sunucu hatası' });
+                    }
+
+                    if (results.length > 0) {
+                        return res.status(400).json({ error: 'Bu kullanıcı adı zaten kullanılıyor' });
+                    }
+
+                    const Profile_Photo = path.join(__basedir, `/data/profilePhoto/${UserName}.jpg`);
+
+                    connectionPool.query(
+                        'INSERT INTO Users (Role, UserName, Email, Password, NameSurname, Phone, Profile_Photo, CompanyName, Owner, Created_At) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                        [Role, UserName, Email, pass, NameSurname, Phone, Profile_Photo, CompanyName, OwnerName, Created_At],
+                        async (insertError, insertResults) => {
+                            if (insertError) {
+                                console.error('MySQL sorgu hatası:', insertError);
+                                return res.status(500).json({ error: 'Sunucu hatası' });
+                            }
+
+                            return res.status(200).json({ message: 'Kullanıcı eklendi' });
+                        }
+                    );
+                }
+            );
+        } catch (err) {
+            console.error('Sorgu hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
 
     loginUser: async (req, res, next)=> {
         const { Username, Password } = req.body;
@@ -153,6 +194,66 @@ module.exports = {
             console.error('Sorgu hatası:', err);
             res.status(500).json({ error: 'Sunucu hatası' });
         }
+    },
+
+    getSubUsers: async (req, res, next) => {
+        const { username } = req.body;
+
+        connectionPool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Veritabanına bağlanırken hata oluştu:', err);
+                return res.status(500).json({ error: 'Veritabanı hatası.' });
+            }
+
+            const sql = 'SELECT * FROM Users WHERE Owner = ?';
+            const inserts = [username];
+            const query = mysql.format(sql, inserts);
+
+            connection.query(query, (err, rows) => {
+                connection.release();
+
+                if (err) {
+                    console.error('Veriler alınırken bir hata oluştu:', err);
+                    return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                }
+
+                if (rows.length > 0) {
+                    res.status(200).json({ subUsers: rows });
+                } else {
+                    res.status(404).json({ error: 'Veri bulunamadı.' });
+                }
+            });
+        });
+    },
+
+    deleteSubUser: async (req, res, next) => {
+        const { username, OwnerName } = req.body;
+
+        connectionPool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Veritabanına bağlanırken hata oluştu:', err);
+                return res.status(500).json({ error: 'Veritabanı hatası.' });
+            }
+
+            const sql = 'DELETE FROM Users WHERE UserName = ? AND Owner = ?';
+            const inserts = [username, OwnerName];
+            const query = mysql.format(sql, inserts);
+
+            connection.query(query, (err, result) => {
+                connection.release();
+
+                if (err) {
+                    console.error('Veri silinirken bir hata oluştu:', err);
+                    return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                }
+
+                if (result.affectedRows > 0) {
+                    res.status(200).json({ message: 'Kayıt başarıyla silindi.' });
+                } else {
+                    res.status(404).json({ error: 'Belirtilen kayıt bulunamadı.' });
+                }
+            });
+        });
     },
 
     getPass: async (req, res, next) => {
