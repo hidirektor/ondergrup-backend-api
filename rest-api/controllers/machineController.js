@@ -10,6 +10,54 @@ const connectionPool = mysql.createPool({
 });
 
 module.exports = {
+    addMachine: async(req, res, next) => {
+        const { Username, CompanyName, MachineID } = req.body;
+
+        try {
+            connectionPool.getConnection((err, connection) => {
+                if (err) {
+                    console.error('Veritabanına bağlanırken hata oluştu:', err);
+                    return res.status(500).json({ error: 'Veritabanı hatası.' });
+                }
+
+                const checkQuery = 'SELECT * FROM Machine WHERE Owner_UserName = ? AND MachineID = ?';
+                const checkInserts = [Username, MachineID];
+                const checkSql = mysql.format(checkQuery, checkInserts);
+
+                connection.query(checkSql, (err, results) => {
+                    if (err) {
+                        connection.release();
+                        console.error('Veri kontrol sırasında bir hata oluştu:', err);
+                        return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                    }
+
+                    if (results.length > 0) {
+                        connection.release();
+                        return res.status(400).json({ error: 'Bu kullanıcıya ait aynı makine zaten var.' });
+                    }
+
+                    const insertQuery = 'INSERT INTO Machine (Owner_UserName, CompanyName, MachineID) VALUES (?, ?, ?)';
+                    const inserts = [Username, CompanyName, MachineID];
+                    const sql = mysql.format(insertQuery, inserts);
+
+                    connection.query(sql, (err, result) => {
+                        connection.release();
+
+                        if (err) {
+                            console.error('Veri eklenirken bir hata oluştu:', err);
+                            return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                        }
+
+                        res.status(200).json({ message: 'Machine başarıyla eklendi.' });
+                    });
+                });
+            });
+        } catch (err) {
+            console.error('Sorgu hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası.' });
+        }
+    },
+
     insertMachineData: async (req, res, next) => {
         const { machineID, projectCode, machineData } = req.body;
 
