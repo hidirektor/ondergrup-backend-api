@@ -69,6 +69,10 @@ module.exports = {
                 'SELECT CompanyName as selectedCompanyName FROM Users WHERE UserName = ?', [username]
             );
 
+            const [ownerNameResult] = await connectionPool.promise().query(
+                'SELECT Owner as selectedOwnerName FROM Users WHERE UserName = ?', [username]
+            );
+
             const [createdAtResult] = await connectionPool.promise().query(
                 'SELECT Created_At as selectedCreatedAt FROM Users WHERE UserName = ?', [username]
             );
@@ -80,6 +84,7 @@ module.exports = {
                 "Email": emailResult[0].selectedEmail,
                 "Phone": phoneResult[0].selectedPhone,
                 "CompanyName": companyNameResult[0].selectedCompanyName,
+                "Owner": ownerNameResult[0].selectedOwnerName,
                 "CreatedAt": createdAtResult[0].selectedCreatedAt
             };
 
