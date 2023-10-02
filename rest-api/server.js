@@ -60,5 +60,15 @@ app.use((req, res, next) => {
     next();
 });
 
+/*const httpsOptions = {
+    key: fs.readFileSync('./ssl/private.key'),
+    cert: fs.readFileSync('./ssl/cert.crt'),
+};
+
+const server = https.createServer(httpsOptions, app);
+
+server.listen(process.env.PORT, () => {
+    console.log(`Sunucu başlatıldı: https://localhost:${process.env.PORT}`);
+});*/
 
 app.listen(process.env.PORT || process.env.PORT, () => console.log(`Sunucu başlatıldı: http://localhost:${process.env.PORT }`))

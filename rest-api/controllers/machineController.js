@@ -69,7 +69,7 @@ module.exports = {
             }
 
             connectionPool.getConnection((err, connection) => {
-                const checkQuery = 'SELECT * FROM Machine WHERE MachineID = ?';
+                const checkQuery = 'SELECT * FROM MachineData WHERE MachineID = ?';
                 const checkInserts = [machineID];
                 const checkSql = mysql.format(checkQuery, checkInserts);
 
@@ -116,7 +116,7 @@ module.exports = {
                 return res.status(400).json({ error: 'Invalid machineData format' });
             }
 
-            const [results] = await pool.query('SELECT * FROM Machine WHERE MachineID = ?', [machineID]);
+            const [results] = await pool.query('SELECT * FROM MachineData WHERE MachineID = ?', [machineID]);
 
             if (results.length === 0) {
                 return res.status(404).json({ error: 'Makine bulunamadı.' });
