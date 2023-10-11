@@ -84,14 +84,19 @@ module.exports = {
                         const secondCheckSql = mysql.format(secondCheckQuery, secondCheckInserts);
 
                         connection.query(secondCheckSql, (err, results) => {
-                            if(err) {
+                            connection.release();
+
+                            if (err) {
+                                console.error('Veri sorgulanırken bir hata oluştu:', err);
+                                return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                            }
+
+                            if (results.length === 0) {
                                 const insertQuery = 'INSERT INTO MachineData (machineID, devirmeYuruyusSecim, calismaSekli, emniyetCercevesi, yavaslamaLimit, altLimit, kapiTablaAcKonum, basincSalteri, kapiSecimleri, kapiAcTipi, kapi1Tip, kapi1AcSure, kapi2Tip, kapi2AcSure, kapitablaTip, kapiTablaAcSure, yukariYavasLimit, devirmeYukariIleriLimit, devirmeAsagiGeriLimit, devirmeSilindirTipi, platformSilindirTipi, yukariValfTmr, asagiValfTmr, devirmeYukariIleriTmr, devirmeAsagiGeriTmr, makineCalismaTmr, buzzer, demoMode, calismaSayisi1, calismaSayisi10, calismaSayisi100, calismaSayisi1000, calismaSayisi10000, dilSecim, eepromData37, eepromData38, eepromData39, eepromData40, eepromData41, eepromData42, eepromData43, eepromData44, eepromData45, eepromData46, eepromData47, lcdBacklightSure) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
                                 const inserts = [machineID, dataArray[0], dataArray[1], dataArray[2], dataArray[3], dataArray[4], dataArray[5], dataArray[6], dataArray[7], dataArray[8], dataArray[9], dataArray[10], dataArray[11], dataArray[12], dataArray[13], dataArray[14], dataArray[15], dataArray[16], dataArray[17], dataArray[18], dataArray[19], dataArray[20], dataArray[21], dataArray[22], dataArray[23], dataArray[24], dataArray[25], dataArray[26], dataArray[27], dataArray[28], dataArray[29], dataArray[30], dataArray[31], dataArray[32], dataArray[33], dataArray[34], dataArray[35], dataArray[36], dataArray[37], dataArray[38], dataArray[39], dataArray[40], dataArray[41], dataArray[42], dataArray[43], dataArray[44], dataArray[44]];
                                 const sql = mysql.format(insertQuery, inserts);
 
                                 connection.query(sql, (err, result) => {
-                                    connection.release();
-
                                     if (err) {
                                         console.error('Veri eklenirken bir hata oluştu:', err);
                                         return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
@@ -100,7 +105,7 @@ module.exports = {
                                     res.status(200).json({ message: 'Makine verileri başarıyla eklendi.' });
                                 });
                             } else {
-                                res.status(400).json({ message: 'Böyle bir makine bulunamadı !'});
+                                res.status(400).json({ message: 'Bu machineID ile zaten bir veri mevcut.' });
                             }
                         });
                     }
@@ -255,5 +260,62 @@ module.exports = {
             console.error('Sorgu hatası:', error);
             res.status(500).json({ error: 'Sunucu hatası' });
         }
+    },
+
+    getMachines: async (req, res, next) => {
+        const { username } = req.body;
+
+        connectionPool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Veritabanına bağlanırken hata oluştu:', err);
+                return res.status(500).json({ error: 'Veritabanı hatası.' });
+            }
+
+            const machineQuery = 'SELECT MachineID, Owner_UserName, MachineType, LastUpdate FROM Machine WHERE Owner_UserName = ?';
+            const machineInserts = [username];
+            const machineSelectQuery = mysql.format(machineQuery, machineInserts);
+
+            connection.query(machineSelectQuery, (err, machineRows) => {
+                if (err) {
+                    connection.release();
+                    console.error('Machine tablosundan veri alınırken bir hata oluştu:', err);
+                    return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                }
+
+                if (machineRows.length === 0) {
+                    connection.release();
+                    return res.status(404).json({ error: 'Veri bulunamadı.' });
+                }
+
+                let machines = [];
+
+                machineRows.forEach((machineRow) => {
+                    const machineID = machineRow.MachineID;
+                    const machineDataQuery = 'SELECT * FROM MachineData WHERE MachineID = ?';
+                    const machineDataInserts = [machineID];
+                    const machineDataSelectQuery = mysql.format(machineDataQuery, machineDataInserts);
+
+                    connection.query(machineDataSelectQuery, (err, machineDataRows) => {
+                        if (err) {
+                            connection.release();
+                            console.error('MachineData tablosundan veri alınırken bir hata oluştu:', err);
+                            return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                        }
+
+                        const machine = {
+                            MachineInfo: machineRow,
+                            MachineData: machineDataRows
+                        };
+
+                        machines.push(machine);
+
+                        if (machines.length === machineRows.length) {
+                            connection.release();
+                            res.status(200).json({ machines: machines });
+                        }
+                    });
+                });
+            });
+        });
     }
 }
