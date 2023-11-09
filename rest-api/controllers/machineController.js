@@ -372,7 +372,7 @@ module.exports = {
                                         dataArray[41], // eepromData45
                                         dataArray[42], // eepromData46
                                         dataArray[43], // eepromData47
-                                        dataArray[44], // lcdBacklightSure
+                                        dataArray[44]*10, // lcdBacklightSure
                                         machineID      // machineID
                                     ];
 
@@ -396,6 +396,39 @@ module.exports = {
         } catch (error) {
             console.error('Sorgu hatası:', error);
             res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
+    checkMachineID: async (req, res, next) => {
+        const machineID = req.query.machineID;
+
+        try {
+            connectionPool.getConnection((err, connection) => {
+                if (err) {
+                    connection.release();
+                    return res.status(500).json({ error: 'Veritabanı bağlantı hatası.' });
+                }
+
+                const checkQuery = 'SELECT * FROM Machine WHERE MachineID = ?';
+                const checkInserts = [machineID];
+                const checkSql = mysql.format(checkQuery, checkInserts);
+
+                connection.query(checkSql, (err, results) => {
+                    connection.release();
+                    if (err) {
+                        return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                    } else {
+                        if (results.length > 0) {
+                            return res.status(400);
+                        } else {
+                            return res.status(200);
+                        }
+                    }
+                });
+            });
+        } catch (error) {
+            console.error('Sorgu hatası:', error);
+            res.status(500).json({ error: 'Sunucu hatası.' });
         }
     },
 
