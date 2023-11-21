@@ -421,7 +421,7 @@ module.exports = {
                         if (results.length > 0) {
                             return res.status(400);
                         } else {
-                            return res.status(200);
+                            return res.status(200).json({msg: 'OK'});
                         }
                     }
                 });
