@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const path = require("path");
+const util = require('util');
 
 const connectionPool = mysql.createPool({
     host: process.env.DB_SERVER,
@@ -402,33 +403,19 @@ module.exports = {
     checkMachineID: async (req, res, next) => {
         const machineID = req.query.machineID;
 
+        const queryAsync = util.promisify(connectionPool.query).bind(connectionPool);
+
         try {
-            connectionPool.getConnection((err, connection) => {
-                if (err) {
-                    connection.release();
-                    return res.status(500).json({ error: 'Veritabanı bağlantı hatası.' });
-                }
+            const results = await queryAsync('SELECT * FROM Machine WHERE MachineID = ?', [machineID]);
 
-                const checkQuery = 'SELECT * FROM Machine WHERE MachineID = ?';
-                const checkInserts = [machineID];
-                const checkSql = mysql.format(checkQuery, checkInserts);
-
-                connection.query(checkSql, (err, results) => {
-                    connection.release();
-                    if (err) {
-                        return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
-                    } else {
-                        if (results.length > 0) {
-                            return res.status(400);
-                        } else {
-                            return res.status(200).json({msg: 'OK'});
-                        }
-                    }
-                });
-            });
+            if (results.length > 0) {
+                return res.status(400).json({ error: 'Machine ID already exists.' });
+            } else {
+                return res.status(200).json({ message: 'Machine ID is available.' });
+            }
         } catch (error) {
-            console.error('Sorgu hatası:', error);
-            res.status(500).json({ error: 'Sunucu hatası.' });
+            console.error('Veritabanı sorgu hatası:', error);
+            return res.status(500).json({ error: 'Sunucu hatası.' });
         }
     },
 
