@@ -474,5 +474,24 @@ module.exports = {
                 });
             });
         });
+    },
+
+    getMachineErrors: async(req, res, next) => {
+        const { machineID } = req.body;
+
+        const queryAsync = util.promisify(connectionPool.query).bind(connectionPool);
+
+        try {
+            const results = await queryAsync('SELECT * FROM MachineErrors WHERE MachineID = ?', [machineID]);
+
+            if(results.length > 0) {
+                return res.status(200).json({ data: results });
+            } else {
+                return res.status(400).json({error : 'Theres no error situtation for that machine.'})
+            }
+        } catch(error) {
+            console.error('Veritabanı sorgu hatası: ', error);
+            return res.status(500).json({error: 'Sunucu hatası.'})
+        }
     }
 }
