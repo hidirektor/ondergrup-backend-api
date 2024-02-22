@@ -193,5 +193,44 @@ module.exports = {
             console.error('İşlem hatası:', err);
             res.status(500).json({ error: 'Sunucu hatası' });
         }
+    },
+
+    getAllUsers: async (req, res, next) => {
+        connectionPool.getConnection((err, connection) => {
+            if (err) {
+                console.error('Veritabanına bağlanırken hata oluştu:', err);
+                return res.status(500).json({ error: 'Veritabanı hatası.' });
+            }
+
+            const userQuery = 'SELECT * FROM Users';
+
+            connection.query(userQuery, (err, userRows) => {
+                if (err) {
+                    connection.release();
+                    console.error('User tablosundan veri alınırken bir hata oluştu:', err);
+                    return res.status(500).json({ error: 'Veritabanı sorgu hatası.' });
+                }
+
+                if (userRows.length === 0) {
+                    connection.release();
+                    return res.status(404).json({ error: 'Veri bulunamadı.' });
+                }
+
+                let users = [];
+
+                userRows.forEach((userRow) => {
+                    const user = {
+                        UserInfo: userRow
+                    };
+
+                    users.push(user);
+
+                    if (users.length === userRows.length) {
+                        connection.release();
+                        res.status(200).json({ users: users });
+                    }
+                });
+            });
+        });
     }
 }
