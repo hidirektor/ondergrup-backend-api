@@ -6,5 +6,6 @@ router.post('/getWholeProfileInfo', userController.getWholeProfileInfo)
 router.post('/updateProfile', userController.updateProfile)
 router.post('/updatePass', userController.updatePass)
 router.post('/getAllUsers', userController.getAllUsers)
+router.post('/deleteUser', userController.deleteUser)
 
 module.exports = router;

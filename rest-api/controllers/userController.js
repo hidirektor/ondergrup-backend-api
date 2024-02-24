@@ -195,6 +195,50 @@ module.exports = {
         }
     },
 
+    deleteUser: async (req, res, next) => {
+        const { Username } = req.body;
+
+        try {
+            connectionPool.getConnection(function(err, connection) {
+                if (err) {
+                    console.error('Veritabanı bağlantısı hatası:', err);
+                    return res.status(500).json({ error: 'Veritabanı bağlantısı hatası' });
+                }
+
+                const findUserQuery = `SELECT * FROM Users WHERE UserName = ?`;
+                connection.query(findUserQuery, [Username], function(err, results) {
+                    if (err) {
+                        connection.release();
+                        console.error('Sorgu hatası:', err);
+                        return res.status(500).json({ error: 'Sunucu hatası' });
+                    }
+
+                    if (results.length === 0) {
+                        connection.release();
+                        return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+                    }
+
+                    const user = results[0];
+
+                    const updatePassQuery = `DELETE FROM Users WHERE UserName = ?`;
+                    connection.query(updatePassQuery, Username, function(err, updateResult) {
+                        connection.release();
+
+                        if (err) {
+                            console.error('Silme hatası:', err);
+                            return res.status(500).json({ error: 'Sunucu hatası' });
+                        }
+
+                        res.status(200).json({ message: 'Kullanıcı silindi.' });
+                    });
+                });
+            });
+        } catch (err) {
+            console.error('İşlem hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
     getAllUsers: async (req, res, next) => {
         connectionPool.getConnection((err, connection) => {
             if (err) {
