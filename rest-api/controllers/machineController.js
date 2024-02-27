@@ -446,6 +446,78 @@ module.exports = {
         });
     },
 
+    createMaintenance: async (req, res, next) => {
+        const {
+            MachineID,
+            Technician,
+            maintenance1,
+            maintenance2,
+            maintenance3,
+            maintenance4,
+            maintenance5,
+            maintenance6,
+            maintenance7,
+            maintenance8,
+            notes
+        } = req.body;
+
+        try {
+            connectionPool.getConnection(function (err, connection) {
+                if (err) {
+                    console.error('Database connection error:', err);
+                    return res.status(500).json({ error: 'Database connection error' });
+                }
+
+                const now = new Date();
+                const maintenanceDate = Math.floor(now.getTime() / 1000); // Convert to UNIX timestamp
+
+                const insertQuery = `
+                INSERT INTO MachineMaintenances 
+                    (machineID, technician, maintenanceDate, \`kontrol1-1\`, \`kontrol1-2\`, \`kontrol1-3\`, \`kontrol1-4\`,
+                        \`kontrol2-1\`, \`kontrol2-2\`, \`kontrol2-3\`, \`kontrol2-4\`,
+                        \`kontrol3-1\`, \`kontrol3-2\`, \`kontrol3-3\`, \`kontrol3-4\`, \`kontrol3-5\`, \`kontrol3-6\`,
+                        \`kontrol4-1\`, \`kontrol4-2\`, \`kontrol4-3\`, \`kontrol4-4\`, \`kontrol4-5\`, \`kontrol4-6\`,
+                        \`kontrol5-1\`, \`kontrol5-2\`, \`kontrol5-3\`, \`kontrol5-4\`, \`kontrol5-5\`, \`kontrol5-6\`,
+                        \`kontrol6-1\`, \`kontrol6-2\`, \`kontrol6-3\`,
+                        \`kontrol7-1\`, \`kontrol7-2\`,
+                        \`kontrol8-1\`, \`kontrol8-2\`, \`kontrol8-3\`,
+                        \`kontrol9-1\`, \`kontrol9-2\`, \`kontrol9-3\`, \`kontrol9-4\`, \`kontrol9-5\`, \`kontrol9-6\`, \`kontrol9-7\`, \`kontrol9-8\`, \`kontrol9-9\`, \`kontrol9-10\`)
+                        VALUES 
+                        (?, ?, FROM_UNIXTIME(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        `;
+
+                const queryParams = [
+                    MachineID,
+                    Technician,
+                    maintenanceDate,
+                    ...maintenance1,
+                    ...maintenance2,
+                    ...maintenance3,
+                    ...maintenance4,
+                    ...maintenance5,
+                    ...maintenance6,
+                    ...maintenance7,
+                    ...maintenance8,
+                    ...notes
+                ];
+
+                connection.query(insertQuery, queryParams, function (err, results) {
+                    connection.release();
+
+                    if (err) {
+                        console.error('Query error:', err);
+                        return res.status(500).json({ error: 'Server error' });
+                    }
+
+                    res.status(200).json({ message: 'Maintenance record created successfully', id: results.insertId });
+                });
+            });
+        } catch (err) {
+            console.error('Operation error:', err);
+            res.status(500).json({ error: 'Server error' });
+        }
+    },
+
     updateOwner: async (req, res, next) => {
         const { MachineID, Owner } = req.body;
 

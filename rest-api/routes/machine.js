@@ -12,5 +12,6 @@ router.post('/getMachineMaintenances', machineController.getMachineMaintenances)
 router.post('/getMachineMaintenancesAll', machineController.getMachineMaintenancesAll)
 router.post('/getAllMachines', machineController.getAllMachines)
 router.post('/updateOwner', machineController.updateOwner)
+router.post('/createMaintenance', machineController.createMaintenance)
 
 module.exports = router;
