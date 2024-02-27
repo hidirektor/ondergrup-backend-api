@@ -446,6 +446,50 @@ module.exports = {
         });
     },
 
+    updateOwner: async (req, res, next) => {
+        const { MachineID, Owner } = req.body;
+
+        try {
+            connectionPool.getConnection(function(err, connection) {
+                if (err) {
+                    console.error('Veritabanı bağlantısı hatası:', err);
+                    return res.status(500).json({ error: 'Veritabanı bağlantısı hatası' });
+                }
+
+                const findUserQuery = `SELECT * FROM Machine WHERE MachineID = ?`;
+                connection.query(findUserQuery, [MachineID], function(err, results) {
+                    if (err) {
+                        connection.release();
+                        console.error('Sorgu hatası:', err);
+                        return res.status(500).json({ error: 'Sunucu hatası' });
+                    }
+
+                    if (results.length === 0) {
+                        connection.release();
+                        return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+                    }
+
+                    const user = results[0];
+
+                    const updateRoleQuery = `UPDATE Machine SET Owner_UserName = ? WHERE MachineID = ?`;
+                    connection.query(updateRoleQuery, [Owner, MachineID], function(err, updateResult) {
+                        connection.release();
+
+                        if (err) {
+                            console.error('Güncelleme hatası:', err);
+                            return res.status(500).json({ error: 'Sunucu hatası' });
+                        }
+
+                        res.status(200).json({ message: 'Makine sahibi güncellendi' });
+                    });
+                });
+            });
+        } catch (err) {
+            console.error('İşlem hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
     getAllMachines: async (req, res, next) => {
         const { username } = req.body;
 
