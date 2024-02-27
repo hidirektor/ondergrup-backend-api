@@ -195,6 +195,50 @@ module.exports = {
         }
     },
 
+    updateRole: async (req, res, next) => {
+        const { Username, Role } = req.body;
+
+        try {
+            connectionPool.getConnection(function(err, connection) {
+                if (err) {
+                    console.error('Veritabanı bağlantısı hatası:', err);
+                    return res.status(500).json({ error: 'Veritabanı bağlantısı hatası' });
+                }
+
+                const findUserQuery = `SELECT * FROM Users WHERE UserName = ?`;
+                connection.query(findUserQuery, [Username], function(err, results) {
+                    if (err) {
+                        connection.release();
+                        console.error('Sorgu hatası:', err);
+                        return res.status(500).json({ error: 'Sunucu hatası' });
+                    }
+
+                    if (results.length === 0) {
+                        connection.release();
+                        return res.status(404).json({ error: 'Kullanıcı bulunamadı' });
+                    }
+
+                    const user = results[0];
+
+                    const updateRoleQuery = `UPDATE Users SET Role = ? WHERE UserName = ?`;
+                    connection.query(updateRoleQuery, [Role, Username], function(err, updateResult) {
+                        connection.release();
+
+                        if (err) {
+                            console.error('Güncelleme hatası:', err);
+                            return res.status(500).json({ error: 'Sunucu hatası' });
+                        }
+
+                        res.status(200).json({ message: 'Rol güncellendi' });
+                    });
+                });
+            });
+        } catch (err) {
+            console.error('İşlem hatası:', err);
+            res.status(500).json({ error: 'Sunucu hatası' });
+        }
+    },
+
     deleteUser: async (req, res, next) => {
         const { Username } = req.body;
 
