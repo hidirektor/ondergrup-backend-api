@@ -647,7 +647,7 @@ module.exports = {
             if(results.length > 0) {
                 return res.status(200).json({ data: results });
             } else {
-                return res.status(400).json({error : 'Theres no error situtation for that machine.'})
+                return res.status(400).json({error : 'Theres no maintenance situtation for that machine.'})
             }
         } catch(error) {
             console.error('Veritabanı sorgu hatası: ', error);
