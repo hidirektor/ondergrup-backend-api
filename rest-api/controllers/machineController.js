@@ -656,12 +656,10 @@ module.exports = {
     },
 
     getMachineErrorsAll: async(req, res, next) => {
-        const { username } = req.body;
-
         const queryAsync = util.promisify(connectionPool.query).bind(connectionPool);
 
         try {
-            const userMachines = await queryAsync('SELECT MachineID FROM Machine WHERE Owner_UserName = ?', [username]);
+            const userMachines = await queryAsync('SELECT MachineID FROM Machine');
 
             const machineErrors = await queryAsync('SELECT * FROM MachineErrors WHERE machineID IN (?)', [userMachines.map(machine => machine.MachineID)]);
 
@@ -677,12 +675,10 @@ module.exports = {
     },
 
     getMachineMaintenancesAll: async(req, res, next) => {
-        const { username } = req.body;
-
         const queryAsync = util.promisify(connectionPool.query).bind(connectionPool);
 
         try {
-            const userMachines = await queryAsync('SELECT MachineID FROM Machine WHERE Owner_UserName = ?', [username]);
+            const userMachines = await queryAsync('SELECT MachineID FROM Machine');
 
             const machineErrors = await queryAsync('SELECT * FROM MachineMaintenances WHERE machineID IN (?)', [userMachines.map(machine => machine.MachineID)]);
 
