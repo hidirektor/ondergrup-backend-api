@@ -264,16 +264,30 @@ module.exports = {
 
                     const user = results[0];
 
-                    const updatePassQuery = `DELETE FROM Users WHERE UserName = ?`;
-                    connection.query(updatePassQuery, Username, function(err, updateResult) {
-                        connection.release();
-
+                    const findMachineQuery = `SELECT * FROM Machine WHERE Owner_UserName = ?`;
+                    connection.query(findMachineQuery, [Username], function(err, machineResults) {
                         if (err) {
-                            console.error('Silme hatası:', err);
+                            connection.release();
+                            console.error('Sorgu hatası:', err);
                             return res.status(500).json({ error: 'Sunucu hatası' });
                         }
 
-                        res.status(200).json({ message: 'Kullanıcı silindi.' });
+                        if (machineResults.length > 0) {
+                            connection.release();
+                            return res.status(200).json({ error: 'Bu kullanıcının makinesi olduğu için kullanıcı silinemez.' });
+                        }
+
+                        const deleteQuery = `DELETE FROM Users WHERE UserName = ?`;
+                        connection.query(deleteQuery, [Username], function(err, deleteResult) {
+                            connection.release();
+
+                            if (err) {
+                                console.error('Silme hatası:', err);
+                                return res.status(500).json({ error: 'Sunucu hatası' });
+                            }
+
+                            res.status(200).json({ message: 'Kullanıcı silindi.' });
+                        });
                     });
                 });
             });
