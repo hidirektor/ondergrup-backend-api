@@ -12,7 +12,7 @@ const connectionPool = mysql.createPool({
 
 module.exports = {
     addMachine: async(req, res, next) => {
-        const { Username, CompanyName, MachineID } = req.body;
+        const { Username, CompanyName, MachineID, MachineType } = req.body;
 
         try {
             connectionPool.getConnection((err, connection) => {
@@ -37,8 +37,8 @@ module.exports = {
                         return res.status(400).json({ error: 'Bu kullanıcıya ait aynı makine zaten var.' });
                     }
 
-                    const insertQuery = 'INSERT INTO Machine (Owner_UserName, CompanyName, MachineID) VALUES (?, ?, ?)';
-                    const inserts = [Username, CompanyName, MachineID];
+                    const insertQuery = 'INSERT INTO Machine (Owner_UserName, CompanyName, MachineID, MachineType) VALUES (?, ?, ?, ?)';
+                    const inserts = [Username, CompanyName, MachineID, MachineType];
                     const sql = mysql.format(insertQuery, inserts);
 
                     connection.query(sql, (err, result) => {
