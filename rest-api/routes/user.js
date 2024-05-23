@@ -10,7 +10,5 @@ router.post('/getProfile', authMiddleware, getProfile);
 router.post('/updateProfile', authMiddleware, updateProfile);
 router.post('/getPreferences', authMiddleware, getPreferences);
 router.post('/updatePreferences', authMiddleware, updatePreferences);
-router.post('/getRating', authMiddleware, getRating);
-router.post('/updateRating', authMiddleware, updateRating);
 
 module.exports = router;
