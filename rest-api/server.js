@@ -10,12 +10,14 @@ const authRoutes = require('./routes/auth');
 const tokenRoutes = require('./routes/token');
 const otpRoutes = require('./routes/otp');
 const userRoutes = require('./routes/user');
+const machineRoutes = require('./routes/machine');
 
 app.use(express.json());
 app.use('/api/v2/auth', authRoutes);
 app.use('/api/v2/token', tokenRoutes);
 app.use('/api/v2/otp', otpRoutes);
 app.use('/api/v2/user', userRoutes);
+app.use('/api/v2/machine', machineRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server);
