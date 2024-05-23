@@ -9,8 +9,8 @@ module.exports = async (req, res) => {
 
     const userID = user.userID;
 
-    const machine = await Machine.findOne({ where: { machineID }});
-    if(!machine) return res.status(404).json({ message: 'Machine not found' });
+    const machine = await Machine.findOne({ where: { machineID } });
+    if (!machine) return res.status(404).json({ message: 'Machine not found' });
 
     machine.ownerID = userID;
     await machine.save();

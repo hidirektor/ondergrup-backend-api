@@ -6,9 +6,8 @@ module.exports = async (req, res) => {
     const user = await Users.findOne({ where: { userName } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const userID = user.userID;
-
-    await user.delete();
+    user.isActive = false;
+    await user.save();
 
     res.json({ message: 'User deleted successfully' });
 };

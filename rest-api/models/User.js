@@ -10,7 +10,8 @@ const User = sequelize.define('User', {
     eMail: { type: DataTypes.STRING, unique: true, allowNull: false },
     phoneNumber: { type: DataTypes.STRING, unique: true, allowNull: false },
     companyName: { type: DataTypes.STRING, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false }
+    password: { type: DataTypes.STRING, allowNull: false },
+    isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
 }, {
     timestamps: false,
     tableName: 'Users',

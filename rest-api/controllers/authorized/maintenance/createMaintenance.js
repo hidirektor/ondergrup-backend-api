@@ -11,12 +11,13 @@ module.exports = async (req, res) => {
         const maintenance = await Maintenance.create({
             machineID,
             technicianID,
-            maintenanceDate: Math.floor(Date.now() / 1000)
+            maintenanceDate: Math.floor(Date.now() / 1000),
+            ...updateData
         });
 
-        res.status(201).json({ message: 'Machine added successfully', machine });
+        res.status(201).json({ message: 'Maintenance record created successfully', maintenance });
     } catch (error) {
-        console.error('Error adding machine:', error);
+        console.error('Error creating maintenance record:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

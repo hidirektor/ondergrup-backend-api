@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
     try {
         const { userID } = req.body;
 
-        if(!userID) {
+        if (!userID) {
             return res.status(400).json({ message: 'userID is required' });
         }
 
@@ -27,4 +27,4 @@ module.exports = async (req, res) => {
         console.log('Error retrieving all machine errors', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};

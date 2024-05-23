@@ -12,4 +12,4 @@ module.exports = async (req, res) => {
         console.log('Error retrieving all machines', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};

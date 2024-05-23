@@ -16,10 +16,10 @@ const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 
 router.post('/addMachine', authMiddleware, add);
-router.post('/getMachines', authMiddleware, getMachines);
+router.get('/getMachines', authMiddleware, getMachines);
 router.put('/updateMachine', authMiddleware, updateMachine);
 router.put('/updateMachineRaw', updateMachineRaw);
-router.post('/checkMachineID', checkMachine);
+router.get('/checkMachineID', checkMachine);
 router.get('/getErrors', authMiddleware, getErrors);
 router.get('/getErrorsAll', authMiddleware, getErrorsAll);
 router.get('/getMaintenances', authMiddleware, getMaintenances);

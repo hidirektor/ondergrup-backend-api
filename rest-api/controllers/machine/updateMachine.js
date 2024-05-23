@@ -17,7 +17,12 @@ module.exports = async (req, res) => {
             return res.status(200).json({ message: 'Machine data updated', updatedMachine });
         }
 
-        throw new Error('Machine not found');
+        const newMachineData = await MachineData.create({
+            machineID,
+            ...updateData
+        });
+
+        res.status(201).json({ message: 'Machine data created', newMachineData });
     } catch (error) {
         console.error('Error updating machine data:', error);
         res.status(500).json({ message: 'Internal server error' });
