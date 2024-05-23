@@ -14,6 +14,6 @@ router.post('/addMachine', authMiddleware, add);
 router.post('/getMachines', authMiddleware, getMachines);
 router.put('/updateMachine', authMiddleware, updateMachine);
 router.put('/updateMachineRaw', updateMachineRaw);
-router.post('/checkMachineID', authMiddleware, checkMachine);
+router.post('/checkMachineID', checkMachine);
 
 module.exports = router;
