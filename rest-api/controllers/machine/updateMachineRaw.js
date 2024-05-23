@@ -1,6 +1,6 @@
 const MachineData = require('../../models/MachineData');
 
-const updateMachineRaw = async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const { machineID, ...updateData } = req.query;
 
@@ -23,5 +23,3 @@ const updateMachineRaw = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
-module.exports = updateMachineRaw;

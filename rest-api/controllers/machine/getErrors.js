@@ -1,6 +1,6 @@
 const MachineError = require('../../models/MachineError');
 
-const getErrors = async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const { machineID } = req.body;
 
@@ -20,5 +20,3 @@ const getErrors = async (req, res) => {
         res.status(500).json({message: 'Internal Server Error'});
     }
 }
-
-module.exports = getErrors;

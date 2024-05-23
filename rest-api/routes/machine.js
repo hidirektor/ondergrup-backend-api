@@ -20,9 +20,9 @@ router.post('/getMachines', authMiddleware, getMachines);
 router.put('/updateMachine', authMiddleware, updateMachine);
 router.put('/updateMachineRaw', updateMachineRaw);
 router.post('/checkMachineID', checkMachine);
-router.get('/getErrors', getErrors);
-router.get('/getErrorsAll', getErrorsAll);
-router.get('/getMaintenances', getMaintenances);
-router.get('/getMaintenancesAll', getMaintenancesAll);
+router.get('/getErrors', authMiddleware, getErrors);
+router.get('/getErrorsAll', authMiddleware, getErrorsAll);
+router.get('/getMaintenances', authMiddleware, getMaintenances);
+router.get('/getMaintenancesAll', authMiddleware, getMaintenancesAll);
 
 module.exports = router;

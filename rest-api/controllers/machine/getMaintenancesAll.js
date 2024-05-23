@@ -1,7 +1,7 @@
 const Machine = require('../../models/Machine');
 const MachineMaintenances = require('../../models/Maintenance');
 
-const getMaintenancesAll = async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const { userID } = req.body;
 
@@ -28,5 +28,3 @@ const getMaintenancesAll = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
-
-module.exports = getMaintenancesAll;

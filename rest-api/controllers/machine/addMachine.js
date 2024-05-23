@@ -1,6 +1,6 @@
 const Machine = require('../../models/Machine');
 
-const addMachine = async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const { machineID, ownerID, machineType } = req.body;
 
@@ -27,5 +27,3 @@ const addMachine = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
-module.exports = addMachine;

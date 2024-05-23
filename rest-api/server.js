@@ -11,6 +11,7 @@ const tokenRoutes = require('./routes/token');
 const otpRoutes = require('./routes/otp');
 const userRoutes = require('./routes/user');
 const machineRoutes = require('./routes/machine');
+const authorizedRoutes = require('./routes/authorized');
 
 app.use(express.json());
 app.use('/api/v2/auth', authRoutes);
@@ -18,6 +19,8 @@ app.use('/api/v2/token', tokenRoutes);
 app.use('/api/v2/otp', otpRoutes);
 app.use('/api/v2/user', userRoutes);
 app.use('/api/v2/machine', machineRoutes);
+app.use('/api/v2/authorized', authorizedRoutes);
+
 
 const server = http.createServer(app);
 const io = new Server(server);

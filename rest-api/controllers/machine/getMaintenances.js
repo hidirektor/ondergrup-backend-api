@@ -1,6 +1,6 @@
 const MachineMaintenance = require('../../models/Maintenance');
 
-const getMaintenances = async (req, res) => {
+module.exports = async (req, res) => {
     try {
         const { machineID } = req.body;
 
@@ -20,5 +20,3 @@ const getMaintenances = async (req, res) => {
         res.status(500).json({message: 'Internal Server Error'});
     }
 }
-
-module.exports = getMaintenances;
