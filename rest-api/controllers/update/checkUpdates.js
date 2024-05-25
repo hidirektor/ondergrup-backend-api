@@ -19,7 +19,12 @@ const checkUpdates = async (req, res) => {
         });
 
         if (update) {
-            return res.status(200).json({ updateAvailable: true, update });
+            return res.status(200).json({
+                updateAvailable: true,
+                update,
+                fileSize: update.fileSize,
+                crc: update.crc
+            });
         } else {
             return res.status(200).json({ updateAvailable: false });
         }

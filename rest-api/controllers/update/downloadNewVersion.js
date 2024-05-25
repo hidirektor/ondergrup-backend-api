@@ -1,13 +1,5 @@
 const Version = require('../../models/Version');
-const Minio = require('minio');
-
-const minioClient = new Minio.Client({
-    endPoint: process.env.MINIO_ENDPOINT,
-    port: parseInt(process.env.MINIO_PORT, 10),
-    useSSL: process.env.MINIO_USE_SSL === 'true',
-    accessKey: process.env.MINIO_ACCESS_KEY,
-    secretKey: process.env.MINIO_SECRET_KEY
-});
+const r2 = require('../../config/cloudflareR2Client');
 
 const downloadNewVersion = async (req, res) => {
     try {
@@ -23,12 +15,18 @@ const downloadNewVersion = async (req, res) => {
             return res.status(404).json({ message: 'Version not found' });
         }
 
-        minioClient.getObject('your-bucket-name', update.filePath, (err, stream) => {
+        const params = {
+            Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+            Key: update.filePath
+        };
+
+        r2.getObject(params, (err, data) => {
             if (err) {
                 return res.status(500).json({ message: 'Error retrieving file' });
             }
 
-            stream.pipe(res);
+            res.attachment(update.filePath);
+            res.send(data.Body);
         });
     } catch (error) {
         console.error('Error downloading new version:', error);

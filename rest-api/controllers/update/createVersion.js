@@ -1,14 +1,7 @@
 const Version = require('../../models/Version');
-const Minio = require('minio');
+const r2 = require('../../config/cloudflareR2Client');
 const { v4: uuidv4 } = require('uuid');
-
-const minioClient = new Minio.Client({
-    endPoint: process.env.MINIO_ENDPOINT,
-    port: parseInt(process.env.MINIO_PORT, 10),
-    useSSL: process.env.MINIO_USE_SSL === 'true',
-    accessKey: process.env.MINIO_ACCESS_KEY,
-    secretKey: process.env.MINIO_SECRET_KEY
-});
+const path = require('path');
 
 const createVersion = async (req, res) => {
     try {
@@ -19,15 +12,26 @@ const createVersion = async (req, res) => {
             return res.status(400).json({ message: 'versionCode, versionTitle, and file are required' });
         }
 
-        const filePath = `versions/${uuidv4()}.hex`;
+        const fileExtension = path.extname(file.originalname);
+        if (fileExtension !== '.hex') {
+            return res.status(400).json({ message: 'Invalid file format. Only .hex files are allowed.' });
+        }
 
-        await minioClient.putObject('your-bucket-name', filePath, file.buffer);
+        const fileName = `${uuidv4()}.hex`;
+        const params = {
+            Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+            Key: `versions/${fileName}`,
+            Body: file.buffer,
+            ContentType: 'application/octet-stream'
+        };
+
+        await r2.upload(params).promise();
 
         const update = await Version.create({
             versionCode,
             versionTitle,
             versionDesc,
-            filePath,
+            filePath: `versions/${fileName}`,
             versionDate: Math.floor(Date.now() / 1000)
         });
 

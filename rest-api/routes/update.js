@@ -11,7 +11,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 
 router.post('/checkUpdates', authMiddleware, checkUpdates);
-router.post('/createVersion', authMiddleware, roleMiddleware(['Admin']), upload.single('file'), createVersion);
+router.post('/createVersion', authMiddleware, roleMiddleware(['SYSOP']), upload.single('file'), createVersion);
 router.post('/downloadNewVersion', authMiddleware, downloadNewVersion);
 
 module.exports = router;
