@@ -6,12 +6,54 @@ require('dotenv').config();
 const sequelize = require('./config/database');
 require('./config/associations');
 
+const fs = require('fs');
+const path = require('path');
+
 const authRoutes = require('./routes/auth');
 const tokenRoutes = require('./routes/token');
 const otpRoutes = require('./routes/otp');
 const userRoutes = require('./routes/user');
 const machineRoutes = require('./routes/machine');
 const authorizedRoutes = require('./routes/authorized');
+
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Önder Grup Back End API',
+            version: '2.0.0',
+            description: 'Önder Grup Back End API for Embedded & Hydraulic',
+            contact: {
+                email: 'hidirektor@gmail.com',
+                url: 'https://hidirektor.com.tr',
+                name: 'Halil İbrahim Direktör'
+            }
+        },
+        servers: [
+            {
+                url: 'http://85.95.231.92:3000',
+                description: 'Local server'
+            }
+        ]
+    },
+    apis: ['./routes/*.js', './models/*.js', './controllers/**/*.js'],
+};
+
+const swaggerSpecs = swaggerJsdoc(swaggerOptions);
+fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpecs, null, 2));
+
+app.get('/api/developer/swagger.json', (req, res) => {
+    res.sendFile(path.join(__dirname, 'swagger.json'));
+});
+
+app.use('/api/developer/api-docs', swaggerUi.serve, swaggerUi.setup(null, {
+    swaggerOptions: {
+        url: '/swagger.json'
+    }
+}));
 
 app.use(express.json());
 app.use('/api/v2/auth', authRoutes);

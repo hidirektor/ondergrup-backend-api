@@ -12,6 +12,7 @@ const User = sequelize.define('User', {
     companyName: { type: DataTypes.STRING, allowNull: false },
     password: { type: DataTypes.STRING, allowNull: false },
     isActive: { type: DataTypes.BOOLEAN, defaultValue: true },
+    createdAt: { type: DataTypes.BIGINT, defaultValue: Date.now() / 1000}
 }, {
     timestamps: false,
     tableName: 'Users',

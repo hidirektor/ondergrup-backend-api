@@ -45,5 +45,5 @@ Users.hasOne(Maintenances, { foreignKey: 'technicianID', sourceKey: 'userID', on
 Maintenances.belongsTo(Users, { foreignKey: 'technicianID', targetKey: 'userID' });
 
 // Machines.machineID > Maintenances.machineID
-Users.hasOne(Maintenances, { foreignKey: 'machineID', sourceKey: 'machineID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-Maintenances.belongsTo(Users, { foreignKey: 'machineID', targetKey: 'machineID' });
+Machines.hasOne(Maintenances, { foreignKey: 'machineID', sourceKey: 'machineID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+Maintenances.belongsTo(Machines, { foreignKey: 'machineID', targetKey: 'machineID' });

@@ -1,5 +1,5 @@
 const OTPLog = require('../../models/OTPLog');
-const Users = require('../../models/Users');
+const Users = require('../../models/User');
 const moment = require('moment');
 
 module.exports = async (req, res) => {
