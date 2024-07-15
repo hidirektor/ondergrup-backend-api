@@ -5,9 +5,9 @@
     "version": "2.0.0",
     "description": "Önder Grup Back End API for Embedded & Hydraulic",
     "contact": {
+      "name": "Halil İbrahim Direktör",
       "email": "hidirektor@gmail.com",
-      "url": "https://hidirektor.com.tr",
-      "name": "Halil İbrahim Direktör"
+      "url": "https://hidirektor.com.tr"
     }
   },
   "servers": [
