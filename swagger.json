@@ -1,0 +1,770 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Önder Grup Back End API",
+    "version": "2.0.0",
+    "description": "Önder Grup Back End API for Embedded & Hydraulic",
+    "contact": {
+      "email": "hidirektor@gmail.com",
+      "url": "https://hidirektor.com.tr",
+      "name": "Halil İbrahim Direktör"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://85.95.231.92:3000",
+      "description": "Local server"
+    }
+  ],
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Machine": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the machine.",
+            "example": 1
+          },
+          "machineID": {
+            "type": "string",
+            "description": "Unique identifier for the machine assigned by the system.",
+            "example": "MCH123456"
+          },
+          "ownerID": {
+            "type": "string",
+            "description": "Unique identifier for the owner of the machine.",
+            "example": "OWN987654"
+          },
+          "machineType": {
+            "type": "string",
+            "description": "Type or model of the machine.",
+            "example": "ESP"
+          },
+          "createdAt": {
+            "type": "integer",
+            "description": "Timestamp of when the machine was created.",
+            "example": 1628000000
+          },
+          "lastUpdate": {
+            "type": "integer",
+            "description": "Timestamp of the last update to the machine's record.",
+            "example": 1628000000
+          }
+        }
+      },
+      "MachineData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the machine data entry.",
+            "example": 1
+          },
+          "machineID": {
+            "type": "string",
+            "description": "Unique identifier for the machine.",
+            "example": "MCH123456"
+          },
+          "wifiSSID": {
+            "type": "string",
+            "description": "WiFi SSID for the machine.",
+            "example": "MyWiFiNetwork"
+          },
+          "wifiPass": {
+            "type": "string",
+            "description": "WiFi password for the machine.",
+            "example": "MyWiFiPassword"
+          },
+          "devirmeYuruyusSecim": {
+            "type": "integer",
+            "description": "Selection for devirme yuruyus.",
+            "example": 1
+          },
+          "calismaSekli": {
+            "type": "integer",
+            "description": "Working mode.",
+            "example": 2
+          },
+          "emniyetCercevesi": {
+            "type": "integer",
+            "description": "Safety frame selection.",
+            "example": 1
+          },
+          "yavaslamaLimit": {
+            "type": "integer",
+            "description": "Slowdown limit.",
+            "example": 50
+          },
+          "altLimit": {
+            "type": "integer",
+            "description": "Lower limit.",
+            "example": 20
+          },
+          "kapiTablaAcKonum": {
+            "type": "integer",
+            "description": "Door table open position.",
+            "example": 30
+          },
+          "basincSalteri": {
+            "type": "integer",
+            "description": "Pressure switch setting.",
+            "example": 1
+          },
+          "kapiSecimleri": {
+            "type": "integer",
+            "description": "Door selections.",
+            "example": 3
+          },
+          "kapiAcTipi": {
+            "type": "integer",
+            "description": "Door open type.",
+            "example": 1
+          },
+          "kapi1Tip": {
+            "type": "integer",
+            "description": "Type of door 1.",
+            "example": 1
+          },
+          "kapi1AcSure": {
+            "type": "integer",
+            "description": "Door 1 open duration.",
+            "example": 5
+          },
+          "kapi2Tip": {
+            "type": "integer",
+            "description": "Type of door 2.",
+            "example": 2
+          },
+          "kapi2AcSure": {
+            "type": "integer",
+            "description": "Door 2 open duration.",
+            "example": 6
+          },
+          "kapitablaTip": {
+            "type": "integer",
+            "description": "Table type.",
+            "example": 2
+          },
+          "kapiTablaAcSure": {
+            "type": "integer",
+            "description": "Table open duration.",
+            "example": 10
+          },
+          "yukariYavasLimit": {
+            "type": "integer",
+            "description": "Upper slow limit.",
+            "example": 70
+          },
+          "devirmeYukariIleriLimit": {
+            "type": "integer",
+            "description": "Devirme upper forward limit.",
+            "example": 60
+          },
+          "devirmeAsagiGeriLimit": {
+            "type": "integer",
+            "description": "Devirme lower back limit.",
+            "example": 40
+          },
+          "devirmeSilindirTipi": {
+            "type": "integer",
+            "description": "Devirme cylinder type.",
+            "example": 1
+          },
+          "platformSilindirTipi": {
+            "type": "integer",
+            "description": "Platform cylinder type.",
+            "example": 2
+          },
+          "yukariValfTmr": {
+            "type": "integer",
+            "description": "Upper valve timer.",
+            "example": 15
+          },
+          "asagiValfTmr": {
+            "type": "integer",
+            "description": "Lower valve timer.",
+            "example": 10
+          },
+          "devirmeYukariIleriTmr": {
+            "type": "integer",
+            "description": "Devirme upper forward timer.",
+            "example": 20
+          },
+          "devirmeAsagiGeriTmr": {
+            "type": "integer",
+            "description": "Devirme lower back timer.",
+            "example": 18
+          },
+          "makineCalismaTmr": {
+            "type": "integer",
+            "description": "Machine working timer.",
+            "example": 25
+          },
+          "buzzer": {
+            "type": "integer",
+            "description": "Buzzer setting.",
+            "example": 1
+          },
+          "demoMode": {
+            "type": "integer",
+            "description": "Demo mode setting.",
+            "example": 0
+          },
+          "calismaSayisi1": {
+            "type": "integer",
+            "description": "Working count in units.",
+            "example": 100
+          },
+          "calismaSayisi10": {
+            "type": "integer",
+            "description": "Working count in tens.",
+            "example": 200
+          },
+          "calismaSayisi100": {
+            "type": "integer",
+            "description": "Working count in hundreds.",
+            "example": 300
+          },
+          "calismaSayisi1000": {
+            "type": "integer",
+            "description": "Working count in thousands.",
+            "example": 400
+          },
+          "calismaSayisi10000": {
+            "type": "integer",
+            "description": "Working count in ten thousands.",
+            "example": 500
+          },
+          "dilSecim": {
+            "type": "integer",
+            "description": "Language selection.",
+            "example": 1
+          },
+          "eepromData38": {
+            "type": "integer",
+            "description": "EEPROM data at position 38.",
+            "example": 255
+          },
+          "eepromData39": {
+            "type": "integer",
+            "description": "EEPROM data at position 39.",
+            "example": 255
+          },
+          "eepromData40": {
+            "type": "integer",
+            "description": "EEPROM data at position 40.",
+            "example": 255
+          },
+          "eepromData41": {
+            "type": "integer",
+            "description": "EEPROM data at position 41.",
+            "example": 255
+          },
+          "eepromData42": {
+            "type": "integer",
+            "description": "EEPROM data at position 42.",
+            "example": 255
+          },
+          "eepromData43": {
+            "type": "integer",
+            "description": "EEPROM data at position 43.",
+            "example": 255
+          },
+          "eepromData44": {
+            "type": "integer",
+            "description": "EEPROM data at position 44.",
+            "example": 255
+          },
+          "eepromData45": {
+            "type": "integer",
+            "description": "EEPROM data at position 45.",
+            "example": 255
+          },
+          "eepromData46": {
+            "type": "integer",
+            "description": "EEPROM data at position 46.",
+            "example": 255
+          },
+          "eepromData47": {
+            "type": "integer",
+            "description": "EEPROM data at position 47.",
+            "example": 255
+          },
+          "lcdBacklightSure": {
+            "type": "integer",
+            "description": "LCD backlight duration.",
+            "example": 60
+          }
+        }
+      },
+      "MachineError": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the machine error entry.",
+            "example": 1
+          },
+          "machineID": {
+            "type": "string",
+            "description": "Unique identifier for the machine.",
+            "example": "MCH123456"
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Code representing the specific error.",
+            "example": "ERR001"
+          },
+          "errorMessage": {
+            "type": "string",
+            "description": "Description of the error.",
+            "example": "Overheating detected"
+          },
+          "errorTime": {
+            "type": "integer",
+            "description": "Timestamp of when the error occurred.",
+            "example": 1628000000
+          }
+        }
+      },
+      "Maintenance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the maintenance entry.",
+            "example": 1
+          },
+          "machineID": {
+            "type": "string",
+            "description": "Unique identifier for the machine.",
+            "example": "MCH123456"
+          },
+          "technicianID": {
+            "type": "string",
+            "description": "Unique identifier for the technician.",
+            "example": "TECH987654"
+          },
+          "maintenanceDate": {
+            "type": "integer",
+            "description": "Timestamp of when the maintenance was performed.",
+            "example": 1628000000
+          },
+          "kontrol11": {
+            "type": "integer",
+            "description": "Status of kontrol 11.",
+            "example": 1
+          },
+          "kontrol12": {
+            "type": "integer",
+            "description": "Status of kontrol 12.",
+            "example": 1
+          },
+          "kontrol13": {
+            "type": "integer",
+            "description": "Status of kontrol 13.",
+            "example": 1
+          },
+          "kontrol14": {
+            "type": "integer",
+            "description": "Status of kontrol 14.",
+            "example": 1
+          },
+          "kontrol21": {
+            "type": "integer",
+            "description": "Status of kontrol 21.",
+            "example": 1
+          },
+          "kontrol22": {
+            "type": "integer",
+            "description": "Status of kontrol 22.",
+            "example": 1
+          },
+          "kontrol23": {
+            "type": "integer",
+            "description": "Status of kontrol 23.",
+            "example": 1
+          },
+          "kontrol24": {
+            "type": "integer",
+            "description": "Status of kontrol 24.",
+            "example": 1
+          },
+          "kontrol31": {
+            "type": "integer",
+            "description": "Status of kontrol 31.",
+            "example": 1
+          },
+          "kontrol32": {
+            "type": "integer",
+            "description": "Status of kontrol 32.",
+            "example": 1
+          },
+          "kontrol33": {
+            "type": "integer",
+            "description": "Status of kontrol 33.",
+            "example": 1
+          },
+          "kontrol34": {
+            "type": "integer",
+            "description": "Status of kontrol 34.",
+            "example": 1
+          },
+          "kontrol35": {
+            "type": "integer",
+            "description": "Status of kontrol 35.",
+            "example": 1
+          },
+          "kontrol36": {
+            "type": "integer",
+            "description": "Status of kontrol 36.",
+            "example": 1
+          },
+          "kontrol41": {
+            "type": "integer",
+            "description": "Status of kontrol 41.",
+            "example": 1
+          },
+          "kontrol42": {
+            "type": "integer",
+            "description": "Status of kontrol 42.",
+            "example": 1
+          },
+          "kontrol43": {
+            "type": "integer",
+            "description": "Status of kontrol 43.",
+            "example": 1
+          },
+          "kontrol44": {
+            "type": "integer",
+            "description": "Status of kontrol 44.",
+            "example": 1
+          },
+          "kontrol45": {
+            "type": "integer",
+            "description": "Status of kontrol 45.",
+            "example": 1
+          },
+          "kontrol46": {
+            "type": "integer",
+            "description": "Status of kontrol 46.",
+            "example": 1
+          },
+          "kontrol51": {
+            "type": "integer",
+            "description": "Status of kontrol 51.",
+            "example": 1
+          },
+          "kontrol52": {
+            "type": "integer",
+            "description": "Status of kontrol 52.",
+            "example": 1
+          },
+          "kontrol53": {
+            "type": "integer",
+            "description": "Status of kontrol 53.",
+            "example": 1
+          },
+          "kontrol54": {
+            "type": "integer",
+            "description": "Status of kontrol 54.",
+            "example": 1
+          },
+          "kontrol55": {
+            "type": "integer",
+            "description": "Status of kontrol 55.",
+            "example": 1
+          },
+          "kontrol56": {
+            "type": "integer",
+            "description": "Status of kontrol 56.",
+            "example": 1
+          },
+          "kontrol61": {
+            "type": "integer",
+            "description": "Status of kontrol 61.",
+            "example": 1
+          },
+          "kontrol62": {
+            "type": "integer",
+            "description": "Status of kontrol 62.",
+            "example": 1
+          },
+          "kontrol63": {
+            "type": "integer",
+            "description": "Status of kontrol 63.",
+            "example": 1
+          },
+          "kontrol71": {
+            "type": "integer",
+            "description": "Status of kontrol 71.",
+            "example": 1
+          },
+          "kontrol72": {
+            "type": "integer",
+            "description": "Status of kontrol 72.",
+            "example": 1
+          },
+          "kontrol81": {
+            "type": "integer",
+            "description": "Status of kontrol 81.",
+            "example": 1
+          },
+          "kontrol82": {
+            "type": "integer",
+            "description": "Status of kontrol 82.",
+            "example": 1
+          },
+          "kontrol83": {
+            "type": "integer",
+            "description": "Status of kontrol 83.",
+            "example": 1
+          },
+          "kontrol91": {
+            "type": "integer",
+            "description": "Status of kontrol 91.",
+            "example": 1
+          },
+          "kontrol92": {
+            "type": "integer",
+            "description": "Status of kontrol 92.",
+            "example": 1
+          },
+          "kontrol93": {
+            "type": "integer",
+            "description": "Status of kontrol 93.",
+            "example": 1
+          },
+          "kontrol94": {
+            "type": "integer",
+            "description": "Status of kontrol 94.",
+            "example": 1
+          },
+          "kontrol95": {
+            "type": "integer",
+            "description": "Status of kontrol 95.",
+            "example": 1
+          },
+          "kontrol96": {
+            "type": "integer",
+            "description": "Status of kontrol 96.",
+            "example": 1
+          },
+          "kontrol97": {
+            "type": "integer",
+            "description": "Status of kontrol 97.",
+            "example": 1
+          },
+          "kontrol98": {
+            "type": "integer",
+            "description": "Status of kontrol 98.",
+            "example": 1
+          },
+          "kontrol99": {
+            "type": "integer",
+            "description": "Status of kontrol 99.",
+            "example": 1
+          },
+          "kontrol910": {
+            "type": "integer",
+            "description": "Status of kontrol 910.",
+            "example": 1
+          }
+        }
+      },
+      "OTPLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the OTP log entry.",
+            "example": 1
+          },
+          "userID": {
+            "type": "string",
+            "description": "Unique identifier for the user.",
+            "example": "USR123456"
+          },
+          "otpType": {
+            "type": "string",
+            "description": "Type of OTP (e.g., email, SMS).",
+            "example": "SMS"
+          },
+          "otpCode": {
+            "type": "string",
+            "description": "OTP code sent to the user.",
+            "example": "123456"
+          },
+          "otpSentTime": {
+            "type": "integer",
+            "description": "Timestamp of when the OTP was sent.",
+            "example": 1628000000
+          },
+          "otpValidationTime": {
+            "type": "integer",
+            "description": "Timestamp of when the OTP was validated.",
+            "example": 1628003600
+          }
+        }
+      },
+      "RefreshToken": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The refresh token.",
+            "example": "a1b2c3d4e5f6g7h8i9j0"
+          },
+          "userID": {
+            "type": "string",
+            "description": "Unique identifier for the user.",
+            "example": "USR123456"
+          }
+        }
+      },
+      "SubUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the sub-user entry.",
+            "example": 1
+          },
+          "ownerID": {
+            "type": "string",
+            "description": "Unique identifier for the owner.",
+            "example": "OWNER123456"
+          },
+          "userID": {
+            "type": "string",
+            "description": "Unique identifier for the sub-user.",
+            "example": "USER123456"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the user.",
+            "example": 1
+          },
+          "userID": {
+            "type": "string",
+            "description": "Unique identifier for the user.",
+            "example": "USR123456"
+          },
+          "userName": {
+            "type": "string",
+            "description": "Unique username for the user.",
+            "example": "johndoe"
+          },
+          "userType": {
+            "type": "string",
+            "description": "Type of the user.",
+            "example": "admin"
+          },
+          "nameSurname": {
+            "type": "string",
+            "description": "Full name of the user.",
+            "example": "John Doe"
+          },
+          "eMail": {
+            "type": "string",
+            "description": "Email address of the user.",
+            "example": "johndoe@example.com"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the user.",
+            "example": "+1234567890"
+          },
+          "companyName": {
+            "type": "string",
+            "description": "Name of the company the user is associated with.",
+            "example": "Example Corp"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password of the user.",
+            "example": "password123"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Whether the user is active.",
+            "example": true
+          },
+          "createdAt": {
+            "type": "integer",
+            "description": "Timestamp of when the user was created.",
+            "example": 1628000000
+          }
+        }
+      },
+      "UserPreferences": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the user preferences entry.",
+            "example": 1
+          },
+          "userID": {
+            "type": "string",
+            "description": "Unique identifier for the user.",
+            "example": "USR123456"
+          },
+          "language": {
+            "type": "boolean",
+            "description": "Language preference of the user.",
+            "example": true
+          },
+          "nightMode": {
+            "type": "boolean",
+            "description": "Whether night mode is enabled.",
+            "example": false
+          }
+        }
+      },
+      "Version": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the version entry.",
+            "example": 1
+          },
+          "versionTitle": {
+            "type": "string",
+            "description": "Title of the version.",
+            "example": "1.0.0"
+          },
+          "versionDesc": {
+            "type": "string",
+            "description": "Description of the version.",
+            "example": "Initial release"
+          },
+          "versionCode": {
+            "type": "string",
+            "description": "Unique code for the version.",
+            "example": "v100"
+          },
+          "versionPath": {
+            "type": "string",
+            "description": "Bucket name for MinIO where the version is stored.",
+            "example": "versions/1.0.0"
+          },
+          "releaseDate": {
+            "type": "integer",
+            "description": "Release date of the version in Unix timestamp format.",
+            "example": 1622548800
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
