@@ -15,6 +15,7 @@ const otpRoutes = require('./routes/otp');
 const userRoutes = require('./routes/user');
 const machineRoutes = require('./routes/machine');
 const authorizedRoutes = require('./routes/authorized');
+const updateRoutes = require('./routes/update');
 const swaggerRoutes = require('./routes/swagger');
 
 const swaggerSpecs = require('./helpers/swaggerOptions');
@@ -27,6 +28,7 @@ app.use('/api/v2/otp', otpRoutes);
 app.use('/api/v2/user', userRoutes);
 app.use('/api/v2/machine', machineRoutes);
 app.use('/api/v2/authorized', authorizedRoutes);
+app.use('/api/v2/updateChecker', updateRoutes);
 app.use('/api/v2', swaggerRoutes);
 
 

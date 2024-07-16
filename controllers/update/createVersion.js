@@ -1,7 +1,15 @@
 const Version = require('../../models/Version');
-const r2 = require('../../config/cloudflareR2Client');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
+const Minio = require('minio');
+
+const minioClient = new Minio.Client({
+    endPoint: process.env.MINIO_ENDPOINT,
+    port: parseInt(process.env.MINIO_PORT),
+    accessKey: process.env.MINIO_ACCESS_KEY,
+    secretKey: process.env.MINIO_SECRET_KEY,
+    useSSL: false // MinIO SSL
+});
 
 /**
  * @swagger
@@ -16,7 +24,7 @@ const path = require('path');
  *         name: versionCode
  *         required: true
  *         type: string
- *         description: Version code of the new version
+ *         description: Version code of the new version. Must be unique.
  *         example: "1.0.0"
  *       - in: formData
  *         name: versionTitle
@@ -34,7 +42,7 @@ const path = require('path');
  *         name: file
  *         required: true
  *         type: file
- *         description: Hex file (.hex) to upload
+ *         description: Hex file (.hex) to upload. Only .hex files are allowed.
  *     responses:
  *       201:
  *         description: Version created successfully
@@ -84,22 +92,29 @@ const createVersion = async (req, res) => {
             return res.status(400).json({ message: 'Invalid file format. Only .hex files are allowed.' });
         }
 
-        const fileName = `${uuidv4()}.hex`;
+        // Check if versionCode already exists
+        const existingVersion = await Version.findOne({ where: { versionCode } });
+        if (existingVersion) {
+            return res.status(400).json({ message: 'Version with this versionCode already exists' });
+        }
+
+        const versionID = uuidv4();
+        const fileName = `${versionID}.hex`;
+
         const params = {
-            Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+            Bucket: process.env.BUCKET_NAME,
             Key: `versions/${fileName}`,
             Body: file.buffer,
             ContentType: 'application/octet-stream'
         };
 
-        await r2.upload(params).promise();
+        await minioClient.putObject(params.Bucket, params.Key, params.Body, params.ContentType);
 
         const update = await Version.create({
-            versionCode,
             versionTitle,
             versionDesc,
-            filePath: `versions/${fileName}`,
-            versionDate: Math.floor(Date.now() / 1000)
+            versionCode,
+            versionID
         });
 
         res.status(201).json({ message: 'Version created successfully', update });

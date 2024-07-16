@@ -73,10 +73,15 @@ const checkUpdates = async (req, res) => {
             return res.status(400).json({ message: 'currentVersion is required' });
         }
 
+        const currentReleaseDate = await Version.findOne({
+            attributes: ['releaseDate'],
+            where: { versionCode: currentVersion }
+        });
+
         const update = await Version.findOne({
             where: {
-                versionCode: {
-                    [Op.gt]: currentVersion
+                releaseDate: {
+                    [Op.gt]: currentReleaseDate.releaseDate
                 }
             },
             order: [['versionCode', 'DESC']]

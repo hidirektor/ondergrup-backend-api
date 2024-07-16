@@ -39,7 +39,7 @@ const Version = sequelize.define('Version', {
     versionTitle: { type: DataTypes.STRING, allowNull: false },
     versionDesc: { type: DataTypes.STRING, allowNull: false },
     versionCode: { type: DataTypes.STRING, unique: true, allowNull: false },
-    versionPath: { type: DataTypes.STRING, allowNull: false }, //Bucket Name for MinIO
+    versionID: { type: DataTypes.STRING, unique: true, allowNull: false },
     releaseDate: {
         type: DataTypes.BIGINT,
         allowNull: true,
