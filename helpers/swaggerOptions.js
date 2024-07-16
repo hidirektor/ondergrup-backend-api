@@ -14,7 +14,7 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://85.95.231.92:3000',
+            url: 'http://ondergrup.hidirektor.com.tr:3000',
             description: 'Local server',
         },
     ],
