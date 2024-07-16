@@ -2,8 +2,8 @@ const Users = require('../../../models/User');
 
 /**
  * @swagger
- * /delete-user:
- *   put:
+ * /deleteUser:
+ *   delete:
  *     summary: Deactivate a user by username
  *     tags: [Users]
  *     requestBody:

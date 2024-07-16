@@ -1,5 +1,73 @@
 const MachineData = require('../../models/MachineData');
 
+/**
+ * @swagger
+ * /updateMachineRaw:
+ *   put:
+ *     summary: Update or create machine data
+ *     tags: [Machine]
+ *     parameters:
+ *       - in: query
+ *         name: machineID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the machine
+ *         example: "M1234"
+ *       - in: query
+ *         name: updateData
+ *         schema:
+ *           type: object
+ *           additionalProperties:
+ *             type: string
+ *         description: Data to update or create for the machine
+ *     responses:
+ *       200:
+ *         description: Machine data updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Machine data updated"
+ *                 updatedMachine:
+ *                   $ref: '#/components/schemas/MachineData'
+ *       201:
+ *         description: Machine data created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Machine data created"
+ *                 newMachineData:
+ *                   $ref: '#/components/schemas/MachineData'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "machineID is required"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
 module.exports = async (req, res) => {
     try {
         const { machineID, ...updateData } = req.query;

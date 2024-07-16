@@ -2,6 +2,108 @@ const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 
+/**
+ * @swagger
+ * /editSubUser:
+ *   put:
+ *     summary: Update a subuser and associated user by ID
+ *     tags: [Sub User Management]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the subuser to update
+ *                 example: "subuser123"
+ *               ownerID:
+ *                 type: string
+ *                 description: The ID of the owner user
+ *                 example: "owner123"
+ *               userID:
+ *                 type: string
+ *                 description: The ID of the subuser user
+ *                 example: "user456"
+ *               userName:
+ *                 type: string
+ *                 description: The username of the subuser
+ *                 example: "subuser"
+ *               userType:
+ *                 type: string
+ *                 description: The type of the subuser
+ *                 example: "subuser"
+ *               nameSurname:
+ *                 type: string
+ *                 description: The full name of the subuser
+ *                 example: "John Doe"
+ *               eMail:
+ *                 type: string
+ *                 description: The email address of the subuser
+ *                 example: "subuser@example.com"
+ *               phoneNumber:
+ *                 type: string
+ *                 description: The phone number of the subuser
+ *                 example: "+1234567890"
+ *               companyName:
+ *                 type: string
+ *                 description: The company name of the subuser
+ *                 example: "SubUser Inc."
+ *               password:
+ *                 type: string
+ *                 description: The new password for the subuser (optional)
+ *                 example: "newpassword"
+ *     responses:
+ *       200:
+ *         description: SubUser and associated User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SubUser updated successfully"
+ *                 subUser:
+ *                   type: object
+ *                   description: The updated SubUser object
+ *                 user:
+ *                   type: object
+ *                   description: The updated User object
+ *       400:
+ *         description: Invalid request body or missing fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "All fields except password are required"
+ *       404:
+ *         description: SubUser, Owner, or User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SubUser not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
 module.exports = async (req, res) => {
     try {
         const { id, ownerID, userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password } = req.body;

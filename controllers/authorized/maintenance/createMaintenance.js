@@ -2,7 +2,7 @@ const Maintenance = require('../../../models/Maintenance');
 
 /**
  * @swagger
- * /create-maintenance:
+ * /createMaintenance:
  *   post:
  *     summary: Create a new maintenance record
  *     tags: [Maintenance]

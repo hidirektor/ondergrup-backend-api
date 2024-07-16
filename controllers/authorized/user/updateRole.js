@@ -2,7 +2,7 @@ const Users = require('../../../models/User');
 
 /**
  * @swagger
- * /update-user-role:
+ * /updateRole:
  *   put:
  *     summary: Update user role
  *     tags: [Users]

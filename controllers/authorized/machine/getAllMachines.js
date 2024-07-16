@@ -2,7 +2,7 @@ const Machine = require('../../../models/Machine');
 
 /**
  * @swagger
- * /machines:
+ * /getAllMachines:
  *   get:
  *     summary: Retrieve all machines
  *     tags: [Machine]

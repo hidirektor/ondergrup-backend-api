@@ -2,7 +2,7 @@ const Users = require('../../../models/User');
 
 /**
  * @swagger
- * /get-active-users:
+ * /getAllUsers:
  *   get:
  *     summary: Get all active users
  *     tags: [Users]

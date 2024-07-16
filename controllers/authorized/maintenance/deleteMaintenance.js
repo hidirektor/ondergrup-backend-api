@@ -2,7 +2,7 @@ const Maintenance = require('../../../models/Maintenance');
 
 /**
  * @swagger
- * /delete-maintenance:
+ * /deleteMaintenance:
  *   delete:
  *     summary: Delete a maintenance record by ID
  *     tags: [Maintenance]

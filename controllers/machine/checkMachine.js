@@ -1,5 +1,71 @@
 const Machine = require('../../models/Machine');
 
+/**
+ * @swagger
+ * /checkMachineID:
+ *   get:
+ *     summary: Check if a machine exists by machineID
+ *     tags: [Machine]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               machineID:
+ *                 type: string
+ *                 description: The ID of the machine to check
+ *                 example: "M1234"
+ *     responses:
+ *       200:
+ *         description: Machine exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exists:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Machine exists"
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "machineID is required"
+ *       404:
+ *         description: Machine not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exists:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Machine not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
 module.exports = async (req, res) => {
     try {
         const { machineID } = req.body;

@@ -2,6 +2,104 @@ const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 
+/**
+ * @swagger
+ * /createSubUser:
+ *   post:
+ *     summary: Create a new subuser under an existing owner
+ *     tags: [Sub User Management]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ownerID:
+ *                 type: string
+ *                 description: The ID of the owner user
+ *                 example: "owner123"
+ *               userID:
+ *                 type: string
+ *                 description: The ID of the new subuser
+ *                 example: "subuser123"
+ *               userName:
+ *                 type: string
+ *                 description: The username of the new subuser
+ *                 example: "subuser_username"
+ *               userType:
+ *                 type: string
+ *                 description: The type of the new subuser
+ *                 example: "employee"
+ *               nameSurname:
+ *                 type: string
+ *                 description: The full name of the new subuser
+ *                 example: "John Doe"
+ *               eMail:
+ *                 type: string
+ *                 description: The email address of the new subuser
+ *                 example: "john.doe@example.com"
+ *               phoneNumber:
+ *                 type: string
+ *                 description: The phone number of the new subuser
+ *                 example: "+1234567890"
+ *               companyName:
+ *                 type: string
+ *                 description: The company name associated with the new subuser
+ *                 example: "Acme Corporation"
+ *               password:
+ *                 type: string
+ *                 description: The password for the new subuser
+ *                 example: "password123"
+ *     responses:
+ *       201:
+ *         description: SubUser created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "SubUser created successfully"
+ *                 subUser:
+ *                   type: object
+ *                   description: The details of the created subuser
+ *                 newUser:
+ *                   type: object
+ *                   description: The details of the newly created user
+ *       400:
+ *         description: Invalid request body
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "All fields are required"
+ *       404:
+ *         description: Owner not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Owner not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
 module.exports = async (req, res) => {
     try {
         const { ownerID, userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password } = req.body;

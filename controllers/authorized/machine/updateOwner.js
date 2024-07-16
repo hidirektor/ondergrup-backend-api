@@ -3,8 +3,8 @@ const Machine = require("../../../models/Machine");
 
 /**
  * @swagger
- * /update-machine-owner:
- *   post:
+ * /updateOwner:
+ *   puy:
  *     summary: Update the owner of a machine
  *     tags: [Machine]
  *     requestBody:

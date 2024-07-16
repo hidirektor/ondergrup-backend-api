@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 /**
  * @swagger
- * /reset-password:
+ * /resetPass:
  *   post:
  *     summary: Reset user's password
  *     tags: [Auth]

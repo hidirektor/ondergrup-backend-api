@@ -1,5 +1,62 @@
 const Users = require('../../models/User');
 
+/**
+ * @swagger
+ * /updateProfile:
+ *   post:
+ *     summary: Update user profile
+ *     tags: [User Profile]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of the user whose profile to update
+ *                 example: "123456789"
+ *               userData:
+ *                 type: object
+ *                 description: Updated user profile data to be applied
+ *                 example:
+ *                   name: "John Doe"
+ *                   email: "john.doe@example.com"
+ *                   phoneNumber: "+1234567890"
+ *     responses:
+ *       200:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Profile updated successfully"
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
 module.exports = async (req, res) => {
     const { userID, userData } = req.body;
 

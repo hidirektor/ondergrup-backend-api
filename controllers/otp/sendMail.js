@@ -4,6 +4,57 @@ const Users = require('../../models/User');
 const generateOtpEmailContent = require('../../helpers/generateOtpEmailContent');
 const moment = require('moment');
 
+/**
+ * @swagger
+ * /sendMail:
+ *   post:
+ *     summary: Send an OTP to the user's email
+ *     tags: [OTP]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's email address
+ *                 example: "user@example.com"
+ *     responses:
+ *       200:
+ *         description: OTP sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 otpSent:
+ *                   type: integer
+ *                   description: The UNIX timestamp when the OTP was sent
+ *                   example: 1628070943
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid email. User not found."
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Failed to send OTP email. Please try again later."
+ */
+
 module.exports = async (req, res) => {
     const { email } = req.body;
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();

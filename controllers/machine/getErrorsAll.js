@@ -1,6 +1,67 @@
 const Machine = require('../../models/Machine');
 const MachineErrors = require('../../models/MachineError');
 
+/**
+ * @swagger
+ * /getErrorsAll:
+ *   get:
+ *     summary: Retrieve all errors for all machines owned by a specific user
+ *     tags: [Machine]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: The ID of the user
+ *                 example: "U1234"
+ *     responses:
+ *       200:
+ *         description: A list of machine errors for the user's machines
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/MachineError'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "userID is required"
+ *       404:
+ *         description: No machines found for the user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "No machines found for this user"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
 module.exports = async (req, res) => {
     try {
         const { userID } = req.body;

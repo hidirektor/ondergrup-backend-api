@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 /**
  * @swagger
- * /change-password:
+ * /changePass:
  *   post:
  *     summary: Change user password
  *     tags: [Auth]
