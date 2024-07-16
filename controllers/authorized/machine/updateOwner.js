@@ -4,7 +4,7 @@ const Machine = require("../../../models/Machine");
 /**
  * @swagger
  * /updateOwner:
- *   puy:
+ *   put:
  *     summary: Update the owner of a machine
  *     tags: [Machine]
  *     requestBody:
