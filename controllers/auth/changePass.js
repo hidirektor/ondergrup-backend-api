@@ -3,6 +3,75 @@ const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+/**
+ * @swagger
+ * /change-password:
+ *   post:
+ *     summary: Change user password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userName
+ *               - oldPassword
+ *               - newPassword
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 description: The username of the user
+ *               oldPassword:
+ *                 type: string
+ *                 description: The current password of the user
+ *               newPassword:
+ *                 type: string
+ *                 description: The new password for the user
+ *     responses:
+ *       200:
+ *         description: Password updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password updated successfully
+ *       400:
+ *         description: Invalid request or password change policy violation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password can only be changed once every 7 days
+ *       401:
+ *         description: Unauthorized, invalid credentials, or user not authenticated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid current password
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ */
+
 module.exports = async (req, res) => {
     const { userName, oldPassword, newPassword } = req.body;
 

@@ -16,7 +16,1721 @@
       "description": "Local server"
     }
   ],
-  "paths": {},
+  "paths": {
+    "/change-password": {
+      "post": {
+        "summary": "Change user password",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "oldPassword",
+                  "newPassword"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "oldPassword": {
+                    "type": "string",
+                    "description": "The current password of the user"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "description": "The new password for the user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or password change policy violation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password can only be changed once every 7 days"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, invalid credentials, or user not authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid current password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "User login",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "password"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password of the user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string",
+                      "description": "Access token for user authentication"
+                    },
+                    "refreshToken": {
+                      "type": "string",
+                      "description": "Refresh token for user authentication"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error during login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Validation error during login"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid password"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Database error during login or unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "examples": {
+                        "databaseError": {
+                          "summary": "Database error",
+                          "value": "Database error during login"
+                        },
+                        "unexpectedError": {
+                          "summary": "Unexpected error",
+                          "value": "An unexpected error occurred during login"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "User logout",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "token"
+                ],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "The refresh token of the user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logged out successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Token not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error logging out",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error logging out"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Error details"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "userType",
+                  "nameSurname",
+                  "eMail",
+                  "phoneNumber",
+                  "companyName",
+                  "password"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "userType": {
+                    "type": "string",
+                    "description": "The type of user (e.g., SysOp, Merchant, Carrier, Customer)"
+                  },
+                  "nameSurname": {
+                    "type": "string",
+                    "description": "The name and surname of the user"
+                  },
+                  "eMail": {
+                    "type": "string",
+                    "description": "The email address of the user"
+                  },
+                  "phoneNumber": {
+                    "type": "string",
+                    "description": "The phone number of the user"
+                  },
+                  "companyName": {
+                    "type": "string",
+                    "description": "The company name of the user"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password for the user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userID": {
+                      "type": "string",
+                      "description": "The unique ID of the user"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "description": "The username of the user"
+                    },
+                    "userType": {
+                      "type": "string",
+                      "description": "The type of user"
+                    },
+                    "nameSurname": {
+                      "type": "string",
+                      "description": "The name and surname of the user"
+                    },
+                    "eMail": {
+                      "type": "string",
+                      "description": "The email address of the user"
+                    },
+                    "phoneNumber": {
+                      "type": "string",
+                      "description": "The phone number of the user"
+                    },
+                    "companyName": {
+                      "type": "string",
+                      "description": "The company name of the user"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or unique constraint error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "examples": {
+                        "uniqueError": {
+                          "summary": "Unique constraint error",
+                          "value": "Username is already taken"
+                        },
+                        "validationError": {
+                          "summary": "Validation error",
+                          "value": "Validation error message"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occurred while registering user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "An unexpected error occurred while registering user"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reset-password": {
+      "post": {
+        "summary": "Reset user's password",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "newPassword"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "The username of the user"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "description": "The new password for the user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password reset successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occurred while resetting the password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "An unexpected error occurred while resetting the password"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/machines": {
+      "get": {
+        "summary": "Retrieve all machines",
+        "tags": [
+          "Machine"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of all machines",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "machines": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "The machine ID",
+                            "example": 1
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The machine name",
+                            "example": "Machine A"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The machine type",
+                            "example": "Type X"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No machines found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No any machines found on database."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-machine-owner": {
+      "post": {
+        "summary": "Update the owner of a machine",
+        "tags": [
+          "Machine"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "machineID",
+                  "userName"
+                ],
+                "properties": {
+                  "machineID": {
+                    "type": "integer",
+                    "description": "ID of the machine to update",
+                    "example": 1
+                  },
+                  "userName": {
+                    "type": "string",
+                    "description": "Username of the new owner",
+                    "example": "johndoe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Machine owner updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Machine owner updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User or machine not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/create-maintenance": {
+      "post": {
+        "summary": "Create a new maintenance record",
+        "tags": [
+          "Maintenance"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "machineID",
+                  "technicianID"
+                ],
+                "properties": {
+                  "machineID": {
+                    "type": "integer",
+                    "description": "ID of the machine being maintained",
+                    "example": 1
+                  },
+                  "technicianID": {
+                    "type": "integer",
+                    "description": "ID of the technician performing the maintenance",
+                    "example": 2
+                  },
+                  "kontrol11": {
+                    "type": "integer",
+                    "description": "Status of kontrol 11",
+                    "example": 1
+                  },
+                  "kontrol12": {
+                    "type": "integer",
+                    "description": "Status of kontrol 12",
+                    "example": 1
+                  },
+                  "kontrol13": {
+                    "type": "integer",
+                    "description": "Status of kontrol 13",
+                    "example": 1
+                  },
+                  "kontrol14": {
+                    "type": "integer",
+                    "description": "Status of kontrol 14",
+                    "example": 1
+                  },
+                  "kontrol21": {
+                    "type": "integer",
+                    "description": "Status of kontrol 21",
+                    "example": 1
+                  },
+                  "kontrol22": {
+                    "type": "integer",
+                    "description": "Status of kontrol 22",
+                    "example": 1
+                  },
+                  "kontrol23": {
+                    "type": "integer",
+                    "description": "Status of kontrol 23",
+                    "example": 1
+                  },
+                  "kontrol24": {
+                    "type": "integer",
+                    "description": "Status of kontrol 24",
+                    "example": 1
+                  },
+                  "kontrol31": {
+                    "type": "integer",
+                    "description": "Status of kontrol 31",
+                    "example": 1
+                  },
+                  "kontrol32": {
+                    "type": "integer",
+                    "description": "Status of kontrol 32",
+                    "example": 1
+                  },
+                  "kontrol33": {
+                    "type": "integer",
+                    "description": "Status of kontrol 33",
+                    "example": 1
+                  },
+                  "kontrol34": {
+                    "type": "integer",
+                    "description": "Status of kontrol 34",
+                    "example": 1
+                  },
+                  "kontrol35": {
+                    "type": "integer",
+                    "description": "Status of kontrol 35",
+                    "example": 1
+                  },
+                  "kontrol36": {
+                    "type": "integer",
+                    "description": "Status of kontrol 36",
+                    "example": 0
+                  },
+                  "kontrol41": {
+                    "type": "integer",
+                    "description": "Status of kontrol 41",
+                    "example": 0
+                  },
+                  "kontrol42": {
+                    "type": "integer",
+                    "description": "Status of kontrol 42",
+                    "example": 0
+                  },
+                  "kontrol43": {
+                    "type": "integer",
+                    "description": "Status of kontrol 43",
+                    "example": 0
+                  },
+                  "kontrol44": {
+                    "type": "integer",
+                    "description": "Status of kontrol 44",
+                    "example": 0
+                  },
+                  "kontrol45": {
+                    "type": "integer",
+                    "description": "Status of kontrol 45",
+                    "example": 0
+                  },
+                  "kontrol46": {
+                    "type": "integer",
+                    "description": "Status of kontrol 46",
+                    "example": 0
+                  },
+                  "kontrol51": {
+                    "type": "integer",
+                    "description": "Status of kontrol 51",
+                    "example": 0
+                  },
+                  "kontrol52": {
+                    "type": "integer",
+                    "description": "Status of kontrol 52",
+                    "example": 0
+                  },
+                  "kontrol53": {
+                    "type": "integer",
+                    "description": "Status of kontrol 53",
+                    "example": 0
+                  },
+                  "kontrol54": {
+                    "type": "integer",
+                    "description": "Status of kontrol 54",
+                    "example": 0
+                  },
+                  "kontrol55": {
+                    "type": "integer",
+                    "description": "Status of kontrol 55",
+                    "example": 0
+                  },
+                  "kontrol56": {
+                    "type": "integer",
+                    "description": "Status of kontrol 56",
+                    "example": 0
+                  },
+                  "kontrol61": {
+                    "type": "integer",
+                    "description": "Status of kontrol 61",
+                    "example": 0
+                  },
+                  "kontrol62": {
+                    "type": "integer",
+                    "description": "Status of kontrol 62",
+                    "example": 0
+                  },
+                  "kontrol63": {
+                    "type": "integer",
+                    "description": "Status of kontrol 63",
+                    "example": 0
+                  },
+                  "kontrol71": {
+                    "type": "integer",
+                    "description": "Status of kontrol 71",
+                    "example": 0
+                  },
+                  "kontrol72": {
+                    "type": "integer",
+                    "description": "Status of kontrol 72",
+                    "example": 0
+                  },
+                  "kontrol81": {
+                    "type": "integer",
+                    "description": "Status of kontrol 81",
+                    "example": 0
+                  },
+                  "kontrol82": {
+                    "type": "integer",
+                    "description": "Status of kontrol 82",
+                    "example": 0
+                  },
+                  "kontrol83": {
+                    "type": "integer",
+                    "description": "Status of kontrol 83",
+                    "example": 0
+                  },
+                  "kontrol91": {
+                    "type": "integer",
+                    "description": "Status of kontrol 91",
+                    "example": 0
+                  },
+                  "kontrol92": {
+                    "type": "integer",
+                    "description": "Status of kontrol 92",
+                    "example": 0
+                  },
+                  "kontrol93": {
+                    "type": "integer",
+                    "description": "Status of kontrol 93",
+                    "example": 0
+                  },
+                  "kontrol94": {
+                    "type": "integer",
+                    "description": "Status of kontrol 94",
+                    "example": 0
+                  },
+                  "kontrol95": {
+                    "type": "integer",
+                    "description": "Status of kontrol 95",
+                    "example": 0
+                  },
+                  "kontrol96": {
+                    "type": "integer",
+                    "description": "Status of kontrol 96",
+                    "example": 0
+                  },
+                  "kontrol97": {
+                    "type": "integer",
+                    "description": "Status of kontrol 97",
+                    "example": 0
+                  },
+                  "kontrol98": {
+                    "type": "integer",
+                    "description": "Status of kontrol 98",
+                    "example": 0
+                  },
+                  "kontrol99": {
+                    "type": "integer",
+                    "description": "Status of kontrol 99",
+                    "example": 0
+                  },
+                  "kontrol910": {
+                    "type": "integer",
+                    "description": "Status of kontrol 910",
+                    "example": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Maintenance record created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Maintenance record created successfully"
+                    },
+                    "maintenance": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "ID of the maintenance record",
+                          "example": 1
+                        },
+                        "machineID": {
+                          "type": "integer",
+                          "description": "ID of the machine being maintained",
+                          "example": 1
+                        },
+                        "technicianID": {
+                          "type": "integer",
+                          "description": "ID of the technician performing the maintenance",
+                          "example": 2
+                        },
+                        "maintenanceDate": {
+                          "type": "integer",
+                          "description": "Timestamp of when the maintenance was performed",
+                          "example": 1628000000
+                        },
+                        "kontrol11": {
+                          "type": "integer",
+                          "description": "Status of kontrol 11",
+                          "example": 1
+                        },
+                        "kontrol12": {
+                          "type": "integer",
+                          "description": "Status of kontrol 12",
+                          "example": 1
+                        },
+                        "kontrol13": {
+                          "type": "integer",
+                          "description": "Status of kontrol 13",
+                          "example": 1
+                        },
+                        "kontrol14": {
+                          "type": "integer",
+                          "description": "Status of kontrol 14",
+                          "example": 1
+                        },
+                        "kontrol21": {
+                          "type": "integer",
+                          "description": "Status of kontrol 21",
+                          "example": 1
+                        },
+                        "kontrol22": {
+                          "type": "integer",
+                          "description": "Status of kontrol 22",
+                          "example": 1
+                        },
+                        "kontrol23": {
+                          "type": "integer",
+                          "description": "Status of kontrol 23",
+                          "example": 1
+                        },
+                        "kontrol24": {
+                          "type": "integer",
+                          "description": "Status of kontrol 24",
+                          "example": 1
+                        },
+                        "kontrol31": {
+                          "type": "integer",
+                          "description": "Status of kontrol 31",
+                          "example": 1
+                        },
+                        "kontrol32": {
+                          "type": "integer",
+                          "description": "Status of kontrol 32",
+                          "example": 1
+                        },
+                        "kontrol33": {
+                          "type": "integer",
+                          "description": "Status of kontrol 33",
+                          "example": 1
+                        },
+                        "kontrol34": {
+                          "type": "integer",
+                          "description": "Status of kontrol 34",
+                          "example": 1
+                        },
+                        "kontrol35": {
+                          "type": "integer",
+                          "description": "Status of kontrol 35",
+                          "example": 1
+                        },
+                        "kontrol36": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol41": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol42": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol43": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol44": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol45": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol46": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol51": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol52": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol53": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol54": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol55": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol56": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol61": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol62": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol63": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol71": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol72": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol81": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol82": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol83": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol91": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol92": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol93": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol94": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol95": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol96": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol97": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol98": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol99": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        },
+                        "kontrol910": {
+                          "type": "integer",
+                          "description": "Status of kontrol 36",
+                          "example": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "All fields are required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "All fields are required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete-maintenance": {
+      "delete": {
+        "summary": "Delete a maintenance record by ID",
+        "tags": [
+          "Maintenance"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "maintenanceID"
+                ],
+                "properties": {
+                  "maintenanceID": {
+                    "type": "integer",
+                    "description": "ID of the maintenance record to delete",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Maintenance record deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Maintenance record deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "MaintenanceID is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "maintenanceID is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Maintenance record not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Maintenance record not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-maintenance": {
+      "put": {
+        "summary": "Update a maintenance record by ID",
+        "tags": [
+          "Maintenance"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "maintenanceID"
+                ],
+                "properties": {
+                  "maintenanceID": {
+                    "type": "integer",
+                    "description": "ID of the maintenance record to update",
+                    "example": 1
+                  },
+                  "machineID": {
+                    "type": "integer",
+                    "description": "ID of the machine being maintained",
+                    "example": 2
+                  },
+                  "technicianID": {
+                    "type": "integer",
+                    "description": "ID of the technician performing the maintenance",
+                    "example": 3
+                  },
+                  "maintenanceDescription": {
+                    "type": "string",
+                    "description": "Description of the maintenance performed",
+                    "example": "Replaced faulty wiring"
+                  },
+                  "maintenanceCost": {
+                    "type": "number",
+                    "description": "Cost of the maintenance",
+                    "example": 150
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Maintenance record updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Maintenance record updated successfully"
+                    },
+                    "updatedMaintenance": {
+                      "type": "object",
+                      "description": "Updated maintenance record object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "description": "ID of the maintenance record",
+                          "example": 1
+                        },
+                        "machineID": {
+                          "type": "integer",
+                          "description": "ID of the machine being maintained",
+                          "example": 2
+                        },
+                        "technicianID": {
+                          "type": "integer",
+                          "description": "ID of the technician performing the maintenance",
+                          "example": 3
+                        },
+                        "maintenanceDate": {
+                          "type": "integer",
+                          "description": "Timestamp of when the maintenance was performed",
+                          "example": 1628000000
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "MaintenanceID is required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "maintenanceID is required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Maintenance record not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Maintenance record not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delete-user": {
+      "put": {
+        "summary": "Deactivate a user by username",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "Username of the user to deactivate",
+                    "example": "johndoe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User deactivated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User deactivated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-active-users": {
+      "get": {
+        "summary": "Get all active users",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of active users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "description": "User ID",
+                            "example": 1
+                          },
+                          "username": {
+                            "type": "string",
+                            "description": "Username of the user",
+                            "example": "johndoe"
+                          },
+                          "email": {
+                            "type": "string",
+                            "description": "Email of the user",
+                            "example": "johndoe@example.com"
+                          },
+                          "isActive": {
+                            "type": "boolean",
+                            "description": "Indicates if the user is active",
+                            "example": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No active users found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "No active users found in the database."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-user-role": {
+      "put": {
+        "summary": "Update user role",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "newRole"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "Username of the user",
+                    "example": "johndoe"
+                  },
+                  "newRole": {
+                    "type": "string",
+                    "description": "New role to assign to the user",
+                    "example": "admin"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User role updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User role updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "components": {
     "schemas": {
       "Machine": {

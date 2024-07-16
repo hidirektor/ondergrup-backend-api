@@ -1,5 +1,103 @@
 const Maintenance = require('../../../models/Maintenance');
 
+/**
+ * @swagger
+ * /update-maintenance:
+ *   put:
+ *     summary: Update a maintenance record by ID
+ *     tags: [Maintenance]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - maintenanceID
+ *             properties:
+ *               maintenanceID:
+ *                 type: integer
+ *                 description: ID of the maintenance record to update
+ *                 example: 1
+ *               machineID:
+ *                 type: integer
+ *                 description: ID of the machine being maintained
+ *                 example: 2
+ *               technicianID:
+ *                 type: integer
+ *                 description: ID of the technician performing the maintenance
+ *                 example: 3
+ *               maintenanceDescription:
+ *                 type: string
+ *                 description: Description of the maintenance performed
+ *                 example: "Replaced faulty wiring"
+ *               maintenanceCost:
+ *                 type: number
+ *                 description: Cost of the maintenance
+ *                 example: 150.00
+ *     responses:
+ *       200:
+ *         description: Maintenance record updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Maintenance record updated successfully
+ *                 updatedMaintenance:
+ *                   type: object
+ *                   description: Updated maintenance record object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       description: ID of the maintenance record
+ *                       example: 1
+ *                     machineID:
+ *                       type: integer
+ *                       description: ID of the machine being maintained
+ *                       example: 2
+ *                     technicianID:
+ *                       type: integer
+ *                       description: ID of the technician performing the maintenance
+ *                       example: 3
+ *                     maintenanceDate:
+ *                       type: integer
+ *                       description: Timestamp of when the maintenance was performed
+ *                       example: 1628000000
+ *       400:
+ *         description: MaintenanceID is required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: maintenanceID is required
+ *       404:
+ *         description: Maintenance record not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Maintenance record not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+
 module.exports = async (req, res) => {
     try {
         const { maintenanceID, ...updateData } = req.body;

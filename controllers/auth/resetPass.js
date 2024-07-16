@@ -2,6 +2,61 @@ const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 
+/**
+ * @swagger
+ * /reset-password:
+ *   post:
+ *     summary: Reset user's password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userName
+ *               - newPassword
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 description: The username of the user
+ *               newPassword:
+ *                 type: string
+ *                 description: The new password for the user
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Password reset successfully
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: An unexpected error occurred while resetting the password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: An unexpected error occurred while resetting the password
+ */
+
 module.exports = async (req, res) => {
     const { userName, newPassword } = req.body;
 

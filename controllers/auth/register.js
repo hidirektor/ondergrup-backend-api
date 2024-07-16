@@ -4,6 +4,111 @@ const bcrypt = require('bcryptjs');
 const generateUserID = require('../../helpers/userIDGenerator');
 const { v4: uuidv4 } = require('uuid');
 
+/**
+ * @swagger
+ * /register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userName
+ *               - userType
+ *               - nameSurname
+ *               - eMail
+ *               - phoneNumber
+ *               - companyName
+ *               - password
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 description: The username of the user
+ *               userType:
+ *                 type: string
+ *                 description: The type of user (e.g., SysOp, Merchant, Carrier, Customer)
+ *               nameSurname:
+ *                 type: string
+ *                 description: The name and surname of the user
+ *               eMail:
+ *                 type: string
+ *                 description: The email address of the user
+ *               phoneNumber:
+ *                 type: string
+ *                 description: The phone number of the user
+ *               companyName:
+ *                 type: string
+ *                 description: The company name of the user
+ *               password:
+ *                 type: string
+ *                 description: The password for the user
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userID:
+ *                   type: string
+ *                   description: The unique ID of the user
+ *                 userName:
+ *                   type: string
+ *                   description: The username of the user
+ *                 userType:
+ *                   type: string
+ *                   description: The type of user
+ *                 nameSurname:
+ *                   type: string
+ *                   description: The name and surname of the user
+ *                 eMail:
+ *                   type: string
+ *                   description: The email address of the user
+ *                 phoneNumber:
+ *                   type: string
+ *                   description: The phone number of the user
+ *                 companyName:
+ *                   type: string
+ *                   description: The company name of the user
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       400:
+ *         description: Validation error or unique constraint error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   examples:
+ *                     uniqueError:
+ *                       summary: Unique constraint error
+ *                       value: Username is already taken
+ *                     validationError:
+ *                       summary: Validation error
+ *                       value: Validation error message
+ *       500:
+ *         description: An unexpected error occurred while registering user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: An unexpected error occurred while registering user
+ */
+
 module.exports = async (req, res) => {
     const {
         userName, userType, nameSurname, eMail, phoneNumber, companyName, password

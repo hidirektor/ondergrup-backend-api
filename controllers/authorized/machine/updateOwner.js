@@ -1,6 +1,63 @@
 const Users = require('../../../models/User');
 const Machine = require("../../../models/Machine");
 
+/**
+ * @swagger
+ * /update-machine-owner:
+ *   post:
+ *     summary: Update the owner of a machine
+ *     tags: [Machine]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - machineID
+ *               - userName
+ *             properties:
+ *               machineID:
+ *                 type: integer
+ *                 description: ID of the machine to update
+ *                 example: 1
+ *               userName:
+ *                 type: string
+ *                 description: Username of the new owner
+ *                 example: "johndoe"
+ *     responses:
+ *       200:
+ *         description: Machine owner updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Machine owner updated successfully
+ *       404:
+ *         description: User or machine not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
+
 module.exports = async (req, res) => {
     const { machineID, userName } = req.body;
 
