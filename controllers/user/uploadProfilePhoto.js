@@ -14,17 +14,10 @@ const minioClient = new Minio.Client({
 
 /**
  * @swagger
- * tags:
- *   name: Profile
- *   description: APIs related to user profiles
- */
-
-/**
- * @swagger
  * /uploadProfilePhoto:
  *   post:
  *     summary: Uploads a user's profile photo and creates a profile photo entry in the database.
- *     tags: [Profile]
+ *     tags: [User Profile]
  *     requestBody:
  *       required: true
  *       content:

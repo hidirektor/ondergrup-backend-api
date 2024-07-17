@@ -13,29 +13,50 @@ const minioClient = new Minio.Client({
 
 /**
  * @swagger
- * /downloadProfilePhoto/{userName}:
- *   get:
- *     summary: Downloads a user's profile photo by userName.
- *     tags: [Profile]
- *     parameters:
- *       - in: path
- *         name: userName
- *         required: true
- *         schema:
- *           type: string
- *         description: The username to find the profile photo.
+ * /downloadProfilePhoto:
+ *   post:
+ *     summary: Retrieve user's profile photo
+ *     tags: [User Profile]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 description: User's name of the user and profile photo to retrieve
+ *                 example: "hidirektor"
  *     responses:
  *       200:
- *         description: Profile photo found and downloaded successfully.
+ *         description: Successfully retrieved the profile photo.
  *         content:
- *           application/octet-stream:
+ *           image/png:
  *             schema:
  *               type: string
  *               format: binary
+ *
  *       404:
- *         description: Profile photo not found.
+ *         description: Profile photo not found for the provided user's name.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Profile photo not found for the provided user's name."
  *       500:
- *         description: Internal server error.
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
  */
 
 const downloadProfilePhoto = async (req, res) => {

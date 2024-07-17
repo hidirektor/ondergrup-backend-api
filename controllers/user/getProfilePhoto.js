@@ -12,10 +12,10 @@ const minioClient = new Minio.Client({
 
 /**
  * @swagger
- * /getProfilePhotoUrl/{userName}:
+ * /getProfilePhoto/{userName}:
  *   get:
  *     summary: Retrieves the URL of a user's profile photo by userName.
- *     tags: [Profile]
+ *     tags: [User Profile]
  *     parameters:
  *       - in: path
  *         name: userName
