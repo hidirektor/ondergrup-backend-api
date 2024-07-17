@@ -98,7 +98,7 @@ module.exports = async (req, res) => {
 
             try {
                 await OTPLog.create({ userID, otpType: 'mail', otpCode, otpSent });
-                res.json({ otpSent });
+                res.json({ otpSent, otpCode });
             } catch (logError) {
                 console.error('Error logging OTP:', logError);
                 res.status(500).json({ message: 'Failed to log OTP. Please try again later.' });

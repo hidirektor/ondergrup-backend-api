@@ -105,7 +105,7 @@ module.exports = async (req, res) => {
 
         await RefreshToken.create({ token: refreshToken, userID: user.userID });
 
-        res.json({ accessToken, refreshToken });
+        res.json({ userID, accessToken, refreshToken });
     } catch (error) {
         console.error('Error logging in:', error);
         if (error.name === 'SequelizeDatabaseError') {
