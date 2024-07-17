@@ -11,6 +11,7 @@ const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const authorizedRoutes = require('./routes/authorized');
+const hydraulicRoutes = require('./routes/hydraulic');
 const machineRoutes = require('./routes/machine');
 const otpRoutes = require('./routes/otp');
 const subUserRoutes = require('./routes/subuser');
@@ -25,6 +26,7 @@ fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpecs, null, 2));
 app.use(express.json());
 app.use('/api/v2/auth', authRoutes);
 app.use('/api/v2/authorized', authorizedRoutes);
+app.use('/api/v2/hydraulic', hydraulicRoutes);
 app.use('/api/v2/machine', machineRoutes);
 app.use('/api/v2/otp', otpRoutes);
 app.use('/api/v2/subUser', subUserRoutes);
