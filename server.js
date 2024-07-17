@@ -10,12 +10,13 @@ const fs = require('fs');
 const path = require('path');
 
 const authRoutes = require('./routes/auth');
-const tokenRoutes = require('./routes/token');
-const otpRoutes = require('./routes/otp');
-const userRoutes = require('./routes/user');
-const machineRoutes = require('./routes/machine');
 const authorizedRoutes = require('./routes/authorized');
+const machineRoutes = require('./routes/machine');
+const otpRoutes = require('./routes/otp');
+const subUserRoutes = require('./routes/subuser');
+const tokenRoutes = require('./routes/token');
 const updateRoutes = require('./routes/update');
+const userRoutes = require('./routes/user');
 const swaggerRoutes = require('./routes/swagger');
 
 const swaggerSpecs = require('./helpers/swaggerOptions');
@@ -23,12 +24,13 @@ fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpecs, null, 2));
 
 app.use(express.json());
 app.use('/api/v2/auth', authRoutes);
-app.use('/api/v2/token', tokenRoutes);
-app.use('/api/v2/otp', otpRoutes);
-app.use('/api/v2/user', userRoutes);
-app.use('/api/v2/machine', machineRoutes);
 app.use('/api/v2/authorized', authorizedRoutes);
+app.use('/api/v2/machine', machineRoutes);
+app.use('/api/v2/otp', otpRoutes);
+app.use('/api/v2/subUser', subUserRoutes);
+app.use('/api/v2/token', tokenRoutes);
 app.use('/api/v2/updateChecker', updateRoutes);
+app.use('/api/v2/user', userRoutes);
 app.use('/api/v2', swaggerRoutes);
 
 
