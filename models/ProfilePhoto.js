@@ -25,6 +25,7 @@ const sequelize = require('../config/database');
 
 const ProfilePhoto = sequelize.define('ProfilePhoto', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    userID: { type: DataTypes.STRING, unique: true, allowNull: false },
     userName: { type: DataTypes.STRING, unique: true, allowNull: false },
     fileID: { type: DataTypes.STRING, unique: true, allowNull: false },
     uploadDate: {

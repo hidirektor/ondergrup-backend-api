@@ -1,8 +1,10 @@
 const ProfilePhoto = require('../../models/ProfilePhoto');
+const User = require('../../models/User');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
 const sharp = require('sharp');
+const {where} = require("sequelize");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -57,6 +59,13 @@ const uploadProfilePhoto = async (req, res) => {
             return res.status(400).json({ message: 'userName and file are required' });
         }
 
+        const user = await User.findOne({where: { userName }});
+        if (!user) {
+            return res.status(400).json({ message: 'user not found !' });
+        }
+
+        const userID = user.userID;
+
         const fileID = uuidv4();
         const originalFileName = file.originalname;
         const fileExtension = path.extname(originalFileName).toLowerCase();
@@ -94,6 +103,7 @@ const uploadProfilePhoto = async (req, res) => {
         }
 
         const update = await ProfilePhoto.create({
+            userID,
             userName,
             fileID
         });
