@@ -47,7 +47,7 @@ const { v4: uuidv4 } = require('uuid');
  *                 type: string
  *                 description: The password for the user
  *     responses:
- *       200:
+ *       201:
  *         description: User registered successfully
  *         content:
  *           application/json:

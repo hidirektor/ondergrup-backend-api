@@ -34,6 +34,9 @@ const { generateAccessToken } = require('../../config/jwt');
  *             schema:
  *               type: object
  *               properties:
+ *                 userID:
+ *                   type: string
+ *                   description: The ID of the user
  *                 accessToken:
  *                   type: string
  *                   description: Access token for user authentication
@@ -79,13 +82,13 @@ const { generateAccessToken } = require('../../config/jwt');
  *               properties:
  *                 message:
  *                   type: string
- *                   examples:
- *                     databaseError:
- *                       summary: Database error
- *                       value: Database error during login
- *                     unexpectedError:
- *                       summary: Unexpected error
- *                       value: An unexpected error occurred during login
+ *                 examples:
+ *                   databaseError:
+ *                     summary: Database error
+ *                     value: Database error during login
+ *                   unexpectedError:
+ *                     summary: Unexpected error
+ *                     value: An unexpected error occurred during login
  */
 
 module.exports = async (req, res) => {

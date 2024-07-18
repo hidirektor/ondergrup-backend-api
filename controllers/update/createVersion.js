@@ -17,32 +17,34 @@ const minioClient = new Minio.Client({
  *   post:
  *     summary: Create a new version
  *     tags: [Version]
- *     consumes:
- *       - multipart/form-data
- *     parameters:
- *       - in: formData
- *         name: versionCode
- *         required: true
- *         type: string
- *         description: Version code of the new version. Must be unique.
- *         example: "1.0.0"
- *       - in: formData
- *         name: versionTitle
- *         required: true
- *         type: string
- *         description: Title of the new version
- *         example: "Release 1.0.0"
- *       - in: formData
- *         name: versionDesc
- *         required: true
- *         type: string
- *         description: Description of the new version
- *         example: "This release includes several bug fixes and new features."
- *       - in: formData
- *         name: file
- *         required: true
- *         type: file
- *         description: Hex file (.hex) to upload. Only .hex files are allowed.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - versionCode
+ *               - versionTitle
+ *               - versionDesc
+ *               - file
+ *             properties:
+ *               versionCode:
+ *                 type: string
+ *                 description: Version code of the new version. Must be unique.
+ *                 example: "1.0.0"
+ *               versionTitle:
+ *                 type: string
+ *                 description: Title of the new version
+ *                 example: "Release 1.0.0"
+ *               versionDesc:
+ *                 type: string
+ *                 description: Description of the new version
+ *                 example: "This release includes several bug fixes and new features."
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Hex file (.hex) to upload. Only .hex files are allowed.
  *     responses:
  *       201:
  *         description: Version created successfully

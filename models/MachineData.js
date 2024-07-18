@@ -132,26 +132,14 @@ const sequelize = require('../config/database');
  *           type: integer
  *           description: Demo mode setting.
  *           example: 0
- *         calismaSayisi1:
+ *         calismaSayisi:
  *           type: integer
  *           description: Working count in units.
  *           example: 100
- *         calismaSayisi10:
+ *         calismaSayisiDemo:
  *           type: integer
  *           description: Working count in tens.
  *           example: 200
- *         calismaSayisi100:
- *           type: integer
- *           description: Working count in hundreds.
- *           example: 300
- *         calismaSayisi1000:
- *           type: integer
- *           description: Working count in thousands.
- *           example: 400
- *         calismaSayisi10000:
- *           type: integer
- *           description: Working count in ten thousands.
- *           example: 500
  *         dilSecim:
  *           type: integer
  *           description: Language selection.
@@ -234,11 +222,8 @@ const MachineData = sequelize.define('MachineData', {
     makineCalismaTmr: { type: DataTypes.INTEGER, allowNull: true },
     buzzer: { type: DataTypes.INTEGER, allowNull: true },
     demoMode: { type: DataTypes.INTEGER, allowNull: true },
-    calismaSayisi1: { type: DataTypes.INTEGER, allowNull: true },
-    calismaSayisi10: { type: DataTypes.INTEGER, allowNull: true },
-    calismaSayisi100: { type: DataTypes.INTEGER, allowNull: true },
-    calismaSayisi1000: { type: DataTypes.INTEGER, allowNull: true },
-    calismaSayisi10000: { type: DataTypes.INTEGER, allowNull: true },
+    calismaSayisi: { type: DataTypes.INTEGER, allowNull: true },
+    calismaSayisiDemo: { type: DataTypes.INTEGER, allowNull: true },
     dilSecim: { type: DataTypes.INTEGER, allowNull: true },
     eepromData38: { type: DataTypes.INTEGER, allowNull: true },
     eepromData39: { type: DataTypes.INTEGER, allowNull: true },
