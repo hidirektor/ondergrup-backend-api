@@ -84,8 +84,12 @@ const getCustomHydraulicInfo = async (req, res, next) => {
             where: {
                 hydraulicType: UnitType
             },
-            attributes: ['id', 'userID', 'userName', 'orderID', 'createdDate', 'hydraulicType', 'pdfFile', 'excelFile', 'createdBy']
+            attributes: ['id', 'userID', 'userName', 'orderID', 'partListID', 'schematicID', 'hydraulicType', 'createdDate']
         });
+
+        if(!hydraulicInfoResult || hydraulicInfoResult.length === 0) {
+            return res.status(400).json({ message: 'No hydraulic unit data found' });
+        }
 
         return res.status(200).json(hydraulicInfoResult);
 

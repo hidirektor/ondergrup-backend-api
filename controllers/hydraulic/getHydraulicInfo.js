@@ -69,8 +69,12 @@ const HydraulicUnit = require('../../models/HydraulicUnit');
 const getHydraulicInfo = async (req, res, next) => {
     try {
         const hydraulicInfoResult = await HydraulicUnit.findAll({
-            attributes: ['id', 'userID', 'userName', 'orderID', 'createdDate', 'hydraulicType', 'pdfFile', 'excelFile', 'createdBy']
+            attributes: ['id', 'userID', 'userName', 'orderID', 'partListID', 'schematicID', 'hydraulicType', 'createdDate']
         });
+
+        if(!hydraulicInfoResult || hydraulicInfoResult.length === 0) {
+            return res.status(400).json({ message: 'No hydraulic unit data found' });
+        }
 
         return res.status(200).json(hydraulicInfoResult);
 
