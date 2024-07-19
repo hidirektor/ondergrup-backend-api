@@ -103,6 +103,7 @@ module.exports = async (req, res) => {
 
         const accessToken = generateAccessToken({ userID: user.userID });
         const refreshToken = jwt.sign({ userID: user.userID }, process.env.JWT_SECRET);
+        const userID = user.userID;
 
         await RefreshToken.destroy({ where: { userID: user.userID } });
 
