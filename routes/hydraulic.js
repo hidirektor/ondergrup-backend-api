@@ -10,8 +10,7 @@ const getPartList = require('../controllers/hydraulic/getPartList');
 const getSchematic = require('../controllers/hydraulic/getSchematic');
 const getOrderNumber = require('../controllers/hydraulic/getHydraulicUnitNumber');
 const getHydraulicStats = require('../controllers/hydraulic/getHydraulicStats');
-const getHydraulicInfo = require('../controllers/hydraulic/getHydraulicInfo');
-const getHydraulicCustomInfo = require('../controllers/hydraulic/getHydraulicCustomInfo');
+const getHydraulicDetails = require('../controllers/hydraulic/getHydraulicDetails');
 
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -25,7 +24,6 @@ router.get('/getPartList/:orderID', getPartList);
 router.get('/getSchematic/:orderID', getSchematic);
 router.get('/getOrderNumber', getOrderNumber);
 router.get('/getHydraulicStats', getHydraulicStats);
-router.get('/getHydraulicInfo', getHydraulicInfo);
-router.get('/getHydraulicCustomInfo', getHydraulicCustomInfo);
+router.get('/getHydraulicDetails', getHydraulicDetails);
 
 module.exports = router;

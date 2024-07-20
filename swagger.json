@@ -158,6 +158,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "userID": {
+                      "type": "string",
+                      "description": "The ID of the user"
+                    },
                     "accessToken": {
                       "type": "string",
                       "description": "Access token for user authentication"
@@ -227,16 +231,16 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string",
-                      "examples": {
-                        "databaseError": {
-                          "summary": "Database error",
-                          "value": "Database error during login"
-                        },
-                        "unexpectedError": {
-                          "summary": "Unexpected error",
-                          "value": "An unexpected error occurred during login"
-                        }
+                      "type": "string"
+                    },
+                    "examples": {
+                      "databaseError": {
+                        "summary": "Database error",
+                        "value": "Database error during login"
+                      },
+                      "unexpectedError": {
+                        "summary": "Unexpected error",
+                        "value": "An unexpected error occurred during login"
                       }
                     }
                   }
@@ -384,7 +388,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "User registered successfully",
             "content": {
               "application/json": {
@@ -1705,6 +1709,475 @@
                     "message": {
                       "type": "string",
                       "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/createHydraulicUnit": {
+      "post": {
+        "summary": "Create a new Hydraulic Unit",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userName",
+                  "orderID",
+                  "hydraulicType",
+                  "partListFile",
+                  "schematicFile"
+                ],
+                "properties": {
+                  "userName": {
+                    "type": "string",
+                    "description": "Username of the user"
+                  },
+                  "orderID": {
+                    "type": "string",
+                    "description": "Order ID of the hydraulic unit"
+                  },
+                  "hydraulicType": {
+                    "type": "string",
+                    "description": "Type of the hydraulic unit"
+                  },
+                  "partListFile": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Excel file containing the part list"
+                  },
+                  "schematicFile": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "PDF file containing the schematic"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Hydraulic Unit created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Hydraulic Unit created successfully"
+                    },
+                    "update": {
+                      "$ref": "#/components/schemas/HydraulicUnit"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "userName, orderID, hydraulicType, partListFile and schematicFile are required"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/downloadPartList": {
+      "post": {
+        "summary": "Download the part list file for a specific Hydraulic Unit",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderID"
+                ],
+                "properties": {
+                  "orderID": {
+                    "type": "string",
+                    "description": "The order ID of the Hydraulic Unit"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the part list file",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Hydraulic Unit not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "HydraulicUnit not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/downloadSchematic": {
+      "post": {
+        "summary": "Download the schematic file for a specific Hydraulic Unit",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "orderID"
+                ],
+                "properties": {
+                  "orderID": {
+                    "type": "string",
+                    "description": "The order ID of the Hydraulic Unit"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the schematic file",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Hydraulic Unit not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "HydraulicUnit not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getHydraulicStats": {
+      "get": {
+        "summary": "Get statistics for hydraulic units",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistics of hydraulic units",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Sipariş Sayısı": {
+                      "type": "integer",
+                      "description": "Total number of orders",
+                      "example": 150
+                    },
+                    "Klasik": {
+                      "type": "integer",
+                      "description": "Number of 'Klasik' type hydraulic units",
+                      "example": 75
+                    },
+                    "Hidros": {
+                      "type": "integer",
+                      "description": "Number of 'Hidros' type hydraulic units",
+                      "example": 50
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Sunucu hatası"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getHydraulicUnitNumber": {
+      "get": {
+        "summary": "Get list of all hydraulic unit order numbers",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of hydraulic unit order numbers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "ORD12345"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error message",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getPartList/{orderID}": {
+      "get": {
+        "summary": "Get the part list file for a specific Hydraulic Unit",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The order ID of the Hydraulic Unit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the part list file",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Hydraulic Unit not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "HydraulicUnit not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getSchematic/{orderID}": {
+      "get": {
+        "summary": "Get the schematic file for a specific Hydraulic Unit",
+        "tags": [
+          "HydraulicUnit"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "orderID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The order ID of the Hydraulic Unit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the schematic file",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Hydraulic Unit not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "HydraulicUnit not found"
                     }
                   }
                 }
@@ -3551,42 +4024,44 @@
         "tags": [
           "Version"
         ],
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "in": "formData",
-            "name": "versionCode",
-            "required": true,
-            "type": "string",
-            "description": "Version code of the new version. Must be unique.",
-            "example": "1.0.0"
-          },
-          {
-            "in": "formData",
-            "name": "versionTitle",
-            "required": true,
-            "type": "string",
-            "description": "Title of the new version",
-            "example": "Release 1.0.0"
-          },
-          {
-            "in": "formData",
-            "name": "versionDesc",
-            "required": true,
-            "type": "string",
-            "description": "Description of the new version",
-            "example": "This release includes several bug fixes and new features."
-          },
-          {
-            "in": "formData",
-            "name": "file",
-            "required": true,
-            "type": "file",
-            "description": "Hex file (.hex) to upload. Only .hex files are allowed."
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "versionCode",
+                  "versionTitle",
+                  "versionDesc",
+                  "file"
+                ],
+                "properties": {
+                  "versionCode": {
+                    "type": "string",
+                    "description": "Version code of the new version. Must be unique.",
+                    "example": "1.0.0"
+                  },
+                  "versionTitle": {
+                    "type": "string",
+                    "description": "Title of the new version",
+                    "example": "Release 1.0.0"
+                  },
+                  "versionDesc": {
+                    "type": "string",
+                    "description": "Description of the new version",
+                    "example": "This release includes several bug fixes and new features."
+                  },
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Hex file (.hex) to upload. Only .hex files are allowed."
+                  }
+                }
+              }
+            }
           }
-        ],
+        },
         "responses": {
           "201": {
             "description": "Version created successfully",
@@ -4205,6 +4680,60 @@
   },
   "components": {
     "schemas": {
+      "HydraulicUnit": {
+        "type": "object",
+        "required": [
+          "userID",
+          "userName",
+          "orderID",
+          "partListID",
+          "schematicID",
+          "hydraulicType"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Auto-incrementing primary key"
+          },
+          "userID": {
+            "type": "string",
+            "description": "Unique identifier for the user"
+          },
+          "userName": {
+            "type": "string",
+            "description": "Unique username"
+          },
+          "orderID": {
+            "type": "string",
+            "description": "Unique identifier for the order"
+          },
+          "partListID": {
+            "type": "string",
+            "description": "Unique identifier for the part list"
+          },
+          "schematicID": {
+            "type": "string",
+            "description": "Unique identifier for the schematic"
+          },
+          "hydraulicType": {
+            "type": "string",
+            "description": "Type of hydraulic unit"
+          },
+          "createdDate": {
+            "type": "integer",
+            "description": "Timestamp of the creation date"
+          }
+        },
+        "example": {
+          "userID": "12345",
+          "userName": "exampleUser",
+          "orderID": "order123",
+          "partListID": "partList123",
+          "schematicID": "schematic123",
+          "hydraulicType": "TypeA",
+          "createdDate": 1622547802
+        }
+      },
       "Machine": {
         "type": "object",
         "properties": {
@@ -4398,30 +4927,15 @@
             "description": "Demo mode setting.",
             "example": 0
           },
-          "calismaSayisi1": {
+          "calismaSayisi": {
             "type": "integer",
             "description": "Working count in units.",
             "example": 100
           },
-          "calismaSayisi10": {
+          "calismaSayisiDemo": {
             "type": "integer",
             "description": "Working count in tens.",
             "example": 200
-          },
-          "calismaSayisi100": {
-            "type": "integer",
-            "description": "Working count in hundreds.",
-            "example": 300
-          },
-          "calismaSayisi1000": {
-            "type": "integer",
-            "description": "Working count in thousands.",
-            "example": 400
-          },
-          "calismaSayisi10000": {
-            "type": "integer",
-            "description": "Working count in ten thousands.",
-            "example": 500
           },
           "dilSecim": {
             "type": "integer",
