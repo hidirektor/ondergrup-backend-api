@@ -17,10 +17,10 @@ const moment = require('moment');
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               userName:
  *                 type: string
- *                 description: The user's email address
- *                 example: "user@example.com"
+ *                 description: The user's userName
+ *                 example: "hidirektor"
  *     responses:
  *       200:
  *         description: OTP sent successfully
@@ -56,18 +56,18 @@ const moment = require('moment');
  */
 
 module.exports = async (req, res) => {
-    const { email } = req.body;
+    const { userName } = req.body;
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpSent = moment().unix();
+    const otpSentTime = moment().unix();
 
     try {
-        const user = await Users.findOne({ where: { eMail: email } });
+        const user = await Users.findOne({ where: { userName: userName } });
         if (!user) {
             return res.status(404).json({ message: 'Invalid email. User not found.' });
         }
 
         const userID = user.userID;
-        const userName = user.userName;
+        const email = user.eMail;
 
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -98,8 +98,8 @@ module.exports = async (req, res) => {
             }
 
             try {
-                await OTPLog.create({ userID, otpType: 'mail', otpCode, otpSent });
-                res.json({ otpSent, otpCode, userName });
+                await OTPLog.create({ userID, otpType: 'mail', otpCode, otpSentTime });
+                res.json({ otpSentTime });
             } catch (logError) {
                 console.error('Error logging OTP:', logError);
                 res.status(500).json({ message: 'Failed to log OTP. Please try again later.' });

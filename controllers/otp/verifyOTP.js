@@ -71,7 +71,7 @@ const moment = require('moment');
  */
 
 module.exports = async (req, res) => {
-    const { userName, otpCode, otpSent } = req.body;
+    const { userName, otpCode, otpSentTime } = req.body;
 
     try {
         const user = await Users.findOne({ where: { userName } });
@@ -80,7 +80,7 @@ module.exports = async (req, res) => {
         }
 
         const userID = user.userID;
-        const otpEntry = await OTPLog.findOne({ where: { userID, otpSent } });
+        const otpEntry = await OTPLog.findOne({ where: { userID, otpSentTime } });
 
         if (!otpEntry) {
             return res.status(404).json({ message: 'Invalid OTP or OTP has expired.' });

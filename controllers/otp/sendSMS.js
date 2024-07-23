@@ -62,7 +62,7 @@ const moment = require('moment');
 module.exports = async (req, res) => {
     const { userName } = req.body;
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpSent = moment().unix();
+    const otpSentTime = moment().unix();
 
     try {
         const user = await Users.findOne({ where: { userName } });
@@ -102,8 +102,8 @@ module.exports = async (req, res) => {
 
         const result = await xml2js.parseStringPromise(response.data);
         if (result.mainbody && result.mainbody.header[0].status[0] === '00') {
-            await OTPLog.create({ userID, otpType: 'sms', otpCode, otpSent });
-            res.json({ otpSent });
+            await OTPLog.create({ userID, otpType: 'sms', otpCode, otpSentTime });
+            res.json({ otpSentTime });
         } else {
             res.status(500).json({ message: 'Error sending SMS', error: result });
         }
