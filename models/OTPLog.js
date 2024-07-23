@@ -36,7 +36,7 @@ const sequelize = require('../config/database');
 
 const OTPLog = sequelize.define('OTPLog', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    userID: { type: DataTypes.STRING, unique: true, allowNull: true },
+    userID: { type: DataTypes.STRING, allowNull: true },
     otpType: { type: DataTypes.STRING, allowNull: true },
     otpCode: { type: DataTypes.STRING, allowNull: true },
     otpSentTime: {

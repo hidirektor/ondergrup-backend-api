@@ -67,6 +67,7 @@ module.exports = async (req, res) => {
         }
 
         const userID = user.userID;
+        const userName = user.userName;
 
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
@@ -98,7 +99,7 @@ module.exports = async (req, res) => {
 
             try {
                 await OTPLog.create({ userID, otpType: 'mail', otpCode, otpSent });
-                res.json({ otpSent, otpCode });
+                res.json({ otpSent, otpCode, userName });
             } catch (logError) {
                 console.error('Error logging OTP:', logError);
                 res.status(500).json({ message: 'Failed to log OTP. Please try again later.' });
