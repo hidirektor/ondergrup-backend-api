@@ -7,6 +7,10 @@ const sequelize = require('../config/database');
  *   schemas:
  *     ProfilePhoto:
  *       type: object
+ *       required:
+ *          - userID
+ *          - userName
+ *          - fileID
  *       properties:
  *         id:
  *           type: integer
@@ -21,6 +25,10 @@ const sequelize = require('../config/database');
  *           type: integer
  *           format: bigint
  *           description: The release date of the profile photo in Unix timestamp format.
+ *       example:
+ *          userID: "12345"
+ *          userName: "hidirektor"
+ *          fileID: "123asdasd13wea"
  */
 
 const ProfilePhoto = sequelize.define('ProfilePhoto', {

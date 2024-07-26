@@ -7,23 +7,25 @@ const sequelize = require('../config/database');
  *   schemas:
  *     UserPreferences:
  *       type: object
+ *       required:
+ *          - userID
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the user preferences entry.
- *           example: 1
  *         userID:
  *           type: string
  *           description: Unique identifier for the user.
- *           example: "USR123456"
  *         language:
  *           type: boolean
  *           description: Language preference of the user.
- *           example: true
  *         nightMode:
  *           type: boolean
  *           description: Whether night mode is enabled.
- *           example: false
+ *       example:
+ *          userID: "12345"
+ *          language: false
+ *          nightMode: true
  */
 
 const UserPreferences = sequelize.define('UserPreferences', {

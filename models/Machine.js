@@ -7,36 +7,38 @@ const sequelize = require('../config/database');
  *   schemas:
  *     Machine:
  *       type: object
+ *       required:
+ *          - machineID
+ *          - machineType
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the machine.
- *           example: 1
  *         machineID:
  *           type: string
  *           description: Unique identifier for the machine assigned by the system.
- *           example: "MCH123456"
  *         ownerID:
  *           type: string
  *           description: Unique identifier for the owner of the machine.
- *           example: "OWN987654"
  *         machineType:
  *           type: string
  *           description: Type or model of the machine.
- *           example: "ESP"
  *         createdAt:
  *           type: integer
  *           description: Timestamp of when the machine was created.
- *           example: 1628000000
  *         lastUpdate:
  *           type: integer
  *           description: Timestamp of the last update to the machine's record.
- *           example: 1628000000
+ *       example:
+ *          machineID: "12345"
+ *          ownerID: "12312312"
+ *          createdAt: 1622547802
+ *          lastUpdate: 1622547802
  */
 
 const Machine = sequelize.define('Machine', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    machineID: { type: DataTypes.STRING, unique: true, allowNull: true },
+    machineID: { type: DataTypes.STRING, unique: true, allowNull: false },
     ownerID: { type: DataTypes.STRING, unique: true, allowNull: true },
     machineType: { type: DataTypes.STRING, allowNull: false },
     createdAt: {

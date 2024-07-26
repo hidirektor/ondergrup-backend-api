@@ -7,27 +7,32 @@ const sequelize = require('../config/database');
  *   schemas:
  *     MachineError:
  *       type: object
+ *       required:
+ *          - machineID
+ *          - errorCode
+ *          - errorMessage
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the machine error entry.
- *           example: 1
  *         machineID:
  *           type: string
  *           description: Unique identifier for the machine.
- *           example: "MCH123456"
  *         errorCode:
  *           type: string
  *           description: Code representing the specific error.
- *           example: "ERR001"
  *         errorMessage:
  *           type: string
  *           description: Description of the error.
- *           example: "Overheating detected"
  *         errorTime:
  *           type: integer
  *           description: Timestamp of when the error occurred.
  *           example: 1628000000
+ *       example:
+ *          machineID: "12345"
+ *          errorCode: "2"
+ *          errorMessage: "Basınç Hatası"
+ *          errorTime: 1622547802
  */
 
 const MachineError = sequelize.define('MachineError', {

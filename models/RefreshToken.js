@@ -7,15 +7,19 @@ const sequelize = require('../config/database');
  *   schemas:
  *     RefreshToken:
  *       type: object
+ *       required:
+ *          - token
+ *          - userID
  *       properties:
  *         token:
  *           type: string
  *           description: The refresh token.
- *           example: "a1b2c3d4e5f6g7h8i9j0"
  *         userID:
  *           type: string
  *           description: Unique identifier for the user.
- *           example: "USR123456"
+ *       example:
+ *          token: "a1b2c3d4e5f6g7h8i9j0"
+ *          userID: "123123123"
  */
 
 const RefreshToken = sequelize.define('RefreshToken', {

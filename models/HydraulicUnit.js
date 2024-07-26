@@ -41,7 +41,7 @@ const sequelize = require('../config/database');
  *            description: Timestamp of the creation date
  *        example:
  *          userID: "12345"
- *          userName: "exampleUser"
+ *          userName: "hidirektor"
  *          orderID: "order123"
  *          partListID: "partList123"
  *          schematicID: "schematic123"

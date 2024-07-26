@@ -7,31 +7,36 @@ const sequelize = require('../config/database');
  *   schemas:
  *     Version:
  *       type: object
+ *       required:
+ *          - versionTitle
+ *          - versionDesc
+ *          - versionCode
+ *          - versionPath
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the version entry.
- *           example: 1
  *         versionTitle:
  *           type: string
  *           description: Title of the version.
- *           example: "1.0.0"
  *         versionDesc:
  *           type: string
  *           description: Description of the version.
- *           example: "Initial release"
  *         versionCode:
  *           type: string
  *           description: Unique code for the version.
- *           example: "v100"
  *         versionPath:
  *           type: string
  *           description: Bucket name for MinIO where the version is stored.
- *           example: "versions/1.0.0"
  *         releaseDate:
  *           type: integer
  *           description: Release date of the version in Unix timestamp format.
- *           example: 1622548800
+ *       example:
+ *          versionTitle: "İlk Sürüm"
+ *          versionDesc: "İlk sürüm yayınlandı !! :))"
+ *          versionCode: "1.0.0"
+ *          versionPath: "versions/asdasd123123123.hex"
+ *          releaseDate: 1622548800
  */
 
 const Version = sequelize.define('Version', {

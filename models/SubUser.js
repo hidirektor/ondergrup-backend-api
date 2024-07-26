@@ -7,19 +7,22 @@ const sequelize = require('../config/database');
  *   schemas:
  *     SubUser:
  *       type: object
+ *       required:
+ *          - ownerID
+ *          - userID
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the sub-user entry.
- *           example: 1
  *         ownerID:
  *           type: string
  *           description: Unique identifier for the owner.
- *           example: "OWNER123456"
  *         userID:
  *           type: string
  *           description: Unique identifier for the sub-user.
- *           example: "USER123456"
+ *       example:
+ *          ownerID: "12345asdasd13"
+ *          userID: "asdasdasd12312"
  */
 
 const SubUser = sequelize.define('SubUser', {

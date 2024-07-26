@@ -7,6 +7,43 @@ const sequelize = require('../config/database');
  *   schemas:
  *     Maintenance:
  *       type: object
+ *       required:
+ *          - machineID
+ *          - technicianID
+ *          - kontrol11
+ *          - kontrol12
+ *          - kontrol13
+ *          - kontrol14
+ *          - kontrol21
+ *          - kontrol22
+ *          - kontrol23
+ *          - kontrol24
+ *          - kontrol31
+ *          - kontrol32
+ *          - kontrol33
+ *          - kontrol34
+ *          - kontrol35
+ *          - kontrol36
+ *          - kontrol41
+ *          - kontrol42
+ *          - kontrol43
+ *          - kontrol44
+ *          - kontrol45
+ *          - kontrol46
+ *          - kontrol51
+ *          - kontrol52
+ *          - kontrol53
+ *          - kontrol54
+ *          - kontrol55
+ *          - kontrol56
+ *          - kontrol61
+ *          - kontrol62
+ *          - kontrol63
+ *          - kontrol71
+ *          - kontrol72
+ *          - kontrol81
+ *          - kontrol82
+ *          - kontrol83
  *       properties:
  *         id:
  *           type: integer
@@ -200,6 +237,53 @@ const sequelize = require('../config/database');
  *           type: integer
  *           description: Status of kontrol 910.
  *           example: 1
+ *       example:
+ *          machineID: "12345"
+ *          technicianID: "12345"
+ *          kontrol11: 1
+ *          kontrol12: 0
+ *          kontrol13: 1
+ *          kontrol14: 1
+ *          kontrol21: 1
+ *          kontrol22: 1
+ *          kontrol23: 1
+ *          kontrol24: 1
+ *          kontrol31: 0
+ *          kontrol32: 1
+ *          kontrol33: 1
+ *          kontrol34: 0
+ *          kontrol35: 1
+ *          kontrol36: 1
+ *          kontrol41: 0
+ *          kontrol42: 1
+ *          kontrol43: 1
+ *          kontrol44: 0
+ *          kontrol45: 1
+ *          kontrol46: 1
+ *          kontrol51: 0
+ *          kontrol52: 0
+ *          kontrol53: 1
+ *          kontrol54: 1
+ *          kontrol55: 0
+ *          kontrol56: 1
+ *          kontrol61: 1
+ *          kontrol62: 0
+ *          kontrol63: 1
+ *          kontrol71: 0
+ *          kontrol72: 1
+ *          kontrol81: 1
+ *          kontrol82: 1
+ *          kontrol83: 1
+ *          kontrol91: "Kontrol durumu belirtilecek."
+ *          kontrol92: "Kontrol durumu belirtilecek."
+ *          kontrol93: "Kontrol durumu belirtilecek."
+ *          kontrol94: "Kontrol durumu belirtilecek."
+ *          kontrol95: "Kontrol durumu belirtilecek."
+ *          kontrol96: "Kontrol durumu belirtilecek."
+ *          kontrol97: "Kontrol durumu belirtilecek."
+ *          kontrol98: "Kontrol durumu belirtilecek."
+ *          kontrol99: "Kontrol durumu belirtilecek."
+ *          kontrol910: "Kontrol durumu belirtilecek."
  */
 
 const Maintenance = sequelize.define('Maintenance', {
@@ -245,16 +329,16 @@ const Maintenance = sequelize.define('Maintenance', {
     kontrol81: { type: DataTypes.INTEGER, allowNull: false },
     kontrol82: { type: DataTypes.INTEGER, allowNull: false },
     kontrol83: { type: DataTypes.INTEGER, allowNull: false },
-    kontrol91: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol92: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol93: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol94: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol95: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol96: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol97: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol98: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol99: { type: DataTypes.INTEGER, allowNull: true },
-    kontrol910: { type: DataTypes.INTEGER, allowNull: true }
+    kontrol91: { type: DataTypes.STRING, allowNull: true },
+    kontrol92: { type: DataTypes.STRING, allowNull: true },
+    kontrol93: { type: DataTypes.STRING, allowNull: true },
+    kontrol94: { type: DataTypes.STRING, allowNull: true },
+    kontrol95: { type: DataTypes.STRING, allowNull: true },
+    kontrol96: { type: DataTypes.STRING, allowNull: true },
+    kontrol97: { type: DataTypes.STRING, allowNull: true },
+    kontrol98: { type: DataTypes.STRING, allowNull: true },
+    kontrol99: { type: DataTypes.STRING, allowNull: true },
+    kontrol910: { type: DataTypes.STRING, allowNull: true }
 
 }, {
     timestamps: false,

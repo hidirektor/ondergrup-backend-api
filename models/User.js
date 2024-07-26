@@ -7,51 +7,60 @@ const sequelize = require('../config/database');
  *   schemas:
  *     User:
  *       type: object
+ *       required:
+ *          - userID
+ *          - userName
+ *          - userType
+ *          - nameSurname
+ *          - eMail
+ *          - phoneNumber
+ *          - companyName
+ *          - password
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the user.
- *           example: 1
  *         userID:
  *           type: string
  *           description: Unique identifier for the user.
- *           example: "USR123456"
  *         userName:
  *           type: string
  *           description: Unique username for the user.
- *           example: "johndoe"
  *         userType:
  *           type: string
  *           description: Type of the user.
- *           example: "admin"
  *         nameSurname:
  *           type: string
  *           description: Full name of the user.
- *           example: "John Doe"
  *         eMail:
  *           type: string
  *           description: Email address of the user.
- *           example: "johndoe@example.com"
  *         phoneNumber:
  *           type: string
  *           description: Phone number of the user.
- *           example: "+1234567890"
  *         companyName:
  *           type: string
  *           description: Name of the company the user is associated with.
- *           example: "Example Corp"
  *         password:
  *           type: string
  *           description: Password of the user.
- *           example: "password123"
  *         isActive:
  *           type: boolean
  *           description: Whether the user is active.
- *           example: true
  *         createdAt:
  *           type: integer
  *           description: Timestamp of when the user was created.
- *           example: 1628000000
+ *       example:
+ *          userID: "12345"
+ *          userName: "hidirektor"
+ *          userType: "ENGINEER"
+ *          nameSurname: "Halil İbrahim DİREKTÖR"
+ *          eMail: "hidirektor@gmail.com"
+ *          phoneNumber: "5417410309"
+ *          companyName: "Lebara Mobile UK"
+ *          password: "asdasd"
+ *          isActive: true
+ *          createdAt: 1628000000
  */
 
 const User = sequelize.define('User', {

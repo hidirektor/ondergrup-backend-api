@@ -7,187 +7,189 @@ const sequelize = require('../config/database');
  *   schemas:
  *     MachineData:
  *       type: object
+ *       required:
+ *          - machineID
  *       properties:
  *         id:
  *           type: integer
  *           description: Unique identifier for the machine data entry.
- *           example: 1
  *         machineID:
  *           type: string
  *           description: Unique identifier for the machine.
- *           example: "MCH123456"
  *         wifiSSID:
  *           type: string
  *           description: WiFi SSID for the machine.
- *           example: "MyWiFiNetwork"
  *         wifiPass:
  *           type: string
  *           description: WiFi password for the machine.
- *           example: "MyWiFiPassword"
  *         devirmeYuruyusSecim:
  *           type: integer
  *           description: Selection for devirme yuruyus.
- *           example: 1
  *         calismaSekli:
  *           type: integer
  *           description: Working mode.
- *           example: 2
  *         emniyetCercevesi:
  *           type: integer
  *           description: Safety frame selection.
- *           example: 1
  *         yavaslamaLimit:
  *           type: integer
  *           description: Slowdown limit.
- *           example: 50
  *         altLimit:
  *           type: integer
  *           description: Lower limit.
- *           example: 20
  *         kapiTablaAcKonum:
  *           type: integer
  *           description: Door table open position.
- *           example: 30
  *         basincSalteri:
  *           type: integer
  *           description: Pressure switch setting.
- *           example: 1
  *         kapiSecimleri:
  *           type: integer
  *           description: Door selections.
- *           example: 3
  *         kapiAcTipi:
  *           type: integer
  *           description: Door open type.
- *           example: 1
  *         kapi1Tip:
  *           type: integer
  *           description: Type of door 1.
- *           example: 1
  *         kapi1AcSure:
  *           type: integer
  *           description: Door 1 open duration.
- *           example: 5
  *         kapi2Tip:
  *           type: integer
  *           description: Type of door 2.
- *           example: 2
  *         kapi2AcSure:
  *           type: integer
  *           description: Door 2 open duration.
- *           example: 6
  *         kapitablaTip:
  *           type: integer
  *           description: Table type.
- *           example: 2
  *         kapiTablaAcSure:
  *           type: integer
  *           description: Table open duration.
- *           example: 10
  *         yukariYavasLimit:
  *           type: integer
  *           description: Upper slow limit.
- *           example: 70
  *         devirmeYukariIleriLimit:
  *           type: integer
  *           description: Devirme upper forward limit.
- *           example: 60
  *         devirmeAsagiGeriLimit:
  *           type: integer
  *           description: Devirme lower back limit.
- *           example: 40
  *         devirmeSilindirTipi:
  *           type: integer
  *           description: Devirme cylinder type.
- *           example: 1
  *         platformSilindirTipi:
  *           type: integer
  *           description: Platform cylinder type.
- *           example: 2
  *         yukariValfTmr:
  *           type: integer
  *           description: Upper valve timer.
- *           example: 15
  *         asagiValfTmr:
  *           type: integer
  *           description: Lower valve timer.
- *           example: 10
  *         devirmeYukariIleriTmr:
  *           type: integer
  *           description: Devirme upper forward timer.
- *           example: 20
  *         devirmeAsagiGeriTmr:
  *           type: integer
  *           description: Devirme lower back timer.
- *           example: 18
  *         makineCalismaTmr:
  *           type: integer
  *           description: Machine working timer.
- *           example: 25
  *         buzzer:
  *           type: integer
  *           description: Buzzer setting.
- *           example: 1
  *         demoMode:
  *           type: integer
  *           description: Demo mode setting.
- *           example: 0
  *         calismaSayisi:
  *           type: integer
  *           description: Working count in units.
- *           example: 100
  *         calismaSayisiDemo:
  *           type: integer
  *           description: Working count in tens.
- *           example: 200
  *         dilSecim:
  *           type: integer
  *           description: Language selection.
- *           example: 1
  *         eepromData38:
  *           type: integer
  *           description: EEPROM data at position 38.
- *           example: 255
  *         eepromData39:
  *           type: integer
  *           description: EEPROM data at position 39.
- *           example: 255
  *         eepromData40:
  *           type: integer
  *           description: EEPROM data at position 40.
- *           example: 255
  *         eepromData41:
  *           type: integer
  *           description: EEPROM data at position 41.
- *           example: 255
  *         eepromData42:
  *           type: integer
  *           description: EEPROM data at position 42.
- *           example: 255
  *         eepromData43:
  *           type: integer
  *           description: EEPROM data at position 43.
- *           example: 255
  *         eepromData44:
  *           type: integer
  *           description: EEPROM data at position 44.
- *           example: 255
  *         eepromData45:
  *           type: integer
  *           description: EEPROM data at position 45.
- *           example: 255
  *         eepromData46:
  *           type: integer
  *           description: EEPROM data at position 46.
- *           example: 255
  *         eepromData47:
  *           type: integer
  *           description: EEPROM data at position 47.
- *           example: 255
  *         lcdBacklightSure:
  *           type: integer
  *           description: LCD backlight duration.
- *           example: 60
+ *       example:
+ *          machineID: "12345"
+ *          wifiSSID: "hidirektor"
+ *          wifiPass: "hidirektor"
+ *          devirmeYuruyusSecim: 1
+ *          calismaSekli: 1
+ *          emniyetCercevesi: 1
+ *          yavaslamaLimit: 1
+ *          altLimit: 0
+ *          kapiTablaAcKonum: 1
+ *          basincSalteri: 1
+ *          kapiSecimleri: 1
+ *          kapiAcTipi: 1
+ *          kapi1Tip: 1
+ *          kapi1AcSure: 60
+ *          kapi2Tip: 1
+ *          kapi2AcSure: 60
+ *          kapitablaTip: 1
+ *          kapiTablaAcSure: 60
+ *          yukariYavasLimit: 1
+ *          devirmeYukariIleriLimit: 1
+ *          devirmeAsagiGeriLimit: 1
+ *          devirmeSilindirTipi: 1
+ *          platformSilindirTipi: 1
+ *          yukariValfTmr: 1
+ *          asagiValfTmr: 1
+ *          devirmeYukariIleriTmr: 1
+ *          devirmeAsagiGeriTmr: 1
+ *          makineCalismaTmr: 1
+ *          buzzer: 1
+ *          demoMode: 1
+ *          calismaSayisi: 255
+ *          calismaSayisiDemo: 255
+ *          dilSecim: 1
+ *          eepromData38: 1
+ *          eepromData39: 1
+ *          eepromData40: 6
+ *          eepromData41: 5
+ *          eepromData42: 3
+ *          eepromData43: 2
+ *          eepromData44: 1
+ *          eepromData45: 1
+ *          eepromData46: 1
+ *          eepromData47: 1
+ *          lcdBacklightSure: 60
  */
 
 const MachineData = sequelize.define('MachineData', {
