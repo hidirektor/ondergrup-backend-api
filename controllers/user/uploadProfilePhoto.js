@@ -65,6 +65,10 @@ const uploadProfilePhoto = async (req, res) => {
         }
 
         const userID = user.userID;
+        const profilePhoto = await ProfilePhoto.findOne({where: {userID}});
+        if (profilePhoto) {
+            await ProfilePhoto.destroy({where: {userID}});
+        }
 
         const fileID = uuidv4();
         const originalFileName = file.originalname;
