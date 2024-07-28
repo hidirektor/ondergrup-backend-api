@@ -6,17 +6,14 @@ const getCustomHydraulicInfo = async (req, res, next) => {
 
         let hydraulicInfoResult;
 
-        if(!UnitType) {
+        if (UnitType) {
             hydraulicInfoResult = await HydraulicUnit.findAll({
                 where: {
                     hydraulicType: UnitType
                 }
-                //attributes: ['id', 'userID', 'userName', 'orderID', 'partListID', 'schematicID', 'hydraulicType', 'createdDate']
             });
         } else {
-            hydraulicInfoResult = await HydraulicUnit.findAll({
-                //attributes: ['id', 'userID', 'userName', 'orderID', 'partListID', 'schematicID', 'hydraulicType', 'createdDate']
-            });
+            hydraulicInfoResult = await HydraulicUnit.findAll();
         }
 
         if(!hydraulicInfoResult || hydraulicInfoResult.length === 0) {

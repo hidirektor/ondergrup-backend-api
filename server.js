@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
     });
 });
 
-sequelize.sync({ force: true, alter: true }).then(() => {
+sequelize.sync({ force: false, alter: true }).then(() => {
     server.listen(process.env.PORT, () => {
         console.log('Server running on port 3000');
     });

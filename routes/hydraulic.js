@@ -24,6 +24,6 @@ router.get('/getPartList/:orderID', getPartList);
 router.get('/getSchematic/:orderID', getSchematic);
 router.get('/getOrderNumber', getOrderNumber);
 router.get('/getHydraulicStats', getHydraulicStats);
-router.get('/getHydraulicDetails', getHydraulicDetails);
+router.post('/getHydraulicDetails', getHydraulicDetails);
 
 module.exports = router;
