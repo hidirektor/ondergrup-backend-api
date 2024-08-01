@@ -194,7 +194,7 @@ const sequelize = require('../config/database');
 
 const MachineData = sequelize.define('MachineData', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    machineID: { type: DataTypes.STRING, unique: true, allowNull: false },
+    machineID: { type: DataTypes.STRING, allowNull: false },
     wifiSSID: { type: DataTypes.STRING, allowNull: true },
     wifiPass: { type: DataTypes.STRING, allowNull: true },
     devirmeYuruyusSecim: { type: DataTypes.INTEGER, allowNull: true },

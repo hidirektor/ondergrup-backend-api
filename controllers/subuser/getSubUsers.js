@@ -26,64 +26,22 @@ const User = require('../../models/User');
  *             schema:
  *               type: object
  *               properties:
- *                 subUsers:
- *                   type: array
- *                   description: Array of sub-user objects
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                         example: "subuser123"
- *                       ownerID:
- *                         type: string
- *                         example: "owner123"
- *                       userID:
- *                         type: string
- *                         example: "user456"
- *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                         example: "2024-07-16T12:00:00Z"
- *                       updatedAt:
- *                         type: string
- *                         format: date-time
- *                         example: "2024-07-16T12:00:00Z"
- *                 users:
- *                   type: array
- *                   description: Array of associated User objects
- *                   items:
- *                     type: object
- *                     properties:
- *                       userID:
- *                         type: string
- *                         example: "user456"
- *                       userName:
- *                         type: string
- *                         example: "username"
- *                       userType:
- *                         type: string
- *                         example: "user"
- *                       nameSurname:
- *                         type: string
- *                         example: "John Doe"
- *                       eMail:
- *                         type: string
- *                         example: "user@example.com"
- *                       phoneNumber:
- *                         type: string
- *                         example: "+1234567890"
- *                       companyName:
- *                         type: string
- *                         example: "User Inc."
- *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                         example: "2024-07-16T12:00:00Z"
- *                       updatedAt:
- *                         type: string
- *                         format: date-time
- *                         example: "2024-07-16T12:00:00Z"
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved all sub users.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     subUsers:
+ *                       type: array
+ *                       description: Array of sub-user objects
+ *                       items:
+ *                         $ref: '#/components/schemas/SubUser'
+ *                     users:
+ *                       type: array
+ *                       description: Array of user objects
+ *                       items:
+ *                         $ref: '#/components/schemas/User'
  *       400:
  *         description: Invalid request body or missing fields
  *         content:
@@ -133,7 +91,7 @@ module.exports = async (req, res) => {
         const userIDs = subUsers.map(subUser => subUser.userID);
         const users = await User.findAll({ where: { userID: userIDs } });
 
-        res.status(200).json({ subUsers, users });
+        res.status(200).json({ message: 'Successfully retrieved all sub users.', payload: { subUsers, users } });
     } catch (error) {
         console.error('Error retrieving sub-users:', error);
         res.status(500).json({ message: 'Internal server error' });

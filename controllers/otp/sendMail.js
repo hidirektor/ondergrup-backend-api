@@ -29,10 +29,16 @@ const moment = require('moment');
  *             schema:
  *               type: object
  *               properties:
- *                 otpSent:
- *                   type: integer
- *                   description: The UNIX timestamp when the OTP was sent
- *                   example: 1628070943
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully sent otp code.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     otpSentTime:
+ *                       type: integer
+ *                       description: The UNIX timestamp when the OTP was sent
+ *                       example: 1628070943
  *       404:
  *         description: User not found
  *         content:
@@ -99,7 +105,7 @@ module.exports = async (req, res) => {
 
             try {
                 await OTPLog.create({ userID, otpType: 'mail', otpCode, otpSentTime });
-                res.json({ otpSentTime });
+                res.json({ message: 'Successfully sent otp code.', payload: { otpSentTime } });
             } catch (logError) {
                 console.error('Error logging OTP:', logError);
                 res.status(500).json({ message: 'Failed to log OTP. Please try again later.' });

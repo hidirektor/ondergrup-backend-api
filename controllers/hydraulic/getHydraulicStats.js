@@ -14,18 +14,24 @@ const HydraulicUnit = require('../../models/HydraulicUnit');
  *             schema:
  *               type: object
  *               properties:
- *                 Sipariş Sayısı:
- *                   type: integer
- *                   description: Total number of orders
- *                   example: 150
- *                 Klasik:
- *                   type: integer
- *                   description: Number of 'Klasik' type hydraulic units
- *                   example: 75
- *                 Hidros:
- *                   type: integer
- *                   description: Number of 'Hidros' type hydraulic units
- *                   example: 50
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved hyrdaulic stats.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     Sipariş Sayısı:
+ *                       type: integer
+ *                       description: Total number of orders
+ *                       example: 150
+ *                     Klasik:
+ *                       type: integer
+ *                       description: Number of 'Klasik' type hydraulic units
+ *                       example: 75
+ *                     Hidros:
+ *                       type: integer
+ *                       description: Number of 'Hidros' type hydraulic units
+ *                       example: 50
  *       500:
  *         description: Internal server error
  *         content:
@@ -61,7 +67,7 @@ const getHydraulicStats = async (req, res) => {
             "Hidros": hidrosCountResult
         };
 
-        return res.status(200).json(statistics);
+        return res.status(200).json({ message: 'Successfully retrieved hyrdaulic stats.', payload: { statistics }});
 
     } catch (error) {
         console.error('Sequelize sorgu hatası:', error);

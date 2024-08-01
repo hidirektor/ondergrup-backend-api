@@ -37,7 +37,7 @@ const sequelize = require('../config/database');
 
 const MachineError = sequelize.define('MachineError', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    machineID: { type: DataTypes.STRING, unique: true, allowNull: false },
+    machineID: { type: DataTypes.STRING, allowNull: false },
     errorCode: { type: DataTypes.STRING, allowNull: false },
     errorMessage: { type: DataTypes.STRING, allowNull: false },
     errorTime: {

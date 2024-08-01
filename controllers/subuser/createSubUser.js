@@ -61,13 +61,14 @@ const bcrypt = require('bcryptjs');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "SubUser created successfully"
- *                 subUser:
+ *                   example: "SubUser created successfully."
+ *                 payload:
  *                   type: object
- *                   description: The details of the created subuser
- *                 newUser:
- *                   type: object
- *                   description: The details of the newly created user
+ *                   properties:
+ *                     subUser:
+ *                       $ref: '#/components/schemas/SubUser'
+ *                     newUser:
+ *                       $ref: '#/components/schemas/User'
  *       400:
  *         description: Invalid request body
  *         content:
@@ -136,7 +137,7 @@ module.exports = async (req, res) => {
             userID,
         });
 
-        res.status(201).json({ message: 'SubUser created successfully', subUser, newUser });
+        res.status(201).json({ message: 'SubUser created successfully.', payload: { subUser, newUser } });
     } catch (error) {
         console.error('Error creating SubUser:', error);
         res.status(500).json({ message: 'Internal server error' });

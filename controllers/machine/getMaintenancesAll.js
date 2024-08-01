@@ -26,10 +26,16 @@ const MachineMaintenances = require('../../models/Maintenance');
  *             schema:
  *               type: object
  *               properties:
- *                 maintenances:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Maintenance'
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved all maintenances.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     maintenances:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Maintenance'
  *       400:
  *         description: Bad request
  *         content:
@@ -83,7 +89,7 @@ module.exports = async (req, res) => {
             }
         });
 
-        res.status(200).json({ maintenances });
+        res.status(200).json({ message: 'Successfully retrieved all maintenances.', payload: { maintenances } });
     } catch (error) {
         console.log('Error retrieving all machine errors', error);
         res.status(500).json({ message: 'Internal server error' });

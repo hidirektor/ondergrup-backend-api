@@ -30,10 +30,16 @@ const moment = require('moment');
  *             schema:
  *               type: object
  *               properties:
- *                 otpSent:
- *                   type: integer
- *                   description: The UNIX timestamp when the OTP was sent
- *                   example: 1628070943
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully sent otp code.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     otpSentTime:
+ *                       type: integer
+ *                       description: The UNIX timestamp when the OTP was sent
+ *                       example: 1628070943
  *       404:
  *         description: User not found
  *         content:
@@ -103,7 +109,7 @@ module.exports = async (req, res) => {
         const result = await xml2js.parseStringPromise(response.data);
         if (result.mainbody && result.mainbody.header[0].status[0] === '00') {
             await OTPLog.create({ userID, otpType: 'sms', otpCode, otpSentTime });
-            res.json({ otpSentTime });
+            res.json({ message: 'Successfully sent otp code.', payload: { otpSentTime } });
         } else {
             res.status(500).json({ message: 'Error sending SMS', error: result });
         }

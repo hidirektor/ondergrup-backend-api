@@ -58,9 +58,12 @@ const minioClient = new Minio.Client({
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Hydraulic Unit created successfully
- *                 update:
- *                   $ref: '#/components/schemas/HydraulicUnit'
+ *                   example: 'Hydraulic Unit created successfully.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     update:
+ *                       $ref: '#/components/schemas/HydraulicUnit'
  *       400:
  *         description: Bad request
  *         content:
@@ -144,7 +147,7 @@ const createHydraulicUnit = async (req, res) => {
             hydraulicType
         });
 
-        res.status(201).json({ message: 'Hydraulic Unit created successfully', update });
+        res.status(201).json({ message: 'Hydraulic Unit created successfully.', payload: { update } });
     } catch (error) {
         console.error('Error creating version:', error);
         res.status(500).json({ message: 'Internal server error' });

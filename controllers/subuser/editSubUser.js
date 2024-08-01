@@ -65,13 +65,14 @@ const bcrypt = require('bcryptjs');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "SubUser updated successfully"
- *                 subUser:
+ *                   example: "SubUser updated successfully."
+ *                 payload:
  *                   type: object
- *                   description: The updated SubUser object
- *                 user:
- *                   type: object
- *                   description: The updated User object
+ *                   properties:
+ *                     subUser:
+ *                       $ref: '#/components/schemas/SubUser'
+ *                     user:
+ *                       $ref: '#/components/schemas/User'
  *       400:
  *         description: Invalid request body or missing fields
  *         content:
@@ -145,7 +146,7 @@ module.exports = async (req, res) => {
 
         await subUser.save();
 
-        res.status(200).json({ message: 'SubUser updated successfully', subUser, user });
+        res.status(200).json({ message: 'SubUser updated successfully.', payload: { subUser, user } });
     } catch (error) {
         console.error('Error updating SubUser:', error);
         res.status(500).json({ message: 'Internal server error' });

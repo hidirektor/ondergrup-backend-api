@@ -51,11 +51,11 @@ const sequelize = require('../config/database');
 
 const HydraulicUnit = sequelize.define('HydraulicUnit', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    userID: { type: DataTypes.STRING, unique: false, allowNull: false },
-    userName: { type: DataTypes.STRING, unique: false, allowNull: false },
-    orderID: { type: DataTypes.STRING, unique: true, allowNull: false },
-    partListID: { type: DataTypes.STRING, unique: true, allowNull: false },
-    schematicID: { type: DataTypes.STRING, unique: true, allowNull: false },
+    userID: { type: DataTypes.STRING, allowNull: false },
+    userName: { type: DataTypes.STRING, allowNull: false },
+    orderID: { type: DataTypes.STRING, allowNull: false },
+    partListID: { type: DataTypes.STRING, allowNull: false },
+    schematicID: { type: DataTypes.STRING, allowNull: false },
     hydraulicType: {type: DataTypes.STRING, allowNull: false },
     createdDate: {
         type: DataTypes.BIGINT,

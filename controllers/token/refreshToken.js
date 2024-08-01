@@ -27,10 +27,16 @@ const { generateAccessToken } = require('../../config/jwt');
  *             schema:
  *               type: object
  *               properties:
- *                 accessToken:
+ *                 message:
  *                   type: string
- *                   description: New access token
- *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                   example: 'Successfully generated access token.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       description: New access token
+ *                       example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
  *         description: Unauthorized - Missing refresh token
  *       403:
@@ -59,7 +65,7 @@ module.exports = async (req, res) => {
         const user = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
         const newAccessToken = generateAccessToken({ userID: user.userID });
 
-        res.json({ accessToken: newAccessToken });
+        res.json({ message: 'Successfully generated access token.', payload: { accessToken: newAccessToken } });
     } catch (error) {
         res.sendStatus(403);
     }

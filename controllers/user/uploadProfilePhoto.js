@@ -42,8 +42,12 @@ const minioClient = new Minio.Client({
  *               properties:
  *                 message:
  *                   type: string
- *                 update:
- *                   $ref: '#/components/schemas/ProfilePhoto'
+ *                   example: 'Profile photo uploaded successfully.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     update:
+ *                       $ref: '#/components/schemas/ProfilePhoto'
  *       400:
  *         description: Bad request, missing parameters.
  *       500:
@@ -112,7 +116,7 @@ const uploadProfilePhoto = async (req, res) => {
             fileID
         });
 
-        res.status(201).json({ message: 'Profile photo uploaded successfully', update });
+        res.status(201).json({ message: 'Profile photo uploaded successfully.', payload: { update } });
     } catch (error) {
         console.error('Error uploading profile photo:', error);
         res.status(500).json({ message: 'Internal server error' });

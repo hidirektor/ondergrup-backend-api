@@ -14,27 +14,16 @@ const Users = require('../../../models/User');
  *             schema:
  *               type: object
  *               properties:
- *                 users:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: User ID
- *                         example: 1
- *                       username:
- *                         type: string
- *                         description: Username of the user
- *                         example: johndoe
- *                       email:
- *                         type: string
- *                         description: Email of the user
- *                         example: johndoe@example.com
- *                       isActive:
- *                         type: boolean
- *                         description: Indicates if the user is active
- *                         example: true
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved all users.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     users:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/User'
  *       404:
  *         description: No active users found
  *         content:
@@ -64,7 +53,7 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'No users found in the database.' });
         }
 
-        res.status(200).json({ users });
+        res.status(200).json({ message: 'Successfully retrieved all users.', payload: { users } });
     } catch (error) {
         console.log('Error retrieving all users', error);
         res.status(500).json({ message: 'Internal server error' });

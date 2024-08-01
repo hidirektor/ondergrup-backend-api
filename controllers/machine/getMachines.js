@@ -25,10 +25,16 @@ const Machine = require('../../models/Machine');
  *             schema:
  *               type: object
  *               properties:
- *                 machines:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Machine'
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved all machines.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     machines:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/Machine'
  *       400:
  *         description: Bad request
  *         content:
@@ -75,7 +81,7 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'No machines found for this user' });
         }
 
-        res.status(200).json({ machines });
+        res.status(200).json({ message: 'Successfully retrieved all machines.', payload: { machines } });
     } catch (error) {
         console.error('Error retrieving machines:', error);
         res.status(500).json({ message: 'Internal server error' });

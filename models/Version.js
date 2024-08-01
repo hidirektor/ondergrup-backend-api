@@ -43,8 +43,8 @@ const Version = sequelize.define('Version', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     versionTitle: { type: DataTypes.STRING, allowNull: false },
     versionDesc: { type: DataTypes.STRING, allowNull: false },
-    versionCode: { type: DataTypes.STRING, unique: true, allowNull: false },
-    versionID: { type: DataTypes.STRING, unique: true, allowNull: false },
+    versionCode: { type: DataTypes.STRING, allowNull: false },
+    versionID: { type: DataTypes.STRING, allowNull: false },
     releaseDate: {
         type: DataTypes.BIGINT,
         allowNull: true,

@@ -55,9 +55,12 @@ const minioClient = new Minio.Client({
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Version created successfully"
- *                 update:
- *                   $ref: '#/components/schemas/Version'
+ *                   example: "Version created successfully."
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     update:
+ *                       $ref: '#/components/schemas/Version'
  *       400:
  *         description: Bad request - Missing versionCode, versionTitle, or file, or invalid file format
  *         content:
@@ -119,7 +122,7 @@ const createVersion = async (req, res) => {
             versionID
         });
 
-        res.status(201).json({ message: 'Version created successfully', update });
+        res.status(201).json({ message: 'Version created successfully.', payload: { update } });
     } catch (error) {
         console.error('Error creating version:', error);
         res.status(500).json({ message: 'Internal server error' });

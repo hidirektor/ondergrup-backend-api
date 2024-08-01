@@ -12,10 +12,17 @@ const HydraulicUnit = require('../../models/HydraulicUnit');
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: string
- *                 example: "ORD12345"
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved hydraulic unit numbers.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     items:
+ *                       type: string
+ *                       example: 'ORD12345'
  *       500:
  *         description: Internal server error
  *         content:
@@ -37,9 +44,7 @@ const getHydraulicUnitNumber = async (req, res) => {
             return res.status(400).json({ message: 'No hydraulic unit data found' });
         }
 
-        return res.status(200).json({
-            count
-        });
+        return res.status(200).json({ message: 'Successfully retrieved hydraulic unit numbers.', payload: { count }});
     } catch (error) {
         console.error('Error retrieving hydraulic unit order numbers:', error);
         res.status(500).json({ message: 'Internal server error' });

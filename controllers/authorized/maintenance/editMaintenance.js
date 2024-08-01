@@ -45,27 +45,12 @@ const Maintenance = require('../../../models/Maintenance');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Maintenance record updated successfully
- *                 updatedMaintenance:
+ *                   example: 'Maintenance record updated successfully.'
+ *                 payload:
  *                   type: object
- *                   description: Updated maintenance record object
  *                   properties:
- *                     id:
- *                       type: integer
- *                       description: ID of the maintenance record
- *                       example: 1
- *                     machineID:
- *                       type: integer
- *                       description: ID of the machine being maintained
- *                       example: 2
- *                     technicianID:
- *                       type: integer
- *                       description: ID of the technician performing the maintenance
- *                       example: 3
- *                     maintenanceDate:
- *                       type: integer
- *                       description: Timestamp of when the maintenance was performed
- *                       example: 1628000000
+ *                     updatedMaintenance:
+ *                       $ref: '#/components/schemas/Maintenance'
  *       400:
  *         description: MaintenanceID is required
  *         content:
@@ -112,7 +97,7 @@ module.exports = async (req, res) => {
 
         if (updated) {
             const updatedMaintenance = await Maintenance.findOne({ where: { maintenanceID } });
-            return res.status(200).json({ message: 'Maintenance record updated', updatedMaintenance });
+            return res.status(200).json({ message: 'Maintenance record updated.', payload: { updatedMaintenance } });
         }
 
         throw new Error('Maintenance record not found');

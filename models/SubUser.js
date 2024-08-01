@@ -26,9 +26,9 @@ const sequelize = require('../config/database');
  */
 
 const SubUser = sequelize.define('SubUser', {
-    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, index: true },
-    ownerID: { type: DataTypes.STRING, unique: true, allowNull: false },
-    userID: { type: DataTypes.STRING, unique: true, allowNull: false }
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    ownerID: { type: DataTypes.STRING, allowNull: false },
+    userID: { type: DataTypes.STRING, allowNull: false }
 }, {
     timestamps: false,
     tableName: 'SubUsers',

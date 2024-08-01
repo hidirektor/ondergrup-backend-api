@@ -35,9 +35,12 @@ const Machine = require('../../models/Machine');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Machine added successfully"
- *                 machine:
- *                   $ref: '#/components/schemas/Machine'
+ *                   example: "Machine added successfully."
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     machine:
+ *                       $ref: '#/components/schemas/Machine'
  *       400:
  *         description: Bad request
  *         content:
@@ -81,7 +84,7 @@ module.exports = async (req, res) => {
             lastUpdate: null,
         });
 
-        res.status(201).json({ message: 'Machine added successfully', machine });
+        res.status(201).json({ message: 'Machine added successfully.', payload: { machine } });
     } catch (error) {
         console.error('Error adding machine:', error);
         res.status(500).json({ message: 'Internal server error' });

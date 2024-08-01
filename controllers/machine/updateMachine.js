@@ -32,9 +32,12 @@ const MachineData = require('../../models/MachineData');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Machine data updated"
- *                 updatedMachine:
- *                   $ref: '#/components/schemas/MachineData'
+ *                   example: "Machine data updated."
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     updatedMachine:
+ *                       $ref: '#/components/schemas/MachineData'
  *       201:
  *         description: Machine data created
  *         content:
@@ -44,9 +47,12 @@ const MachineData = require('../../models/MachineData');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Machine data created"
- *                 newMachineData:
- *                   $ref: '#/components/schemas/MachineData'
+ *                   example: "Machine data created."
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     newMachineData:
+ *                       $ref: '#/components/schemas/MachineData'
  *       400:
  *         description: Bad request
  *         content:
@@ -83,7 +89,7 @@ module.exports = async (req, res) => {
 
         if (updated) {
             const updatedMachine = await MachineData.findOne({ where: { machineID } });
-            return res.status(200).json({ message: 'Machine data updated', updatedMachine });
+            return res.status(200).json({ message: 'Machine data updated.', payload: { updatedMachine } });
         }
 
         const newMachineData = await MachineData.create({
@@ -91,7 +97,7 @@ module.exports = async (req, res) => {
             ...updateData
         });
 
-        res.status(201).json({ message: 'Machine data created', newMachineData });
+        res.status(201).json({ message: 'Machine data created.', payload: { newMachineData } });
     } catch (error) {
         console.error('Error updating machine data:', error);
         res.status(500).json({ message: 'Internal server error' });

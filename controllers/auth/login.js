@@ -34,15 +34,21 @@ const { generateAccessToken } = require('../../config/jwt');
  *             schema:
  *               type: object
  *               properties:
- *                 userID:
+ *                 message:
  *                   type: string
- *                   description: The ID of the user
- *                 accessToken:
- *                   type: string
- *                   description: Access token for user authentication
- *                 refreshToken:
- *                   type: string
- *                   description: Refresh token for user authentication
+ *                   example: 'Successfully logged in :)'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     userID:
+ *                       type: string
+ *                       description: The ID of the user
+ *                     accessToken:
+ *                       type: string
+ *                       description: Access token for user authentication
+ *                     refreshToken:
+ *                       type: string
+ *                       description: Refresh token for user authentication
  *       400:
  *         description: Validation error during login
  *         content:
@@ -109,7 +115,7 @@ module.exports = async (req, res) => {
 
         await RefreshToken.create({ token: refreshToken, userID: user.userID });
 
-        res.json({ userID, accessToken, refreshToken });
+        res.json({ message: 'Successfully logged in :)', payload: { userID, accessToken, refreshToken } });
     } catch (error) {
         console.error('Error logging in:', error);
         if (error.name === 'SequelizeDatabaseError') {

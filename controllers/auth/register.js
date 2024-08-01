@@ -54,33 +54,14 @@ const { v4: uuidv4 } = require('uuid');
  *             schema:
  *               type: object
  *               properties:
- *                 userID:
+ *                 message:
  *                   type: string
- *                   description: The unique ID of the user
- *                 userName:
- *                   type: string
- *                   description: The username of the user
- *                 userType:
- *                   type: string
- *                   description: The type of user
- *                 nameSurname:
- *                   type: string
- *                   description: The name and surname of the user
- *                 eMail:
- *                   type: string
- *                   description: The email address of the user
- *                 phoneNumber:
- *                   type: string
- *                   description: The phone number of the user
- *                 companyName:
- *                   type: string
- *                   description: The company name of the user
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
+ *                   example: 'Successfully registered :)'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     newUser:
+ *                       $ref: '#/components/schemas/User'
  *       400:
  *         description: Validation error or unique constraint error
  *         content:
@@ -135,7 +116,7 @@ module.exports = async (req, res) => {
             nightMode: false
         });
 
-        res.json(newUser);
+        res.status(200).json({message: 'Successfully registered :)', payload: { newUser }});
     } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {
             const field = error.errors[0].path;

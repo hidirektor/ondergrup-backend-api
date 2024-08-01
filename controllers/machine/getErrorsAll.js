@@ -26,10 +26,16 @@ const MachineErrors = require('../../models/MachineError');
  *             schema:
  *               type: object
  *               properties:
- *                 errors:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/MachineError'
+ *                 message:
+ *                   type: string
+ *                   example: 'Successfully retrieved all machine errors.'
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     errors:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/MachineError'
  *       400:
  *         description: Bad request
  *         content:
@@ -83,7 +89,7 @@ module.exports = async (req, res) => {
             }
         });
 
-        res.status(200).json({ errors });
+        res.status(200).json({ message: 'Successfully retrieved all machine errors.', payload: { errors } });
     } catch (error) {
         console.log('Error retrieving all machine errors', error);
         res.status(500).json({ message: 'Internal server error' });

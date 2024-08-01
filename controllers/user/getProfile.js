@@ -26,10 +26,16 @@ const UserPreferences = require('../../models/UserPreferences');
  *             schema:
  *               type: object
  *               properties:
- *                 user:
- *                   $ref: '#/components/schemas/User'
- *                 userPreferences:
- *                   $ref: '#/components/schemas/UserPreferences'
+ *                 message:
+ *                  type: string
+ *                  example: 'Successfully retrieved user profile.'
+ *                 payload:
+ *                  type: object
+ *                  properties:
+ *                    user:
+ *                      $ref: '#/components/schemas/User'
+ *                    userPreferences:
+ *                      $ref: '#/components/schemas/UserPreferences'
  *       404:
  *         description: User not found
  *         content:
@@ -60,5 +66,5 @@ module.exports = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    res.json({ user, userPreferences });
+    res.status(200).json({ message: 'Successfully retrieved user profile.', payload: { user, userPreferences } });
 };

@@ -22,8 +22,17 @@ const UserPreferences = require('../../models/UserPreferences');
  *         description: User preferences retrieved successfully
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/UserPreferences'
+ *            schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                  type: string
+ *                  example: 'Successfully retrieved user preferences.'
+ *                 payload:
+ *                  type: object
+ *                  properties:
+ *                    userPreferences:
+ *                      $ref: '#/components/schemas/UserPreferences'
  *       404:
  *         description: Preferences not found
  *         content:
@@ -53,5 +62,5 @@ module.exports = async (req, res) => {
 
     if (!userPreferences) return res.status(404).json({ message: 'Preferences not found' });
 
-    res.json(userPreferences);
+    res.status(200).json({ message: 'Successfully retrieved user preferences.', payload: { userPreferences } });
 };
