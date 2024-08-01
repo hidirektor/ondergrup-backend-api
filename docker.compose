@@ -4,7 +4,7 @@ version: '3.9'
 services:
   ondergrup-backend-api:
     build: .
-    image: node:latest
+    image: ondergrup-backend-api:latest
     environment:
       PORT: ${PORT}
       DB_HOST: ${DB_HOST}
@@ -12,16 +12,16 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_PORT: ${DB_PORT}
-      EMAIL_SERVER: ${EMAIL_SERVER}
-      EMAIL: ${EMAIL}
-      EMAIL_PASS: ${EMAIL_PASS}
-      SECRET_KEY: ${SECRET_KEY}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      JWT_SECRET: ${JWT_SECRET}
       MINIO_ENDPOINT: ${MINIO_ENDPOINT}
       MINIO_PORT: ${MINIO_PORT}
       MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
       BUCKET_NAME: ${BUCKET_NAME}
-
     ports:
       - '3000:3000'
     networks:
