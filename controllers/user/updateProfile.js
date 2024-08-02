@@ -1,4 +1,5 @@
 const Users = require('../../models/User');
+const bcrypt = require("bcryptjs");
 
 /**
  * @swagger
@@ -61,7 +62,15 @@ module.exports = async (req, res) => {
     const { userID, userData } = req.body;
 
     const user = await Users.findOne({ where: { userID } });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (userData.password) {
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        userData.password = hashedPassword;
+    }
 
     await user.update(userData);
 
