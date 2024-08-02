@@ -2,21 +2,18 @@ const Machine = require('../../models/Machine');
 
 /**
  * @swagger
- * /checkMachineID:
+ * /checkMachineIDRaw:
  *   get:
  *     summary: Check if a machine exists by machineID
  *     tags: [Machine]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               machineID:
- *                 type: string
- *                 description: The ID of the machine to check
- *                 example: "M1234"
+ *     parameters:
+ *       - in: query
+ *         name: machineID
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the machine
+ *         example: "M1234"
  *     responses:
  *       404:
  *         description: Machine exists
@@ -68,7 +65,7 @@ const Machine = require('../../models/Machine');
 
 module.exports = async (req, res) => {
     try {
-        const { machineID } = req.body;
+        const { machineID } = req.query;
 
         if (!machineID) {
             return res.status(400).json({ message: 'machineID is required' });

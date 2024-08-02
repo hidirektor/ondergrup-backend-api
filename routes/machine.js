@@ -7,6 +7,7 @@ const getMachines = require('../controllers/machine/getMachines');
 const updateMachine = require('../controllers/machine/updateMachine');
 const updateMachineRaw = require('../controllers/machine/updateMachineRaw');
 const checkMachine = require('../controllers/machine/checkMachine');
+const checkMachineRaw = require('../controllers/machine/checkMachineRaw');
 
 const getErrors = require('../controllers/machine/getErrors');
 const getErrorsAll = require('../controllers/machine/getErrorsAll');
@@ -22,6 +23,7 @@ router.get('/getMachines', authMiddleware, getMachines);
 router.post('/updateMachine', updateMachine);
 router.get('/updateMachineRaw', updateMachineRaw);
 router.get('/checkMachineID', checkMachine);
+router.get('/checkMachineIDRaw', checkMachineRaw);
 router.get('/getErrors', authMiddleware, getErrors);
 router.get('/getErrorsAll', authMiddleware, getErrorsAll);
 router.get('/getMaintenances', authMiddleware, getMaintenances);
