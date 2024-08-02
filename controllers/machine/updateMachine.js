@@ -1,3 +1,4 @@
+const Machines = require('../../models/Machine');
 const MachineData = require('../../models/MachineData');
 
 /**
@@ -81,6 +82,11 @@ module.exports = async (req, res) => {
 
         if (!machineID) {
             return res.status(400).json({ message: 'machineID is required' });
+        }
+
+        const machineExists = await Machines.findOne({ where: { machineID } });
+        if (!machineExists) {
+            return res.status(404).json({ message: 'Machine not found.' });
         }
 
         const [updated] = await MachineData.update(updateData, {

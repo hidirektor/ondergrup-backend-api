@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const create = require('../controllers/machine/createMachine');
 const add = require('../controllers/machine/addMachine');
 const getMachines = require('../controllers/machine/getMachines');
 const updateMachine = require('../controllers/machine/updateMachine');
@@ -15,9 +16,10 @@ const getMaintenancesAll = require('../controllers/machine/getMaintenancesAll');
 const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 
+router.post('/createMachine', authMiddleware, create);
 router.post('/addMachine', authMiddleware, add);
 router.get('/getMachines', authMiddleware, getMachines);
-router.put('/updateMachine', authMiddleware, updateMachine);
+router.put('/updateMachine', updateMachine);
 router.put('/updateMachineRaw', updateMachineRaw);
 router.get('/checkMachineID', checkMachine);
 router.get('/getErrors', authMiddleware, getErrors);

@@ -2,7 +2,7 @@ const Machine = require('../../models/Machine');
 
 /**
  * @swagger
- * /addMachine:
+ * /createMachine:
  *   post:
  *     summary: Add a new machine
  *     tags: [Machine]
@@ -17,10 +17,6 @@ const Machine = require('../../models/Machine');
  *                 type: string
  *                 description: The ID of the machine
  *                 example: "M1234"
- *               ownerID:
- *                 type: string
- *                 description: The ID of the owner
- *                 example: "O5678"
  *               machineType:
  *                 type: string
  *                 description: The type of the machine
@@ -35,7 +31,7 @@ const Machine = require('../../models/Machine');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Machine ownerID updated successfully."
+ *                   example: "Machine added successfully."
  *                 payload:
  *                   type: object
  *                   properties:
@@ -65,20 +61,25 @@ const Machine = require('../../models/Machine');
 
 module.exports = async (req, res) => {
     try {
-        const { machineID, ownerID, machineType } = req.body;
+        const { machineID, machineType } = req.body;
 
-        if (!machineID || !ownerID || !machineType) {
+        if (!machineID || !machineType) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
         const existingMachine = await Machine.findOne({ where: { machineID } });
-        if (!existingMachine) {
-            return res.status(404).json({ message: 'Machine not found' });
+        if (existingMachine) {
+            return res.status(400).json({ message: 'Machine with this ID already exists' });
         }
 
-        await existingMachine.update({ ownerID });
+        const machine = await Machine.create({
+            machineID,
+            machineType,
+            createdAt: Math.floor(Date.now() / 1000),
+            lastUpdate: null,
+        });
 
-        res.status(201).json({ message: 'Machine ownerID updated successfully.', payload: { existingMachine } });
+        res.status(201).json({ message: 'Machine added successfully.', payload: { machine } });
     } catch (error) {
         console.error('Error adding machine:', error);
         res.status(500).json({ message: 'Internal server error' });
