@@ -21,10 +21,6 @@ const Machine = require('../../models/Machine');
  *                 type: string
  *                 description: The ID of the owner
  *                 example: "O5678"
- *               machineType:
- *                 type: string
- *                 description: The type of the machine
- *                 example: "TypeA"
  *     responses:
  *       201:
  *         description: Machine added successfully
@@ -65,9 +61,9 @@ const Machine = require('../../models/Machine');
 
 module.exports = async (req, res) => {
     try {
-        const { machineID, ownerID, machineType } = req.body;
+        const { machineID, ownerID } = req.body;
 
-        if (!machineID || !ownerID || !machineType) {
+        if (!machineID || !ownerID) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 

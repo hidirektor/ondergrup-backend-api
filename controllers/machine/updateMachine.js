@@ -4,7 +4,7 @@ const MachineData = require('../../models/MachineData');
 /**
  * @swagger
  * /updateMachine:
- *   put:
+ *   post:
  *     summary: Update or create machine data
  *     tags: [Machine]
  *     requestBody:
@@ -78,7 +78,7 @@ const MachineData = require('../../models/MachineData');
 
 module.exports = async (req, res) => {
     try {
-        const { machineID, ...updateData } = req.body;
+        const { machineID, updateData } = req.body;
 
         if (!machineID) {
             return res.status(400).json({ message: 'machineID is required' });
@@ -89,21 +89,22 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'Machine not found.' });
         }
 
-        const [updated] = await MachineData.update(updateData, {
-            where: { machineID }
-        });
+        const machineData = await MachineData.findOne({ where: { machineID } });
+        if (!machineData) {
+            const newMachineData = await MachineData.create({
+                machineID,
+                ...updateData
+            });
+            await Machines.update({ lastUpdate: Math.floor(Date.now() / 1000) }, { where: { machineID } });
 
-        if (updated) {
+            return res.status(201).json({ message: 'Machine data created.', payload: { newMachineData } });
+        } else {
+            await MachineData.update(updateData, { where: { machineID } });
             const updatedMachine = await MachineData.findOne({ where: { machineID } });
+            await Machines.update({ lastUpdate: Math.floor(Date.now() / 1000) }, { where: { machineID } });
+
             return res.status(200).json({ message: 'Machine data updated.', payload: { updatedMachine } });
         }
-
-        const newMachineData = await MachineData.create({
-            machineID,
-            ...updateData
-        });
-
-        res.status(201).json({ message: 'Machine data created.', payload: { newMachineData } });
     } catch (error) {
         console.error('Error updating machine data:', error);
         res.status(500).json({ message: 'Internal server error' });
