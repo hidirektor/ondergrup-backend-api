@@ -63,8 +63,6 @@ module.exports = async (req, res) => {
 
     const user = await Users.findOne({ where: { userID } });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     if (userData.password) {
