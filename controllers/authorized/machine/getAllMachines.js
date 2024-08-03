@@ -1,4 +1,6 @@
 const Machine = require('../../../models/Machine');
+const Users = require("../../../models/User");
+const MachineData = require("../../../models/MachineData");
 
 /**
  * @swagger
@@ -53,7 +55,20 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'No any machines found on database.' });
         }
 
-        res.status(200).json({ message: 'Successfully retrieved all machines.', payload: { machines } });
+        const machineDetails = await Promise.all(machines.map(async (machine) => {
+            const userID = machine.ownerID;
+            const user = await Users.findOne( { userID } );
+            const ownerName = user.userName;
+            const machineID = machine.machineID;
+            const machineData = await MachineData.findAll({ where: { machineID } });
+            return {
+                ...machine.dataValues,
+                ownerName,
+                machineData
+            };
+        }));
+
+        res.status(200).json({ message: 'Successfully retrieved all machines.', payload: { machines: machineDetails } });
     } catch (error) {
         console.log('Error retrieving all machines', error);
         res.status(500).json({ message: 'Internal server error' });
