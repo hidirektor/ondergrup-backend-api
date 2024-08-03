@@ -4,7 +4,7 @@ const MachineMaintenances = require('../../models/Maintenance');
 /**
  * @swagger
  * /getMaintenancesAll:
- *   get:
+ *   post:
  *     summary: Retrieve all maintenances for all machines owned by a specific user
  *     tags: [Machine]
  *     requestBody:

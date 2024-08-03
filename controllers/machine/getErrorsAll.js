@@ -4,7 +4,7 @@ const MachineErrors = require('../../models/MachineError');
 /**
  * @swagger
  * /getErrorsAll:
- *   get:
+ *   post:
  *     summary: Retrieve all errors for all machines owned by a specific user
  *     tags: [Machine]
  *     requestBody:

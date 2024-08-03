@@ -3,7 +3,7 @@ const MachineMaintenance = require('../../models/Maintenance');
 /**
  * @swagger
  * /getMaintenances:
- *   get:
+ *   post:
  *     summary: Retrieve all maintenances for a specific machine
  *     tags: [Machine]
  *     requestBody:
