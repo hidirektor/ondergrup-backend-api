@@ -76,7 +76,9 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: 'userID is required' });
         }
 
-        const machines = await Machine.findAll({ where: { userID } });
+        const ownerID = userID;
+
+        const machines = await Machine.findAll({ where: { ownerID } });
         if (!machines.length) {
             return res.status(404).json({ message: 'No machines found for this user' });
         }

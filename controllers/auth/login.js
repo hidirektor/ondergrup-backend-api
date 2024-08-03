@@ -43,6 +43,9 @@ const { generateAccessToken } = require('../../config/jwt');
  *                     userID:
  *                       type: string
  *                       description: The ID of the user
+ *                     userType:
+ *                       type: string
+ *                       description: The Role of user
  *                     accessToken:
  *                       type: string
  *                       description: Access token for user authentication
@@ -110,12 +113,13 @@ module.exports = async (req, res) => {
         const accessToken = generateAccessToken({ userID: user.userID });
         const refreshToken = jwt.sign({ userID: user.userID }, process.env.JWT_SECRET);
         const userID = user.userID;
+        const userType = user.userType;
 
         await RefreshToken.destroy({ where: { userID: user.userID } });
 
         await RefreshToken.create({ token: refreshToken, userID: user.userID });
 
-        res.json({ message: 'Successfully logged in :)', payload: { userID, accessToken, refreshToken } });
+        res.json({ message: 'Successfully logged in :)', payload: { userID, userType, accessToken, refreshToken } });
     } catch (error) {
         console.error('Error logging in:', error);
         if (error.name === 'SequelizeDatabaseError') {

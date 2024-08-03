@@ -288,8 +288,8 @@ const sequelize = require('../config/database');
 
 const Maintenance = sequelize.define('Maintenance', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    machineID: { type: DataTypes.STRING, unique: true, allowNull: false },
-    technicianID: { type: DataTypes.STRING, unique: true, allowNull: false },
+    machineID: { type: DataTypes.STRING, allowNull: false },
+    technicianID: { type: DataTypes.STRING, allowNull: false },
     maintenanceDate: {
         type: DataTypes.BIGINT,
         allowNull: false,

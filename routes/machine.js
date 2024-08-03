@@ -19,7 +19,7 @@ const roleMiddleware = require('../middleware/roleMiddleware');
 
 router.post('/createMachine', authMiddleware, create);
 router.post('/addMachine', authMiddleware, add);
-router.get('/getMachines', authMiddleware, getMachines);
+router.post('/getMachines', authMiddleware, getMachines);
 router.post('/updateMachine', updateMachine);
 router.get('/updateMachineRaw', updateMachineRaw);
 router.get('/checkMachineID', checkMachine);
