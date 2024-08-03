@@ -1,5 +1,6 @@
 const Machine = require('../../models/Machine');
 const MachineMaintenances = require('../../models/Maintenance');
+const User = require('../../models/User');
 
 /**
  * @swagger
@@ -32,7 +33,7 @@ const MachineMaintenances = require('../../models/Maintenance');
  *                 payload:
  *                   type: object
  *                   properties:
- *                     maintenances:
+ *                     maintenancesWithTechnicianNames:
  *                       type: array
  *                       items:
  *                         $ref: '#/components/schemas/Maintenance'
@@ -91,7 +92,16 @@ module.exports = async (req, res) => {
             }
         });
 
-        res.status(200).json({ message: 'Successfully retrieved all maintenances.', payload: { maintenances } });
+        const maintenancesWithTechnicianNames = await Promise.all(maintenances.map(async (maintenance) => {
+            const userID = maintenance.technicianID;
+            const technician = await User.findOne({ where: { userID } });
+            return {
+                ...maintenance.toJSON(),
+                technicianName: technician ? technician.userName : 'Unknown'
+            };
+        }));
+
+        res.status(200).json({ message: 'Successfully retrieved all maintenances.', payload: { maintenancesWithTechnicianNames } });
     } catch (error) {
         console.log('Error retrieving all machine errors', error);
         res.status(500).json({ message: 'Internal server error' });
