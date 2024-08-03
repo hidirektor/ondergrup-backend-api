@@ -96,8 +96,6 @@ module.exports = async (req, res) => {
             };
         }));
 
-        console.log(machineDetails);
-
         res.status(200).json({ message: 'Successfully retrieved all machines.', payload: { machines: machineDetails } });
     } catch (error) {
         console.error('Error retrieving machines:', error);
