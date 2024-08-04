@@ -18,7 +18,7 @@ const roleMiddleware = require('../middleware/roleMiddleware');
 router.get('/getAllMachines', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
 router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), updateOwner);
 router.get('/getAllUsers', authMiddleware, roleMiddleware(['SYSOP']), getAllUsers);
-router.delete('/deleteUser', authMiddleware, roleMiddleware(['SYSOP']), deleteUser);
+router.post('/deleteUser', authMiddleware, roleMiddleware(['SYSOP']), deleteUser);
 router.put('/updateRole', authMiddleware, roleMiddleware(['SYSOP']), updateRole);
 router.post('/createMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), createMaintenance);
 router.put('/editMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), editMaintenance);

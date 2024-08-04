@@ -56,9 +56,13 @@ module.exports = async (req, res) => {
         }
 
         const machineDetails = await Promise.all(machines.map(async (machine) => {
-            const userID = machine.ownerID;
-            const user = await Users.findOne( { userID } );
-            const ownerName = user.userName;
+            const ownerID = machine.ownerID;
+            let ownerName = "NaN";
+            if(ownerID) {
+                const user = await Users.findOne({ where: { userID: ownerID } });
+                ownerName = user.userName;
+            }
+
             const machineID = machine.machineID;
             const machineData = await MachineData.findAll({ where: { machineID } });
             return {
