@@ -9,9 +9,9 @@ const getSubUsers = require('../controllers/subuser/getSubUsers');
 const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 
-router.post('/createSubUser', authMiddleware, roleMiddleware(['NORMAL']), createSubUser);
-router.delete('/deleteSubUser', authMiddleware, roleMiddleware(['NORMAL']), deleteSubUser);
-router.put('/editSubUser', authMiddleware, roleMiddleware(['NORMAL']), editSubUser);
-router.get('/getSubUsers', authMiddleware, roleMiddleware(['NORMAL']), getSubUsers);
+router.post('/createSubUser', authMiddleware, createSubUser);
+router.post('/deleteSubUser', authMiddleware, deleteSubUser);
+router.post('/editSubUser', authMiddleware, editSubUser);
+router.post('/getSubUsers', authMiddleware, getSubUsers);
 
 module.exports = router;

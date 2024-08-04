@@ -1,6 +1,10 @@
 const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
+const generateUserID = require("../../helpers/userIDGenerator");
+const Users = require("../../models/User");
+
+const Sequelize = require('sequelize');
 
 /**
  * @swagger
@@ -103,15 +107,23 @@ const bcrypt = require('bcryptjs');
 
 module.exports = async (req, res) => {
     try {
-        const { ownerID, userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password } = req.body;
+        const { ownerID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password } = req.body;
 
-        if (!ownerID || !userID || !userName || !userType || !nameSurname || !eMail || !phoneNumber || !companyName || !password) {
+        if (!ownerID || !userName || !userType || !nameSurname || !eMail || !phoneNumber || !companyName || !password) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
         const owner = await User.findOne({ where: { userID: ownerID } });
         if (!owner) {
             return res.status(404).json({ message: 'Owner not found' });
+        }
+
+        let userID = generateUserID();
+        let userIDExists = await Users.findOne({ where: { userID } });
+
+        while (userIDExists) {
+            userID = generateUserID();
+            userIDExists = await Users.findOne({ where: { userID } });
         }
 
         const existingUser = await User.findOne({ where: { [Sequelize.Op.or]: [{ userID }, { userName }, { eMail }] } });

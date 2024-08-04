@@ -107,13 +107,13 @@ const bcrypt = require('bcryptjs');
 
 module.exports = async (req, res) => {
     try {
-        const { id, ownerID, userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password } = req.body;
+        const { ownerID, userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password } = req.body;
 
-        if (!id || !ownerID || !userID || !userName || !userType || !nameSurname || !eMail || !phoneNumber || !companyName) {
+        if (!ownerID || !userID || !userName || !userType || !nameSurname || !eMail || !phoneNumber || !companyName) {
             return res.status(400).json({ message: 'All fields except password are required' });
         }
 
-        const subUser = await SubUser.findOne({ where: { id } });
+        const subUser = await SubUser.findOne({ where: { userID: userID } });
         if (!subUser) {
             return res.status(404).json({ message: 'SubUser not found' });
         }

@@ -4,7 +4,7 @@ const User = require('../../models/User');
 /**
  * @swagger
  * /deleteSubUser:
- *   delete:
+ *   post:
  *     summary: Delete a subuser and associated user by ID
  *     tags: [Sub User Management]
  *     requestBody:
@@ -63,13 +63,13 @@ const User = require('../../models/User');
 
 module.exports = async (req, res) => {
     try {
-        const { id } = req.body;
+        const { subUserID } = req.body;
 
-        if (!id) {
-            return res.status(400).json({ message: 'id is required' });
+        if (!subUserID) {
+            return res.status(400).json({ message: 'subUserID is required' });
         }
 
-        const subUser = await SubUser.findOne({ where: { id } });
+        const subUser = await SubUser.findOne({ where: { userID: subUserID } });
         if (!subUser) {
             return res.status(404).json({ message: 'SubUser not found' });
         }

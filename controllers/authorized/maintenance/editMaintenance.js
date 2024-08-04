@@ -92,11 +92,11 @@ module.exports = async (req, res) => {
         }
 
         const [updated] = await Maintenance.update(updateData, {
-            where: { maintenanceID }
+            where: { id: maintenanceID }
         });
 
         if (updated) {
-            const updatedMaintenance = await Maintenance.findOne({ where: { maintenanceID } });
+            const updatedMaintenance = await Maintenance.findOne({ where: { id: maintenanceID } });
             return res.status(200).json({ message: 'Maintenance record updated.', payload: { updatedMaintenance } });
         }
 

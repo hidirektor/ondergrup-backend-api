@@ -70,7 +70,7 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: 'maintenanceID is required' });
         }
 
-        const maintenance = await Maintenance.findOne({ where: { maintenanceID } });
+        const maintenance = await Maintenance.findOne({ where: { id: maintenanceID } });
         if (!maintenance) {
             return res.status(404).json({ message: 'Maintenance record not found' });
         }
