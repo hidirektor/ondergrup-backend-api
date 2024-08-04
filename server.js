@@ -35,7 +35,6 @@ app.use('/api/v2/updateChecker', updateRoutes);
 app.use('/api/v2/user', userRoutes);
 app.use('/api/v2', swaggerRoutes);
 
-
 const server = http.createServer(app);
 const io = new Server(server);
 
@@ -51,9 +50,9 @@ io.on('connection', (socket) => {
     });
 });
 
-sequelize.sync({ force: false, alter: true }).then(() => {
+sequelize.sync({ force: false, alter: true }).then(async () => {
     server.listen(process.env.PORT, () => {
-        console.log('Server running on port 3000');
+        console.log(`Server running on port ${process.env.PORT || 3000}`);
     });
 }).catch((error) => {
     console.error('Unable to connect to the database:', error);
