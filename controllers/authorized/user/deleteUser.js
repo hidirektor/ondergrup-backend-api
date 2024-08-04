@@ -4,8 +4,8 @@ const Users = require('../../../models/User');
  * @swagger
  * /deleteUser:
  *   delete:
- *     summary: Deactivate a user by username
- *     tags: [Users]
+ *     summary: Delete a user by username
+ *     tags: [Authorized]
  *     requestBody:
  *       required: true
  *       content:
@@ -17,11 +17,11 @@ const Users = require('../../../models/User');
  *             properties:
  *               userName:
  *                 type: string
- *                 description: Username of the user to deactivate
+ *                 description: Username of the user to delete
  *                 example: johndoe
  *     responses:
  *       200:
- *         description: User deactivated successfully
+ *         description: User deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -29,7 +29,7 @@ const Users = require('../../../models/User');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: User deactivated successfully
+ *                   example: User deleted successfully
  *       404:
  *         description: User not found
  *         content:
@@ -42,15 +42,18 @@ const Users = require('../../../models/User');
  *                   example: User not found
  */
 
-
 module.exports = async (req, res) => {
     const { userName } = req.body;
 
-    const user = await Users.findOne({ where: { userName } });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    try {
+        const user = await Users.findOne({ where: { userName } });
+        if (!user) return res.status(404).json({ message: 'User not found' });
 
-    user.isActive = false;
-    await user.save();
+        await user.destroy();
 
-    res.json({ message: 'User deleted successfully' });
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'An error occurred while deleting the user' });
+    }
 };

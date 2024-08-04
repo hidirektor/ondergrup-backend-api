@@ -63,7 +63,7 @@ const { generateAccessToken } = require('../../config/jwt');
  *                   type: string
  *                   example: Validation error during login
  *       401:
- *         description: Unauthorized, invalid credentials
+ *         description: Unauthorized, invalid credentials or inactive account
  *         content:
  *           application/json:
  *             schema:
@@ -71,7 +71,13 @@ const { generateAccessToken } = require('../../config/jwt');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Invalid password
+ *                   examples:
+ *                     invalidPassword:
+ *                       summary: Invalid password
+ *                       value: Invalid password
+ *                     inactiveAccount:
+ *                       summary: User account is inactive
+ *                       value: User account is inactive
  *       404:
  *         description: User not found
  *         content:
@@ -109,6 +115,8 @@ module.exports = async (req, res) => {
 
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) return res.status(401).json({ message: 'Invalid password' });
+
+        if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
         const accessToken = generateAccessToken({ userID: user.userID });
         const refreshToken = jwt.sign({ userID: user.userID }, process.env.JWT_SECRET);

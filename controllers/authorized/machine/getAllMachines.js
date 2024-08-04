@@ -7,7 +7,7 @@ const MachineData = require("../../../models/MachineData");
  * /getAllMachines:
  *   get:
  *     summary: Retrieve all machines
- *     tags: [Machine]
+ *     tags: [Authorized]
  *     responses:
  *       200:
  *         description: A list of all machines

@@ -10,6 +10,7 @@ const updatePreferences = require('../controllers/user/updatePreferences');
 const uploadProfilePhoto = require('../controllers/user/uploadProfilePhoto');
 const downloadProfilePhoto = require('../controllers/user/downloadProfilePhoto');
 const getProfilePhoto = require('../controllers/user/getProfilePhoto');
+const checkUser = require('../controllers/user/checkUser');
 
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -20,6 +21,7 @@ router.post('/updatePreferences', authMiddleware, updatePreferences);
 router.post('/uploadProfilePhoto', upload.single('file'), uploadProfilePhoto);
 router.post('/downloadProfilePhoto', downloadProfilePhoto);
 router.get('/getProfilePhoto/:userName', getProfilePhoto);
+router.post('/checkUser', checkUser);
 
 //router.post('/uploadProfilePhoto', authMiddleware, uploadProfilePhoto);
 //router.post('/downloadProfilePhoto', authMiddleware, downloadProfilePhoto);

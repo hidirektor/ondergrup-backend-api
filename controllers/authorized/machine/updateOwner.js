@@ -6,7 +6,7 @@ const Machine = require("../../../models/Machine");
  * /updateOwner:
  *   put:
  *     summary: Update the owner of a machine
- *     tags: [Machine]
+ *     tags: [Authorized]
  *     requestBody:
  *       required: true
  *       content:

@@ -5,6 +5,7 @@ const getAllMachines = require('../controllers/authorized/machine/getAllMachines
 const updateOwner = require('../controllers/authorized/machine/updateOwner');
 
 const getAllUsers = require('../controllers/authorized/user/getAllUsers');
+const deActivateUser = require('../controllers/authorized/user/deActivateUser');
 const deleteUser = require('../controllers/authorized/user/deleteUser');
 const updateRole = require('../controllers/authorized/user/updateRole');
 
@@ -18,6 +19,7 @@ const roleMiddleware = require('../middleware/roleMiddleware');
 router.get('/getAllMachines', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
 router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), updateOwner);
 router.get('/getAllUsers', authMiddleware, roleMiddleware(['SYSOP']), getAllUsers);
+router.post('/deActivateUser', authMiddleware, roleMiddleware(['SYSOP']), deActivateUser);
 router.post('/deleteUser', authMiddleware, roleMiddleware(['SYSOP']), deleteUser);
 router.put('/updateRole', authMiddleware, roleMiddleware(['SYSOP']), updateRole);
 router.post('/createMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), createMaintenance);

@@ -5,7 +5,7 @@ const Users = require('../../../models/User');
  * /getAllUsers:
  *   get:
  *     summary: Get all active users
- *     tags: [Users]
+ *     tags: [Authorized]
  *     responses:
  *       200:
  *         description: List of active users retrieved successfully

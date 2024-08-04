@@ -17,7 +17,7 @@ Users.hasOne(SubUsers, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: '
 SubUsers.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
 
 // Users.userID > Machines.ownerID
-Users.hasOne(Machines, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+Users.hasOne(Machines, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'SET NULL' });
 Machines.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
 
 // Users.userID > RefreshTokens.userID
@@ -41,7 +41,7 @@ Users.hasOne(UserPreferences, { foreignKey: 'userID', sourceKey: 'userID', onUpd
 UserPreferences.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
 
 // Users.userID > Maintenances.userID
-Users.hasOne(Maintenances, { foreignKey: 'technicianID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+Users.hasOne(Maintenances, { foreignKey: 'technicianID', sourceKey: 'userID', onUpdate: 'CASCADE' });
 Maintenances.belongsTo(Users, { foreignKey: 'technicianID', targetKey: 'userID' });
 
 // Machines.machineID > Maintenances.machineID
