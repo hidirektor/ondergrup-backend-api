@@ -85,14 +85,6 @@ module.exports = async (req, res) => {
         await subUser.destroy();
         await user.destroy();
 
-        await ActionLog.create({
-            userID: userID,
-            userName: userName,
-            operationType: "SUB USER",
-            operationName: "Delete Sub User",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(200).json({ message: 'SubUser and associated User deleted successfully' });
     } catch (error) {
         console.error('Error deleting SubUser:', error);
