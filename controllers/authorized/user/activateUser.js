@@ -2,9 +2,9 @@ const Users = require('../../../models/User');
 
 /**
  * @swagger
- * /deleteUser:
+ * /activateUser:
  *   post:
- *     summary: Delete a user by username
+ *     summary: Activate a user by username
  *     tags: [Authorized]
  *     requestBody:
  *       required: true
@@ -17,11 +17,11 @@ const Users = require('../../../models/User');
  *             properties:
  *               userName:
  *                 type: string
- *                 description: Username of the user to delete
+ *                 description: Username of the user to activate
  *                 example: johndoe
  *     responses:
  *       200:
- *         description: User deleted successfully
+ *         description: User activated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -29,7 +29,7 @@ const Users = require('../../../models/User');
  *               properties:
  *                 message:
  *                   type: string
- *                   example: User deleted successfully
+ *                   example: User activated successfully
  *       404:
  *         description: User not found
  *         content:
@@ -42,18 +42,15 @@ const Users = require('../../../models/User');
  *                   example: User not found
  */
 
+
 module.exports = async (req, res) => {
     const { userName } = req.body;
 
-    try {
-        const user = await Users.findOne({ where: { userName } });
-        if (!user) return res.status(404).json({ message: 'User not found' });
+    const user = await Users.findOne({ where: { userName } });
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
-        await user.destroy();
+    user.isActive = true;
+    await user.save();
 
-        res.json({ message: 'User deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ message: 'An error occurred while deleting the user' });
-    }
+    res.json({ message: 'User activated successfully' });
 };

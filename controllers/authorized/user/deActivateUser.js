@@ -3,7 +3,7 @@ const Users = require('../../../models/User');
 /**
  * @swagger
  * /deActivateUser:
- *   delete:
+ *   post:
  *     summary: Deactivate a user by username
  *     tags: [Authorized]
  *     requestBody:
@@ -52,5 +52,5 @@ module.exports = async (req, res) => {
     user.isActive = false;
     await user.save();
 
-    res.json({ message: 'User deleted successfully' });
+    res.json({ message: 'User deactivated successfully' });
 };
