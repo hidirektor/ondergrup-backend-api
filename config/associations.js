@@ -7,6 +7,7 @@ const MachineData = require('../models/MachineData');
 const Maintenances = require('../models/Maintenance');
 const MachineErrors = require('../models/MachineError');
 const OTPLog = require('../models/OTPLog');
+const ActionLog = require('../models/ActionLog');
 
 // Users.userID > SubUsers.userID
 Users.hasOne(SubUsers, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
@@ -15,6 +16,10 @@ SubUsers.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
 // Users.userID > SubUsers.ownerID
 Users.hasOne(SubUsers, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
 SubUsers.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
+
+// Users.userID > ActionLog.userID
+Users.hasOne(ActionLog, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE' });
+ActionLog.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
 
 // Users.userID > Machines.ownerID
 Users.hasOne(Machines, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'SET NULL' });
