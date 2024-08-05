@@ -77,14 +77,6 @@ module.exports = async (req, res) => {
 
         await existingMachine.update({ ownerID });
 
-        await ActionLog.create({
-            userID: ownerID,
-            userName: user.userName,
-            operationType: "MACHINE",
-            operationName: "Synchronize Machine",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(201).json({ message: 'Machine ownerID updated successfully.', payload: { existingMachine } });
     } catch (error) {
         console.error('Error adding machine:', error);

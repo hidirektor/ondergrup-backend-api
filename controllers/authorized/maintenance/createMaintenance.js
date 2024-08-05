@@ -257,14 +257,6 @@ module.exports = async (req, res) => {
             ...updateData
         });
 
-        await ActionLog.create({
-            userID: technician.userID,
-            userName: technician.userName,
-            operationType: "AUTHORIZED",
-            operationName: "Create Maintenance",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(201).json({ message: 'Maintenance record created successfully.', payload: { maintenance } });
     } catch (error) {
         console.error('Error creating maintenance record:', error);

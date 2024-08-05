@@ -74,14 +74,6 @@ module.exports = async (req, res) => {
         user.password = hashedPassword;
         await user.save();
 
-        await ActionLog.create({
-            userID: user.userID,
-            userName: user.userName,
-            operationType: "AUTH",
-            operationName: "Reset Password",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.json({ message: 'Password reset successfully' });
     } catch (error) {
         console.error('Error resetting password:', error);

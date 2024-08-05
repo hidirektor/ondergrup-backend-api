@@ -99,13 +99,5 @@ module.exports = async (req, res) => {
     user.lastPasswordChange = currentTime;
     await user.save();
 
-    await ActionLog.create({
-        userID: user.userID,
-        userName: user.userName,
-        operationType: "AUTH",
-        operationName: "Change Password",
-        operationTime: currentTime
-    });
-
     res.json({ message: 'Password updated successfully' });
 };

@@ -117,14 +117,6 @@ module.exports = async (req, res) => {
             nightMode: false
         });
 
-        await ActionLog.create({
-            userID: newUser.userID,
-            userName: newUser.userName,
-            operationType: "AUTH",
-            operationName: "Register",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(200).json({message: 'Successfully registered :)', payload: { newUser }});
     } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {

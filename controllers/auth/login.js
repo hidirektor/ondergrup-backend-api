@@ -128,14 +128,6 @@ module.exports = async (req, res) => {
 
         await RefreshToken.create({ token: refreshToken, userID: user.userID });
 
-        await ActionLog.create({
-            userID: user.userID,
-            userName: user.userName,
-            operationType: "AUTH",
-            operationName: "Login",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.json({ message: 'Successfully logged in :)', payload: { userID, userType, accessToken, refreshToken } });
     } catch (error) {
         console.error('Error logging in:', error);

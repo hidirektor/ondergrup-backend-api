@@ -148,14 +148,6 @@ const createHydraulicUnit = async (req, res) => {
             hydraulicType
         });
 
-        await ActionLog.create({
-            userID: user.userID,
-            userName: user.userName,
-            operationType: "HYDRAULIC",
-            operationName: "Create Hydraulic Unit",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(201).json({ message: 'Hydraulic Unit created successfully.', payload: { update } });
     } catch (error) {
         console.error('Error creating version:', error);

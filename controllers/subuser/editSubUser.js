@@ -147,14 +147,6 @@ module.exports = async (req, res) => {
 
         await subUser.save();
 
-        await ActionLog.create({
-            userID: ownerID,
-            userName: owner.userName,
-            operationType: "SUB USER",
-            operationName: "Edit Sub User",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(200).json({ message: 'SubUser updated successfully.', payload: { subUser, user } });
     } catch (error) {
         console.error('Error updating SubUser:', error);

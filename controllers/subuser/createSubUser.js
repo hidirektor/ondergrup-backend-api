@@ -150,14 +150,6 @@ module.exports = async (req, res) => {
             userID,
         });
 
-        await ActionLog.create({
-            userID: ownerID,
-            userName: owner.userName,
-            operationType: "SUB USER",
-            operationName: "Create Sub User",
-            operationTime: Math.floor(Date.now() / 1000)
-        });
-
         res.status(201).json({ message: 'SubUser created successfully.', payload: { subUser, newUser } });
     } catch (error) {
         console.error('Error creating SubUser:', error);
