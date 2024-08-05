@@ -1,4 +1,5 @@
 const Machine = require('../../models/Machine');
+const Users = require("../../models/User");
 const ActionLog = require("../../models/ActionLog");
 
 /**
