@@ -2,7 +2,7 @@ const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { generateAccessToken } = require('../../config/jwt');
+const { generateAccessToken, generateRefreshToken } = require('../../helpers/tokenUtils');
 const ActionLog = require("../../models/ActionLog");
 
 /**
@@ -120,15 +120,13 @@ module.exports = async (req, res) => {
         if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
         const accessToken = generateAccessToken({ userID: user.userID });
-        const refreshToken = jwt.sign({ userID: user.userID }, process.env.JWT_SECRET);
-        const userID = user.userID;
-        const userType = user.userType;
+        const refreshToken = generateRefreshToken({ userID: user.userID });
 
         await RefreshToken.destroy({ where: { userID: user.userID } });
 
-        await RefreshToken.create({ token: refreshToken, userID: user.userID });
+        await RefreshToken.create({ refreshToken, accessToken, userID: user.userID });
 
-        res.json({ message: 'Successfully logged in :)', payload: { userID, userType, accessToken, refreshToken } });
+        res.json({ message: 'Successfully logged in :)', payload: { userID: user.userID, userType: user.userType, accessToken, refreshToken } });
     } catch (error) {
         console.error('Error logging in:', error);
         if (error.name === 'SequelizeDatabaseError') {

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const RefreshToken = require('../../models/RefreshToken');
-const { generateAccessToken } = require('../../config/jwt');
+const { generateAccessToken } = require('../../helpers/tokenUtils');
 
 /**
  * @swagger
@@ -54,16 +54,18 @@ const { generateAccessToken } = require('../../config/jwt');
  */
 
 module.exports = async (req, res) => {
-    const { token } = req.body;
+    const { refreshToken } = req.body;
 
-    if (!token) return res.sendStatus(401);
+    if (!refreshToken) return res.sendStatus(401);
 
     try {
-        const refreshToken = await RefreshToken.findOne({ where: { token } });
-        if (!refreshToken) return res.sendStatus(403);
+        const tokenData = await RefreshToken.findOne({ where: { refreshToken } });
+        if (!tokenData) return res.sendStatus(403);
 
-        const user = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-        const newAccessToken = generateAccessToken({ userID: user.userID });
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const newAccessToken = generateAccessToken({ userID: decoded.userID });
+
+        await RefreshToken.update({ accessToken: newAccessToken }, { where: { refreshToken } });
 
         res.json({ message: 'Successfully generated access token.', payload: { accessToken: newAccessToken } });
     } catch (error) {

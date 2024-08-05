@@ -5,6 +5,7 @@ const app = express();
 require('dotenv').config();
 const sequelize = require('./config/database');
 require('./config/associations');
+const checkAndRefreshTokens = require('./helpers/tokenWorker');
 
 const fs = require('fs');
 const path = require('path');
@@ -53,6 +54,7 @@ io.on('connection', (socket) => {
 sequelize.sync({ force: false, alter: true }).then(async () => {
     server.listen(process.env.PORT, () => {
         console.log(`Server running on port ${process.env.PORT || 3000}`);
+        checkAndRefreshTokens();
     });
 }).catch((error) => {
     console.error('Unable to connect to the database:', error);

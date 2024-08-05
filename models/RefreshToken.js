@@ -22,8 +22,10 @@ const sequelize = require('../config/database');
  *          userID: "123123123"
  */
 
-const RefreshToken = sequelize.define('RefreshToken', {
-    token: { type: DataTypes.STRING, primaryKey: true },
+const RefreshToken = sequelize.define('RefreshTokens', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    refreshToken: { type: DataTypes.STRING, allowNull: false },
+    accessToken: { type: DataTypes.STRING, allowNull: false },
     userID: { type: DataTypes.STRING, allowNull: false }
 }, {
     timestamps: false,
