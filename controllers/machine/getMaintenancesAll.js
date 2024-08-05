@@ -48,7 +48,7 @@ const User = require('../../models/User');
  *                   type: string
  *                   example: "userID is required"
  *       404:
- *         description: No machines found for the user
+ *         description: No machines found for the user or No maintenance data found for the machines
  *         content:
  *           application/json:
  *             schema:
@@ -57,6 +57,9 @@ const User = require('../../models/User');
  *                 message:
  *                   type: string
  *                   example: "No machines found for this user"
+ *                 message2:
+ *                   type: string
+ *                   example: "Maintenance data not found"
  *       500:
  *         description: Internal server error
  *         content:

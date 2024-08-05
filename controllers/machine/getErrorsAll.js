@@ -47,7 +47,7 @@ const MachineErrors = require('../../models/MachineError');
  *                   type: string
  *                   example: "userID is required"
  *       404:
- *         description: No machines found for the user
+ *         description: No machines found for the user or No machine errors found for the machines
  *         content:
  *           application/json:
  *             schema:
@@ -56,6 +56,9 @@ const MachineErrors = require('../../models/MachineError');
  *                 message:
  *                   type: string
  *                   example: "No machines found for this user"
+ *                 message2:
+ *                   type: string
+ *                   example: "No machine errors found for whole machines"
  *       500:
  *         description: Internal server error
  *         content:
