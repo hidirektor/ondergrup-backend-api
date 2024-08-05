@@ -92,6 +92,10 @@ module.exports = async (req, res) => {
             }
         });
 
+        if (!maintenances || maintenances.length === 0) {
+            return res.status(404).send('Maintenance data not found');
+        }
+
         const maintenancesWithTechnicianNames = await Promise.all(maintenances.map(async (maintenance) => {
             const userID = maintenance.technicianID;
             const technician = await User.findOne({ where: { userID } });

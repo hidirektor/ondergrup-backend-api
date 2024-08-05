@@ -91,6 +91,10 @@ module.exports = async (req, res) => {
             }
         });
 
+        if(!errors.length) {
+            return res.status(404).json({ message: 'No machine errors found for whole machines' });
+        }
+
         res.status(200).json({ message: 'Successfully retrieved all machine errors.', payload: { errors } });
     } catch (error) {
         console.log('Error retrieving all machine errors', error);
