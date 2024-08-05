@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
 const User = require("../../models/User");
+const ActionLog = require("../../models/ActionLog");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -145,6 +146,14 @@ const createHydraulicUnit = async (req, res) => {
             partListID,
             schematicID,
             hydraulicType
+        });
+
+        await ActionLog.create({
+            userID: user.userID,
+            userName: user.userName,
+            operationType: "HYDRAULIC",
+            operationName: "Create Hydraulic Unit",
+            operationTime: Math.floor(Date.now() / 1000)
         });
 
         res.status(201).json({ message: 'Hydraulic Unit created successfully.', payload: { update } });

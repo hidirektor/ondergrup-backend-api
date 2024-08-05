@@ -1,5 +1,6 @@
 const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger
@@ -75,12 +76,22 @@ module.exports = async (req, res) => {
         }
 
         const user = await User.findOne({ where: { userID: subUser.userID } });
+        const userID = user.userID;
+        const userName = user.userName;
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
         await subUser.destroy();
         await user.destroy();
+
+        await ActionLog.create({
+            userID: userID,
+            userName: userName,
+            operationType: "SUB USER",
+            operationName: "Delete Sub User",
+            operationTime: Math.floor(Date.now() / 1000)
+        });
 
         res.status(200).json({ message: 'SubUser and associated User deleted successfully' });
     } catch (error) {

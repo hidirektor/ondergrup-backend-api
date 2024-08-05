@@ -1,5 +1,6 @@
 const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
+const ActionLog = require('../../models/ActionLog');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -97,6 +98,14 @@ module.exports = async (req, res) => {
     user.password = await bcrypt.hash(newPassword, 10);
     user.lastPasswordChange = currentTime;
     await user.save();
+
+    await ActionLog.create({
+        userID: user.userID,
+        userName: user.userName,
+        operationType: "AUTH",
+        operationName: "Change Password",
+        operationTime: currentTime
+    });
 
     res.json({ message: 'Password updated successfully' });
 };

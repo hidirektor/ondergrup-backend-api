@@ -1,4 +1,5 @@
 const Machine = require('../../models/Machine');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger

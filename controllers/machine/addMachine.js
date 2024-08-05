@@ -1,4 +1,5 @@
 const Machine = require('../../models/Machine');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger
@@ -67,12 +68,22 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
+        const user = Users.findOne({ where: { userID: ownerID } });
+
         const existingMachine = await Machine.findOne({ where: { machineID } });
         if (!existingMachine) {
             return res.status(404).json({ message: 'Machine not found' });
         }
 
         await existingMachine.update({ ownerID });
+
+        await ActionLog.create({
+            userID: ownerID,
+            userName: user.userName,
+            operationType: "MACHINE",
+            operationName: "Synchronize Machine",
+            operationTime: Math.floor(Date.now() / 1000)
+        });
 
         res.status(201).json({ message: 'Machine ownerID updated successfully.', payload: { existingMachine } });
     } catch (error) {

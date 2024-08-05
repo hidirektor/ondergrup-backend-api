@@ -3,6 +3,7 @@ const OTPLog = require('../../models/OTPLog');
 const Users = require('../../models/User');
 const generateOtpEmailContent = require('../../helpers/generateOtpEmailContent');
 const moment = require('moment');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger

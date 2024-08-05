@@ -3,6 +3,7 @@ const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken } = require('../../config/jwt');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger
@@ -126,6 +127,14 @@ module.exports = async (req, res) => {
         await RefreshToken.destroy({ where: { userID: user.userID } });
 
         await RefreshToken.create({ token: refreshToken, userID: user.userID });
+
+        await ActionLog.create({
+            userID: user.userID,
+            userName: user.userName,
+            operationType: "AUTH",
+            operationName: "Login",
+            operationTime: Math.floor(Date.now() / 1000)
+        });
 
         res.json({ message: 'Successfully logged in :)', payload: { userID, userType, accessToken, refreshToken } });
     } catch (error) {

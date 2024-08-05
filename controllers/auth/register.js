@@ -3,6 +3,7 @@ const UserPreferences = require('../../models/UserPreferences');
 const bcrypt = require('bcryptjs');
 const generateUserID = require('../../helpers/userIDGenerator');
 const { v4: uuidv4 } = require('uuid');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger
@@ -114,6 +115,14 @@ module.exports = async (req, res) => {
             userID,
             language: true,
             nightMode: false
+        });
+
+        await ActionLog.create({
+            userID: newUser.userID,
+            userName: newUser.userName,
+            operationType: "AUTH",
+            operationName: "Register",
+            operationTime: Math.floor(Date.now() / 1000)
         });
 
         res.status(200).json({message: 'Successfully registered :)', payload: { newUser }});

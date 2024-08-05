@@ -1,5 +1,6 @@
 const Users = require('../../../models/User');
 const Machine = require("../../../models/Machine");
+const ActionLog = require("../../../models/ActionLog");
 
 /**
  * @swagger
@@ -71,6 +72,14 @@ module.exports = async (req, res) => {
 
     machine.ownerID = userID;
     await machine.save();
+
+    await ActionLog.create({
+        userID: user.userID,
+        userName: user.userName,
+        operationType: "AUTHORIZED",
+        operationName: "Update Machine Owner",
+        operationTime: Math.floor(Date.now() / 1000)
+    });
 
     res.json({ message: 'Machine owner updated successfully' });
 };

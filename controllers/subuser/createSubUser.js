@@ -5,6 +5,7 @@ const generateUserID = require("../../helpers/userIDGenerator");
 const Users = require("../../models/User");
 
 const Sequelize = require('sequelize');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger
@@ -147,6 +148,14 @@ module.exports = async (req, res) => {
         const subUser = await SubUser.create({
             ownerID,
             userID,
+        });
+
+        await ActionLog.create({
+            userID: ownerID,
+            userName: owner.userName,
+            operationType: "SUB USER",
+            operationName: "Create Sub User",
+            operationTime: Math.floor(Date.now() / 1000)
         });
 
         res.status(201).json({ message: 'SubUser created successfully.', payload: { subUser, newUser } });

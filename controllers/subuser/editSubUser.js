@@ -1,6 +1,7 @@
 const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
+const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger
@@ -145,6 +146,14 @@ module.exports = async (req, res) => {
         subUser.userID = userID;
 
         await subUser.save();
+
+        await ActionLog.create({
+            userID: ownerID,
+            userName: owner.userName,
+            operationType: "SUB USER",
+            operationName: "Edit Sub User",
+            operationTime: Math.floor(Date.now() / 1000)
+        });
 
         res.status(200).json({ message: 'SubUser updated successfully.', payload: { subUser, user } });
     } catch (error) {

@@ -9,6 +9,7 @@ const sequelize = require('../config/database');
  *       type: object
  *       required:
  *          - userID
+ *          - userName
  *          - operationType
  *          - operationName
  *       properties:
@@ -18,6 +19,9 @@ const sequelize = require('../config/database');
  *         userID:
  *           type: string
  *           description: Unique identifier for the user.
+ *         userName:
+ *           type: string
+ *           description: Name of operator.
  *         operationType:
  *           type: string
  *           description: Type of ActionLog (e.g., ADD, OTP, CREATE).
@@ -37,6 +41,7 @@ const sequelize = require('../config/database');
 const ActionLog = sequelize.define('ActionLog', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     userID: { type: DataTypes.STRING, allowNull: false },
+    userName: { type: DataTypes.STRING, allowNull: false },
     operationType: { type: DataTypes.STRING, allowNull: false },
     operationName: { type: DataTypes.STRING, allowNull: false },
     operationTime: {

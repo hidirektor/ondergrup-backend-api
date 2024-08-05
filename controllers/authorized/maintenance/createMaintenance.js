@@ -1,4 +1,6 @@
 const Maintenance = require('../../../models/Maintenance');
+const Users = require("../../../models/User");
+const ActionLog = require("../../../models/ActionLog");
 
 /**
  * @swagger
@@ -246,11 +248,21 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
+        const technician = Users.findOne({ where: { userID: technicianID } });
+
         const maintenance = await Maintenance.create({
             machineID,
             technicianID,
             maintenanceDate: Math.floor(Date.now() / 1000),
             ...updateData
+        });
+
+        await ActionLog.create({
+            userID: technician.userID,
+            userName: technician.userName,
+            operationType: "AUTHORIZED",
+            operationName: "Create Maintenance",
+            operationTime: Math.floor(Date.now() / 1000)
         });
 
         res.status(201).json({ message: 'Maintenance record created successfully.', payload: { maintenance } });
