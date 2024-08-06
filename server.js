@@ -6,7 +6,6 @@ require('dotenv').config();
 const sequelize = require('./config/database');
 require('./config/associations');
 const checkAndRefreshTokens = require('./helpers/tokenWorker');
-
 const fs = require('fs');
 const path = require('path');
 

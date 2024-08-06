@@ -119,8 +119,22 @@ module.exports = async (req, res) => {
 
         if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
-        const accessToken = generateAccessToken({ userID: user.userID });
-        const refreshToken = generateRefreshToken({ userID: user.userID });
+        const existingToken = await RefreshToken.findOne({ where: { userID: user.userID } });
+        let accessToken;
+        let refreshToken;
+
+        if (existingToken) {
+            // Var olan refresh token'ı kullan
+            accessToken = generateAccessToken({ userID: user.userID });
+            refreshToken = existingToken.refreshToken;
+            // Access token'ı güncelle
+            await RefreshToken.update({ accessToken }, { where: { userID: user.userID } });
+        } else {
+            // Yeni refresh token üret
+            accessToken = generateAccessToken({ userID: user.userID });
+            refreshToken = generateRefreshToken({ userID: user.userID });
+            await RefreshToken.create({ refreshToken, accessToken, userID: user.userID });
+        }
 
         await RefreshToken.destroy({ where: { userID: user.userID } });
 

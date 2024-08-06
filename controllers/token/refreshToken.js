@@ -54,18 +54,24 @@ const { generateAccessToken } = require('../../helpers/tokenUtils');
  */
 
 module.exports = async (req, res) => {
-    const { refreshToken } = req.body;
+    const { userID, accessToken, refreshToken } = req.body;
 
-    if (!refreshToken) return res.sendStatus(401);
+    if (!userID || !refreshToken || !accessToken) return res.sendStatus(401);
 
     try {
-        const tokenData = await RefreshToken.findOne({ where: { refreshToken } });
+        const tokenData = await RefreshToken.findOne({ where: { refreshToken, userID } });
         if (!tokenData) return res.sendStatus(403);
 
-        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+        const decodedAccessToken = jwt.verify(accessToken, process.env.JWT_SECRET, { ignoreExpiration: true });
+
+        if (decodedAccessToken.userID !== decoded.userID || decoded.userID !== userID) {
+            return res.sendStatus(403);
+        }
+
         const newAccessToken = generateAccessToken({ userID: decoded.userID });
 
-        await RefreshToken.update({ accessToken: newAccessToken }, { where: { refreshToken } });
+        await RefreshToken.update({ accessToken: newAccessToken }, { where: { refreshToken, userID } });
 
         res.json({ message: 'Successfully generated access token.', payload: { accessToken: newAccessToken } });
     } catch (error) {
