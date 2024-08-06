@@ -2,6 +2,7 @@ const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 const ActionLog = require("../../models/ActionLog");
+const OTPLog = require("../../models/OTPLog");
 
 /**
  * @swagger
@@ -18,6 +19,7 @@ const ActionLog = require("../../models/ActionLog");
  *             required:
  *               - userName
  *               - newPassword
+ *               - otpSentTime
  *             properties:
  *               userName:
  *                 type: string
@@ -25,6 +27,9 @@ const ActionLog = require("../../models/ActionLog");
  *               newPassword:
  *                 type: string
  *                 description: The new password for the user
+ *               otpSentTime:
+ *                 type: string
+ *                 description: The otp sent time unix value
  *     responses:
  *       200:
  *         description: Password reset successfully
@@ -46,6 +51,9 @@ const ActionLog = require("../../models/ActionLog");
  *                 message:
  *                   type: string
  *                   example: User not found
+ *                 message2:
+ *                   type: string
+ *                   example: OTP not found
  *       500:
  *         description: An unexpected error occurred while resetting the password
  *         content:
@@ -59,12 +67,18 @@ const ActionLog = require("../../models/ActionLog");
  */
 
 module.exports = async (req, res) => {
-    const { userName, newPassword } = req.body;
+    const { userName, newPassword, otpSentTime } = req.body;
 
     try {
         const user = await Users.findOne({ where: { userName } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
+        }
+
+        const userID = user.userID;
+        const otpLog = await OTPLog.findOne({ where: {userID, otpSentTime} });
+        if(!otpLog) {
+            return res.status(404).json({ message: 'OTP not found' });
         }
 
         await RefreshToken.destroy({ where: { userID: user.userID } });
