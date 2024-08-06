@@ -42,8 +42,8 @@ Users.hasOne(OTPLog, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CAS
 OTPLog.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
 
 // Users.userID > UserPreferences.userID
-Users.hasOne(UserPreferences, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-UserPreferences.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
+Users.hasOne(UserPreferences, { foreignKey: 'userID', sourceKey: 'userID', as: 'preferences', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+UserPreferences.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID', as: 'user' });
 
 // Users.userID > Maintenances.userID
 Users.hasOne(Maintenances, { foreignKey: 'technicianID', sourceKey: 'userID', onUpdate: 'CASCADE' });

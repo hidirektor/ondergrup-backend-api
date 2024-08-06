@@ -59,12 +59,12 @@ module.exports = async (req, res) => {
     const { token } = req.body;
 
     try {
-        const refreshToken = await RefreshToken.findOne({ where: { token } });
+        const refreshToken = await RefreshToken.findOne({ where: { accessToken: token } });
         if (!refreshToken) {
             return res.status(404).json({ message: 'Token not found' });
         }
 
-        await RefreshToken.destroy({ where: { token } });
+        await RefreshToken.destroy({ where: { accessToken: token } });
 
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {

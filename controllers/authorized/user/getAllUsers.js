@@ -1,4 +1,5 @@
 const Users = require('../../../models/User');
+const UserPreferences = require('../../../models/UserPreferences');
 
 /**
  * @swagger
@@ -48,7 +49,12 @@ const Users = require('../../../models/User');
 
 module.exports = async (req, res) => {
     try {
-        const users = await Users.findAll();
+        const users = await Users.findAll({
+            include: [{
+                model: UserPreferences,
+                as: 'preferences'
+            }]
+        });
         if (!users.length) {
             return res.status(404).json({ message: 'No users found in the database.' });
         }
