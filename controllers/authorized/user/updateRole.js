@@ -1,4 +1,5 @@
 const Users = require('../../../models/User');
+const {createActionLog} = require("../../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -13,9 +14,13 @@ const Users = require('../../../models/User');
  *           schema:
  *             type: object
  *             required:
+ *               - userID
  *               - userName
  *               - newRole
  *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of source user.
  *               userName:
  *                 type: string
  *                 description: Username of the user
@@ -58,13 +63,29 @@ const Users = require('../../../models/User');
  */
 
 module.exports = async (req, res) => {
-    const { userName, newRole } = req.body;
+    const { userID, userName, newRole } = req.body;
 
     const user = await Users.findOne({ where: { userName } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     user.userType = newRole;
     await user.save();
+
+    try {
+        await createActionLog({
+            sourceUserID: userID,
+            affectedUserID: user.userID,
+            affectedUserName: userName,
+            affectedMachineID: null,
+            affectedMaintenanceID: null,
+            affectedHydraulicUnitID: null,
+            operationSection: 'EMBEDDED',
+            operationType: 'UPDATE',
+            operationName: 'User Role Updated.',
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Action Log can not created.' });
+    }
 
     res.json({ message: 'User role updated successfully' });
 };

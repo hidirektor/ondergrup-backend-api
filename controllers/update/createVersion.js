@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
 const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -25,11 +26,15 @@ const minioClient = new Minio.Client({
  *           schema:
  *             type: object
  *             required:
+ *               - userID
  *               - versionCode
  *               - versionTitle
  *               - versionDesc
  *               - file
  *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of source user
  *               versionCode:
  *                 type: string
  *                 description: Version code of the new version. Must be unique.
@@ -86,7 +91,7 @@ const minioClient = new Minio.Client({
 
 const createVersion = async (req, res) => {
     try {
-        const { versionCode, versionTitle, versionDesc } = req.body;
+        const { userID, versionCode, versionTitle, versionDesc } = req.body;
         const file = req.file;
 
         if (!versionCode || !versionTitle || !file) {
@@ -122,6 +127,22 @@ const createVersion = async (req, res) => {
             versionCode,
             versionID
         });
+
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'CREATE',
+                operationName: 'Machine Software Created.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(201).json({ message: 'Version created successfully.', payload: { update } });
     } catch (error) {
