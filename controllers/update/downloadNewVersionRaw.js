@@ -12,20 +12,17 @@ const minioClient = new Minio.Client({
 /**
  * @swagger
  * /downloadNewVersionRaw:
- *   post:
+ *   get:
  *     summary: Download a specific version file
  *     tags: [Version]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               versionCode:
- *                 type: string
- *                 description: Version code of the file to download
- *                 example: "1.0.0"
+ *     parameters:
+ *       - in: query
+ *         name: versionCode
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The current software version of machine
+ *         example: "1.0.0"
  *     responses:
  *       200:
  *         description: Version file downloaded successfully
