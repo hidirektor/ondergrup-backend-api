@@ -17,9 +17,13 @@ SubUsers.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
 Users.hasOne(SubUsers, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
 SubUsers.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
 
-// Users.userID > ActionLog.userID
-Users.hasOne(ActionLog, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE' });
-ActionLog.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
+// Users.userID > ActionLog.sourceUserID
+Users.hasOne(ActionLog, { foreignKey: 'sourceUserID', sourceKey: 'userID', onUpdate: 'CASCADE' });
+ActionLog.belongsTo(Users, { foreignKey: 'sourceUserID', targetKey: 'userID' });
+
+// Users.userID > ActionLog.affectedUserID
+Users.hasOne(ActionLog, { foreignKey: 'affectedUserID', sourceKey: 'userID', onUpdate: 'CASCADE' });
+ActionLog.belongsTo(Users, { foreignKey: 'affectedUserID', targetKey: 'userID' });
 
 // Users.userID > Machines.ownerID
 Users.hasOne(Machines, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'SET NULL' });
@@ -52,3 +56,11 @@ Maintenances.belongsTo(Users, { foreignKey: 'technicianID', targetKey: 'userID' 
 // Machines.machineID > Maintenances.machineID
 Machines.hasOne(Maintenances, { foreignKey: 'machineID', sourceKey: 'machineID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
 Maintenances.belongsTo(Machines, { foreignKey: 'machineID', targetKey: 'machineID' });
+
+// Machine.machineID > ActionLog.affectedMachineID
+Machines.hasOne(ActionLog, { foreignKey: 'affectedMachineID', sourceKey: 'machineID', onUpdate: 'CASCADE' });
+ActionLog.belongsTo(Machines, { foreignKey: 'affectedMachineID', targetKey: 'machineID' });
+
+// Maintenances.id > ActionLog.affectedMaintenanceID
+Maintenances.hasOne(ActionLog, { foreignKey: 'affectedMaintenanceID', sourceKey: 'id', onUpdate: 'CASCADE' });
+ActionLog.belongsTo(Maintenances, { foreignKey: 'affectedMaintenanceID', targetKey: 'id' });
