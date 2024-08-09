@@ -1,5 +1,6 @@
 const Users = require('../../../models/User');
 const Machine = require("../../../models/Machine");
+const {createActionLog} = require("../../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -14,9 +15,13 @@ const Machine = require("../../../models/Machine");
  *           schema:
  *             type: object
  *             required:
+ *               - userID
  *               - machineID
  *               - userName
  *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of source user.
  *               machineID:
  *                 type: integer
  *                 description: ID of the machine to update
@@ -59,18 +64,34 @@ const Machine = require("../../../models/Machine");
  */
 
 module.exports = async (req, res) => {
-    const { machineID, userName } = req.body;
+    const { userID, machineID, userName } = req.body;
 
     const user = await Users.findOne({ where: { userName } });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
-    const userID = user.userID;
+    const affectedUserID = user.userID;
 
     const machine = await Machine.findOne({ where: { machineID } });
     if (!machine) return res.status(404).json({ message: 'Machine not found' });
 
-    machine.ownerID = userID;
+    machine.ownerID = affectedUserID;
     await machine.save();
+
+    try {
+        await createActionLog({
+            sourceUserID: userID,
+            affectedUserID: affectedUserID,
+            affectedUserName: user.userName,
+            affectedMachineID: machineID,
+            affectedMaintenanceID: null,
+            affectedHydraulicUnitID: null,
+            operationSection: 'EMBEDDED',
+            operationType: 'UPDATE',
+            operationName: 'Machine Owner Updated.',
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Action Log can not created.' });
+    }
 
     res.json({ message: 'Machine owner updated successfully' });
 };

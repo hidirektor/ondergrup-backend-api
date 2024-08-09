@@ -1,6 +1,7 @@
 const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -15,10 +16,13 @@ const ActionLog = require("../../models/ActionLog");
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               userID:
  *                 type: string
- *                 description: The ID of the subuser to delete
+ *                 description: User ID of source user.
  *                 example: "subuser123"
+ *               subUserID:
+ *                 type: string
+ *                 description: Sub User ID
  *     responses:
  *       200:
  *         description: SubUser and associated User deleted successfully
@@ -64,7 +68,7 @@ const ActionLog = require("../../models/ActionLog");
 
 module.exports = async (req, res) => {
     try {
-        const { subUserID } = req.body;
+        const { userID, subUserID } = req.body;
 
         if (!subUserID) {
             return res.status(400).json({ message: 'subUserID is required' });
@@ -75,15 +79,30 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'SubUser not found' });
         }
 
-        const user = await User.findOne({ where: { userID: subUser.userID } });
-        const userID = user.userID;
-        const userName = user.userName;
-        if (!user) {
+        const subUserDetails = await User.findOne({ where: { userID: subUser.userID } });
+        const subUserName = subUserDetails.userName;
+        if (!subUserDetails) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: subUserID,
+                affectedUserName: subUserName,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'DELETE',
+                operationName: 'Sub User Deleted.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
+
         await subUser.destroy();
-        await user.destroy();
+        await subUserDetails.destroy();
 
         res.status(200).json({ message: 'SubUser and associated User deleted successfully' });
     } catch (error) {

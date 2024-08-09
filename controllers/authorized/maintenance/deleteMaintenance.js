@@ -1,4 +1,5 @@
 const Maintenance = require('../../../models/Maintenance');
+const {createActionLog} = require("../../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -13,8 +14,12 @@ const Maintenance = require('../../../models/Maintenance');
  *           schema:
  *             type: object
  *             required:
+ *               - userID
  *               - maintenanceID
  *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of source user.
  *               maintenanceID:
  *                 type: integer
  *                 description: ID of the maintenance record to delete
@@ -64,7 +69,7 @@ const Maintenance = require('../../../models/Maintenance');
 
 module.exports = async (req, res) => {
     try {
-        const { maintenanceID } = req.body;
+        const { userID, maintenanceID } = req.body;
 
         if (!maintenanceID) {
             return res.status(400).json({ message: 'maintenanceID is required' });
@@ -73,6 +78,22 @@ module.exports = async (req, res) => {
         const maintenance = await Maintenance.findOne({ where: { id: maintenanceID } });
         if (!maintenance) {
             return res.status(404).json({ message: 'Maintenance record not found' });
+        }
+
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedMachineID: null,
+                affectedMaintenanceID: maintenanceID,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'DELETE',
+                operationName: 'Maintenance Deleted.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
         }
 
         await maintenance.destroy();

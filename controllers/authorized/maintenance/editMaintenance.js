@@ -1,4 +1,5 @@
 const Maintenance = require('../../../models/Maintenance');
+const {createActionLog} = require("../../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -13,8 +14,12 @@ const Maintenance = require('../../../models/Maintenance');
  *           schema:
  *             type: object
  *             required:
+ *               - userID
  *               - maintenanceID
  *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of source user.
  *               maintenanceID:
  *                 type: integer
  *                 description: ID of the maintenance record to update
@@ -85,7 +90,7 @@ const Maintenance = require('../../../models/Maintenance');
 
 module.exports = async (req, res) => {
     try {
-        const { maintenanceID, ...updateData } = req.body;
+        const { userID, maintenanceID, ...updateData } = req.body;
 
         if (!maintenanceID) {
             return res.status(400).json({ message: 'maintenanceID is required' });
@@ -97,6 +102,23 @@ module.exports = async (req, res) => {
 
         if (updated) {
             const updatedMaintenance = await Maintenance.findOne({ where: { id: maintenanceID } });
+
+            try {
+                await createActionLog({
+                    sourceUserID: userID,
+                    affectedUserID: null,
+                    affectedUserName: null,
+                    affectedMachineID: null,
+                    affectedMaintenanceID: maintenanceID,
+                    affectedHydraulicUnitID: null,
+                    operationSection: 'EMBEDDED',
+                    operationType: 'UPDATE',
+                    operationName: 'Maintenance Updated.',
+                });
+            } catch (error) {
+                res.status(500).json({ message: 'Action Log can not created.' });
+            }
+
             return res.status(200).json({ message: 'Maintenance record updated.', payload: { updatedMaintenance } });
         }
 

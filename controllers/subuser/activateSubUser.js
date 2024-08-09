@@ -1,6 +1,7 @@
 const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -15,7 +16,10 @@ const ActionLog = require("../../models/ActionLog");
  *           schema:
  *             type: object
  *             properties:
- *               id:
+ *               userID:
+ *                 type: string
+ *                 description: User ID of source user.
+ *               subUserID:
  *                 type: string
  *                 description: The ID of the subuser to delete
  *                 example: "subuser123"
@@ -64,7 +68,7 @@ const ActionLog = require("../../models/ActionLog");
 
 module.exports = async (req, res) => {
     try {
-        const { subUserID } = req.body;
+        const { userID, subUserID } = req.body;
 
         if (!subUserID) {
             return res.status(400).json({ message: 'subUserID is required' });
@@ -75,15 +79,30 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'SubUser not found' });
         }
 
-        const user = await User.findOne({ where: { userID: subUser.userID } });
-        const userID = user.userID;
-        const userName = user.userName;
-        if (!user) {
+        const subUserDetails = await User.findOne({ where: { userID: subUser.userID } });
+        const userName = subUserDetails.userName;
+        if (!subUserDetails) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        user.isActive = true;
-        user.save();
+        subUserDetails.isActive = true;
+        subUserDetails.save();
+
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: subUserID,
+                affectedUserName: userName,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'UPDATE',
+                operationName: 'Sub User Activated.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(200).json({ message: 'SubUser activated successfully' });
     } catch (error) {
