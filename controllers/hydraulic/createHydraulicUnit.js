@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
 const User = require("../../models/User");
-const ActionLog = require("../../models/ActionLog");
+const { createActionLog } = require('../../helpers/logger/actionLog');
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -147,6 +147,20 @@ const createHydraulicUnit = async (req, res) => {
             schematicID,
             hydraulicType
         });
+
+        try {
+            await createActionLog({
+                sourceUserID: user.userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedHydraulicUnitID: orderID,
+                operationSection: 'HYDRAULIC',
+                operationType: 'CREATE',
+                operationName: 'Hydraulic Unit Creation.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(201).json({ message: 'Hydraulic Unit created successfully.', payload: { update } });
     } catch (error) {

@@ -35,6 +35,9 @@ const sequelize = require('../config/database');
  *         affectedMaintenanceID:
  *           type: string
  *           description: Affected maintenance id.
+ *         affectedHydraulicUnitID:
+ *           type: string
+ *           description: Affected hydraulic unit id.
  *         operationSection:
  *           type: string
  *           description: Section seperator for HYDRAULIC and EMBEDDED
@@ -66,6 +69,7 @@ const ActionLog = sequelize.define('ActionLog', {
     affectedUserName: { type: DataTypes.STRING, allowNull: true },
     affectedMachineID: { type: DataTypes.STRING, allowNull: true },
     affectedMaintenanceID: { type: DataTypes.INTEGER, allowNull: true },
+    affectedHydraulicUnitID: { type: DataTypes.STRING, allowNull: true },
     operationSection: { type: DataTypes.STRING, allowNull: false },
     operationType: { type: DataTypes.STRING, allowNull: false },
     operationName: { type: DataTypes.STRING, allowNull: false },

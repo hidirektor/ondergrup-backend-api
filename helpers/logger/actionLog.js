@@ -6,12 +6,13 @@ const createActionLog = async ({
                                    affectedUserID = null,
                                    affectedMachineID = null,
                                    affectedMaintenanceID = null,
+                                   affectedHydraulicUnitID = null,
                                    operationSection,
                                    operationType,
                                    operationName,
                                }) => {
     try {
-        const sourceUser = await Users.findOne({ where: { id: sourceUserID } });
+        const sourceUser = await Users.findOne({ where: { userID: sourceUserID } });
         if (!sourceUser) {
             throw new Error(`User with ID ${sourceUserID} not found. Request aborted.`);
         }
@@ -33,6 +34,7 @@ const createActionLog = async ({
             affectedUserName: affectedUserName,
             affectedMachineID: affectedMachineID,
             affectedMaintenanceID: affectedMaintenanceID,
+            affectedHydraulicUnitID: affectedHydraulicUnitID,
             operationSection: operationSection,
             operationType: operationType,
             operationName: operationName,
