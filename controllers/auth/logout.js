@@ -1,5 +1,4 @@
 const RefreshToken = require('../../models/RefreshToken');
-const ActionLog = require("../../models/ActionLog");
 
 /**
  * @swagger

@@ -1,4 +1,5 @@
 const UserPreferences = require('../../models/UserPreferences');
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -63,6 +64,22 @@ module.exports = async (req, res) => {
     if (!userPreferences) return res.status(404).json({ message: 'Preferences not found' });
 
     await userPreferences.update(preferencesData);
+
+    try {
+        await createActionLog({
+            sourceUserID: userID,
+            affectedUserID: null,
+            affectedUserName: null,
+            affectedMachineID: null,
+            affectedMaintenanceID: null,
+            affectedHydraulicUnitID: null,
+            operationSection: 'GENERAL',
+            operationType: 'UPDATE',
+            operationName: 'Preferences Updated.',
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Action Log can not created.' });
+    }
 
     res.json({ message: 'Preferences updated successfully' });
 };

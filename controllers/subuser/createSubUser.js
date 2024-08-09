@@ -6,6 +6,7 @@ const Users = require("../../models/User");
 
 const Sequelize = require('sequelize');
 const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -149,6 +150,22 @@ module.exports = async (req, res) => {
             ownerID,
             userID,
         });
+
+        try {
+            await createActionLog({
+                sourceUserID: ownerID,
+                affectedUserID: userID,
+                affectedUserName: userName,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'ADD',
+                operationName: 'Sub User Created.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(201).json({ message: 'SubUser created successfully.', payload: { subUser, newUser } });
     } catch (error) {

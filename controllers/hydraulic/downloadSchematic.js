@@ -1,6 +1,5 @@
 const HydraulicUnit = require('../../models/HydraulicUnit');
 const { v4: uuidv4 } = require('uuid');
-const path = require('path');
 const Minio = require('minio');
 
 const minioClient = new Minio.Client({

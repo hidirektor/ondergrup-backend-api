@@ -4,6 +4,7 @@ const Users = require('../../models/User');
 const https = require('https');
 const xml2js = require('xml2js');
 const moment = require('moment');
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -109,6 +110,23 @@ module.exports = async (req, res) => {
         const result = await xml2js.parseStringPromise(response.data);
         if (result.mainbody && result.mainbody.header[0].status[0] === '00') {
             await OTPLog.create({ userID, otpType: 'sms', otpCode, otpSentTime });
+
+            try {
+                await createActionLog({
+                    sourceUserID: userID,
+                    affectedUserID: null,
+                    affectedUserName: null,
+                    affectedMachineID: null,
+                    affectedMaintenanceID: null,
+                    affectedHydraulicUnitID: null,
+                    operationSection: 'GENERAL',
+                    operationType: 'OTP',
+                    operationName: 'Otp SMS Sent.',
+                });
+            } catch (error) {
+                res.status(500).json({ message: 'Action Log can not created.' });
+            }
+
             res.json({ message: 'Successfully sent otp code.', payload: { otpSentTime } });
         } else {
             res.status(500).json({ message: 'Error sending SMS', error: result });

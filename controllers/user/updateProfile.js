@@ -1,5 +1,6 @@
 const Users = require('../../models/User');
 const bcrypt = require("bcryptjs");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -71,6 +72,22 @@ module.exports = async (req, res) => {
     }
 
     await user.update(userData);
+
+    try {
+        await createActionLog({
+            sourceUserID: userID,
+            affectedUserID: null,
+            affectedUserName: null,
+            affectedMachineID: null,
+            affectedMaintenanceID: null,
+            affectedHydraulicUnitID: null,
+            operationSection: 'GENERAL',
+            operationType: 'UPDATE',
+            operationName: 'Profile Updated.',
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Action Log can not created.' });
+    }
 
     res.json({ message: 'Profile updated successfully' });
 };

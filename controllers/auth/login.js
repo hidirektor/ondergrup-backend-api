@@ -1,10 +1,7 @@
 const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { generateAccessToken, generateRefreshToken } = require('../../helpers/tokenUtils');
-const ActionLog = require("../../models/ActionLog");
-const createActionLog = require('../../helpers/logger/actionLog');
 
 /**
  * @swagger

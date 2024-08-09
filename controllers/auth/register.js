@@ -3,7 +3,7 @@ const UserPreferences = require('../../models/UserPreferences');
 const bcrypt = require('bcryptjs');
 const generateUserID = require('../../helpers/userIDGenerator');
 const { v4: uuidv4 } = require('uuid');
-const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -116,6 +116,22 @@ module.exports = async (req, res) => {
             language: true,
             nightMode: false
         });
+
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'GENERAL',
+                operationType: 'REGISTER',
+                operationName: 'Registered.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(200).json({message: 'Successfully registered :)', payload: { newUser }});
     } catch (error) {

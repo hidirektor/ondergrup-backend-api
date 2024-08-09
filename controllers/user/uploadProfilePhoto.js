@@ -5,6 +5,7 @@ const path = require('path');
 const Minio = require('minio');
 const sharp = require('sharp');
 const {where} = require("sequelize");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -115,6 +116,22 @@ const uploadProfilePhoto = async (req, res) => {
             userName,
             fileID
         });
+
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'GENERAL',
+                operationType: 'UPDATE',
+                operationName: 'Profile Photo Updated.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(201).json({ message: 'Profile photo uploaded successfully.', payload: { update } });
     } catch (error) {

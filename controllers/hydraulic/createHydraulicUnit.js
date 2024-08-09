@@ -156,7 +156,7 @@ const createHydraulicUnit = async (req, res) => {
                 affectedHydraulicUnitID: orderID,
                 operationSection: 'HYDRAULIC',
                 operationType: 'CREATE',
-                operationName: 'Hydraulic Unit Creation.',
+                operationName: 'Hydraulic Unit Created.',
             });
         } catch (error) {
             res.status(500).json({ message: 'Action Log can not created.' });

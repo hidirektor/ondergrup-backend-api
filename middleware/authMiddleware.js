@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.error('Error in authMiddleware', err);
+        //console.error('Error in authMiddleware', err);
         res.sendStatus(403); // Forbidden
     }
 };

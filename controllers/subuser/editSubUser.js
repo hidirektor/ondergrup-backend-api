@@ -2,6 +2,7 @@ const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -146,6 +147,22 @@ module.exports = async (req, res) => {
         subUser.userID = userID;
 
         await subUser.save();
+
+        try {
+            await createActionLog({
+                sourceUserID: ownerID,
+                affectedUserID: userID,
+                affectedUserName: userName,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'EDIT',
+                operationName: 'Sub User Edited.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.status(200).json({ message: 'SubUser updated successfully.', payload: { subUser, user } });
     } catch (error) {

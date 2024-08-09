@@ -1,11 +1,12 @@
 const Machine = require('../../models/Machine');
 const ActionLog = require("../../models/ActionLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
  * /createMachine:
  *   post:
- *     summary: Add a new machine
+ *     summary: Create a new machine
  *     tags: [Machine]
  *     requestBody:
  *       required: true
@@ -14,6 +15,9 @@ const ActionLog = require("../../models/ActionLog");
  *           schema:
  *             type: object
  *             properties:
+ *               userID:
+ *                 type: string
+ *                 description: Unique ID of source user.
  *               machineID:
  *                 type: string
  *                 description: The ID of the machine
@@ -24,7 +28,7 @@ const ActionLog = require("../../models/ActionLog");
  *                 example: "TypeA"
  *     responses:
  *       201:
- *         description: Machine added successfully
+ *         description: Machine created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -32,7 +36,7 @@ const ActionLog = require("../../models/ActionLog");
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Machine added successfully."
+ *                   example: "Machine created successfully."
  *                 payload:
  *                   type: object
  *                   properties:
@@ -62,7 +66,7 @@ const ActionLog = require("../../models/ActionLog");
 
 module.exports = async (req, res) => {
     try {
-        const { machineID, machineType } = req.body;
+        const { userID, machineID, machineType } = req.body;
 
         if (!machineID || !machineType) {
             return res.status(400).json({ message: 'All fields are required' });
@@ -80,9 +84,25 @@ module.exports = async (req, res) => {
             lastUpdate: null,
         });
 
-        res.status(201).json({ message: 'Machine added successfully.', payload: { machine } });
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedMachineID: machineID,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'EMBEDDED',
+                operationType: 'CREATE',
+                operationName: 'Machine Created.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
+
+        res.status(201).json({ message: 'Machine created successfully.', payload: { machine } });
     } catch (error) {
-        console.error('Error adding machine:', error);
+        console.error('Error creating machine:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

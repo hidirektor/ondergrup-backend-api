@@ -1,8 +1,8 @@
 const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
-const ActionLog = require("../../models/ActionLog");
 const OTPLog = require("../../models/OTPLog");
+const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
@@ -87,6 +87,22 @@ module.exports = async (req, res) => {
 
         user.password = hashedPassword;
         await user.save();
+
+        try {
+            await createActionLog({
+                sourceUserID: userID,
+                affectedUserID: null,
+                affectedUserName: null,
+                affectedMachineID: null,
+                affectedMaintenanceID: null,
+                affectedHydraulicUnitID: null,
+                operationSection: 'GENERAL',
+                operationType: 'EDIT',
+                operationName: 'Password Reset.',
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Action Log can not created.' });
+        }
 
         res.json({ message: 'Password reset successfully' });
     } catch (error) {

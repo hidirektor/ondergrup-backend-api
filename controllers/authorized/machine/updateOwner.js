@@ -1,6 +1,5 @@
 const Users = require('../../../models/User');
 const Machine = require("../../../models/Machine");
-const ActionLog = require("../../../models/ActionLog");
 
 /**
  * @swagger
