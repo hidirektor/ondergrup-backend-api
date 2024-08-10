@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer();
 
 const checkUpdates = require('../controllers/update/checkUpdates');
+const checkUpdatesRaw = require('../controllers/update/checkUpdatesRaw');
 const createVersion = require('../controllers/update/createVersion');
 const downloadNewVersion = require('../controllers/update/downloadNewVersion');
 const downloadNewVersionRaw = require('../controllers/update/downloadNewVersionRaw');
@@ -12,6 +13,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
 
 router.post('/checkUpdates', checkUpdates);
+router.get('/checkUpdatesRaw', checkUpdatesRaw);
 router.post('/createVersion', upload.single('file'), createVersion);
 router.post('/downloadNewVersion', downloadNewVersion);
 router.get('/downloadNewVersionRaw', downloadNewVersionRaw);
