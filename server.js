@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 const app = express();
@@ -22,6 +23,8 @@ const swaggerRoutes = require('./routes/swagger');
 
 const swaggerSpecs = require('./helpers/swaggerOptions');
 fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpecs, null, 2));
+
+app.use(cors());
 
 app.use(express.json());
 app.use('/api/v2/auth', authRoutes);
