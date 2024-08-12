@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  nodejs-app:
+    image: nodejs-app:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    restart: always
+    volumes:
+      - .:/app
+    networks:
+      - bridge-network
+    environment:
+      BUCKET_NAME: 'backend-api'
+      DB_HOST: '85.95.231.92'
+      DB_NAME: 'ondergrup_iot'
+      DB_PASS: 'onderadmin1456'
+      DB_PORT: '3306'
+      DB_USER: 'root'
+      EMAIL_SUBJECT: 'Doğrulama Kodunuz!'
+      JWT_REFRESH_SECRET: 'onder-backend-api-secret_refresh_%23JSHUJ776X$'
+      JWT_SECRET: 'onder-backend-api-secret_%23JSHUJ776X$'
+      MINIO_ACCESS_KEY: '3owXsMkYclyGlUzzP7Ll'
+      MINIO_ENDPOINT: '160.20.111.38'
+      MINIO_PORT: '9099'
+      MINIO_SECRET_KEY: 'GqGKrPJ71ZGv1yDWiyYcOWMAyp3B6uSxa3NuD5AS'
+      PORT: '3000'
+      SMTP_HOST: 'mail.hidirektor.com.tr'
+      SMTP_PASS: 'Jjc4FA{{GIEn'
+      SMTP_PORT: '587'
+      SMTP_USER: 'verification@hidirektor.com.tr'
+
+networks:
+  bridge-network:
+    driver: bridge
