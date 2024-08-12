@@ -3,6 +3,7 @@ const router = express.Router();
 
 const getAllMachines = require('../controllers/authorized/machine/getAllMachines');
 const getAllActions = require('../controllers/authorized/actionlog/getAllActions');
+const getAllMaintenances = require('../controllers/authorized/maintenance/getAllMaintenances');
 const getAllVersions = require('../controllers/authorized/machine/getAllVersions');
 const updateOwner = require('../controllers/authorized/machine/updateOwner');
 
@@ -23,6 +24,7 @@ const roleMiddleware = require('../middleware/roleMiddleware');
 
 router.get('/getAllActions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllActions);
 router.get('/getAllMachines', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
+router.get('/getAllMaintenances', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllMaintenances);
 router.get('/getAllVersions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllVersions);
 
 router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), updateOwner);
