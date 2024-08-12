@@ -1,5 +1,6 @@
 const Maintenance = require('../../../models/Maintenance');
 const Users = require("../../../models/User");
+const MachineData = require("../../../models/MachineData");
 
 /**
  * @swagger
@@ -54,7 +55,21 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'No any maintenance found on database.' });
         }
 
-        res.status(200).json({ message: 'Successfully retrieved all maintenances.', payload: { maintenances } });
+        const maintenancesDetails = await Promise.all(maintenances.map(async (maintenance) => {
+            const technicianID = maintenance.technicianID;
+            let technicianName = "NaN";
+            if(technicianID) {
+                const user = await Users.findOne({ where: { userID: technicianID } });
+                technicianName = user.userName;
+            }
+
+            return {
+                ...maintenance.dataValues,
+                technicianName
+            };
+        }));
+
+        res.status(200).json({ message: 'Successfully retrieved all maintenances.', payload: { maintenancesDetails } });
     } catch (error) {
         console.log('Error retrieving all maintenances', error);
         res.status(500).json({ message: 'Internal server error' });
