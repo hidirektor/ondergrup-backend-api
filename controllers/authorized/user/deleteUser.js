@@ -54,8 +54,6 @@ module.exports = async (req, res) => {
         const user = await Users.findOne({ where: { userName } });
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        await user.destroy();
-
         try {
             await createActionLog({
                 sourceUserID: userID,
@@ -71,6 +69,8 @@ module.exports = async (req, res) => {
         } catch (error) {
             res.status(500).json({ message: 'Action Log can not created.' });
         }
+
+        await user.destroy();
 
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
