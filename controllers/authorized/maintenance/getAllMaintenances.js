@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
             let technicianName = "NaN";
             if(technicianID) {
                 const user = await Users.findOne({ where: { userID: technicianID } });
-                technicianName = user.userName;
+                technicianName = user.nameSurname;
             }
 
             return {
