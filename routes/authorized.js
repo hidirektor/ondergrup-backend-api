@@ -12,6 +12,7 @@ const activateUser = require('../controllers/authorized/user/activateUser');
 const deleteUser = require('../controllers/authorized/user/deleteUser');
 const addUser = require('../controllers/authorized/user/addUser');
 const updateRole = require('../controllers/authorized/user/updateRole');
+const updateUser = require('../controllers/authorized/user/updateUser');
 
 const createMaintenance = require('../controllers/authorized/maintenance/createMaintenance');
 const editMaintenance = require('../controllers/authorized/maintenance/editMaintenance');
@@ -32,6 +33,7 @@ router.post('/activateUser', authMiddleware, roleMiddleware(['SYSOP']), activate
 router.post('/deleteUser', authMiddleware, roleMiddleware(['SYSOP']), deleteUser);
 router.post('/addUser', authMiddleware, roleMiddleware(['SYSOP']), addUser);
 router.put('/updateRole', authMiddleware, roleMiddleware(['SYSOP']), updateRole);
+router.post('/updateUser', authMiddleware, roleMiddleware(['SYSOP']), updateUser);
 
 router.post('/createMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), createMaintenance);
 router.put('/editMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), editMaintenance);
