@@ -84,10 +84,12 @@ module.exports = async (req, res) => {
 
             const subUserID = subuser.userID;
             const subUserData = await Users.findAll({ where: { userID: subUserID } });
+            const subUserPreferencesData = await UserPreferences.findAll({ where: { userID: subUserID } });
             return {
                 ...subuser.dataValues,
                 ownerName,
-                subUserData
+                subUserData,
+                subUserPreferencesData
             };
         }));
 
