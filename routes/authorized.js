@@ -5,6 +5,7 @@ const getAllMachines = require('../controllers/authorized/machine/getAllMachines
 const getAllActions = require('../controllers/authorized/actionlog/getAllActions');
 const getAllMaintenances = require('../controllers/authorized/maintenance/getAllMaintenances');
 const getAllVersions = require('../controllers/authorized/machine/getAllVersions');
+const getAllSubUsers = require('../controllers/authorized/user/getAllSubUsers');
 const updateOwner = require('../controllers/authorized/machine/updateOwner');
 
 const getAllUsers = require('../controllers/authorized/user/getAllUsers');
@@ -26,6 +27,7 @@ router.get('/getAllActions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER'
 router.get('/getAllMachines', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
 router.get('/getAllMaintenances', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllMaintenances);
 router.get('/getAllVersions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllVersions);
+router.get('/getAllSubUsers', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllSubUsers);
 
 router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), updateOwner);
 
