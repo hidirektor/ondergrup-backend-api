@@ -13,8 +13,9 @@ const getProfilePhoto = require('../controllers/user/getProfilePhoto');
 const checkUser = require('../controllers/user/checkUser');
 
 const authMiddleware = require('../middleware/authMiddleware');
+const actionLogMiddleware = require('../middleware/actionLogMiddleware');
 
-router.post('/getProfile', authMiddleware, getProfile);
+router.post('/getProfile', authMiddleware, actionLogMiddleware('EMBEDDED', 'VIEW', 'Get User Profile'), getProfile);
 router.post('/updateProfile', authMiddleware, updateProfile);
 router.post('/getPreferences', authMiddleware, getPreferences);
 router.post('/updatePreferences', authMiddleware, updatePreferences);
@@ -22,9 +23,5 @@ router.post('/uploadProfilePhoto', upload.single('file'), uploadProfilePhoto);
 router.post('/downloadProfilePhoto', downloadProfilePhoto);
 router.get('/getProfilePhoto/:userName', getProfilePhoto);
 router.post('/checkUser', checkUser);
-
-//router.post('/uploadProfilePhoto', authMiddleware, uploadProfilePhoto);
-//router.post('/downloadProfilePhoto', authMiddleware, downloadProfilePhoto);
-//router.get('/getProfilePhoto', authMiddleware, getProfilePhoto);
 
 module.exports = router;
