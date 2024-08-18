@@ -5,7 +5,9 @@ const ActionLogs = require('../../../models/ActionLog');
  * /getAllActions:
  *   get:
  *     summary: Get all action logs
- *     tags: [Authorized]
+ *     tags:
+ *       - Authorized
+ *       - ActionLog
  *     responses:
  *       200:
  *         description: List of all action logs retrieved successfully

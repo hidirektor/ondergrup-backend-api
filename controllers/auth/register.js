@@ -18,7 +18,6 @@ const { v4: uuidv4 } = require('uuid');
  *             type: object
  *             required:
  *               - userName
- *               - userType
  *               - nameSurname
  *               - eMail
  *               - phoneNumber
@@ -28,9 +27,6 @@ const { v4: uuidv4 } = require('uuid');
  *               userName:
  *                 type: string
  *                 description: The username of the user
- *               userType:
- *                 type: string
- *                 description: The type of user (e.g., SysOp, Merchant, Carrier, Customer)
  *               nameSurname:
  *                 type: string
  *                 description: The name and surname of the user
@@ -92,7 +88,7 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = async (req, res) => {
     const {
-        userName, userType, nameSurname, eMail, phoneNumber, companyName, password
+        userName, nameSurname, eMail, phoneNumber, companyName, password
     } = req.body;
 
     try {
@@ -105,6 +101,7 @@ module.exports = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const userType = "NORMAL";
 
         const newUser = await Users.create({
             userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password: hashedPassword
