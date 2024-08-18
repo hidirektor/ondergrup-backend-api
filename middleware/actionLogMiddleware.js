@@ -5,13 +5,13 @@ const actionLogMiddleware = (operationType, operationName) => {
     return async (req, res, next) => {
         try {
             const {
-                operationPlatform,
-                sourceUserID,
-                affectedUserID,
-                affectedUserName,
-                affectedMachineID,
-                affectedMaintenanceID,
-                affectedHydraulicUnitID
+                operationPlatform = null,
+                sourceUserID = null,
+                affectedUserID = null,
+                affectedUserName = null,
+                affectedMachineID = null,
+                affectedMaintenanceID = null,
+                affectedHydraulicUnitID = null
             } = req.body;
 
             let affectedUser = null,
@@ -35,12 +35,10 @@ const actionLogMiddleware = (operationType, operationName) => {
                     affectedNameSurnameData = affectedUser.nameSurname;
                     affectedUserNameData = affectedUser.userName;
                 }
-            } else {
-                if (affectedUserName && affectedUserName.trim() !== '') {
-                    affectedUser = await Users.findOne({ where: { userName: affectedUserName } });
-                    if (affectedUser) {
-                        affectedUserIDData = affectedUser.userID;
-                    }
+            } else if (affectedUserName && affectedUserName.trim() !== '') {
+                affectedUser = await Users.findOne({ where: { userName: affectedUserName } });
+                if (affectedUser) {
+                    affectedUserIDData = affectedUser.userID;
                 }
             }
 
@@ -64,7 +62,7 @@ const actionLogMiddleware = (operationType, operationName) => {
             next();
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ message: 'Action Log can not be created.' });
+            return res.status(500).json({ message: 'Action Log cannot be created.' });
         }
     };
 };
