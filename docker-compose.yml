@@ -3,6 +3,7 @@ version: '3'
 services:
   nodejs-app:
     image: nodejs-app:latest
+    container_name: nodejs-api
     build:
       context: .
       dockerfile: Dockerfile
@@ -23,10 +24,10 @@ services:
       EMAIL_SUBJECT: 'Doğrulama Kodunuz!'
       JWT_REFRESH_SECRET: 'onder-backend-api-secret_refresh_%23JSHUJ776X$'
       JWT_SECRET: 'onder-backend-api-secret_%23JSHUJ776X$'
-      MINIO_ACCESS_KEY: 'oiaSRszgmrWWYqQ5ZuDs'
+      MINIO_ACCESS_KEY: 'P83jLrCv2pWsE18XQpCO'
       MINIO_ENDPOINT: '85.95.231.92'
       MINIO_PORT: '9099'
-      MINIO_SECRET_KEY: '2enAze9lXLLwcQfZAyf434Co5PuRNi2Wrx72LeVq'
+      MINIO_SECRET_KEY: 'o3jLtjbth7JRo2HHnG0rIrfBedqRWBpbPLiIIdr2'
       PORT: '3000'
       SMTP_HOST: 'mail.hidirektor.com.tr'
       SMTP_PASS: 'Jjc4FA{{GIEn'
