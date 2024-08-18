@@ -1,8 +1,6 @@
 const SubUser = require('../../models/SubUser');
 const User = require('../../models/User');
 const bcrypt = require('bcryptjs');
-const ActionLog = require("../../models/ActionLog");
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

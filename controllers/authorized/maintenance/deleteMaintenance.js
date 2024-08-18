@@ -1,5 +1,4 @@
 const Maintenance = require('../../../models/Maintenance');
-const {createActionLog} = require("../../../helpers/logger/actionLog");
 
 /**
  * @swagger

@@ -5,8 +5,6 @@ const generateUserID = require("../../helpers/userIDGenerator");
 const Users = require("../../models/User");
 
 const Sequelize = require('sequelize');
-const ActionLog = require("../../models/ActionLog");
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

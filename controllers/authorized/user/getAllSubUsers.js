@@ -1,7 +1,6 @@
 const SubUsers = require('../../../models/SubUser');
 const Users = require('../../../models/User');
 const UserPreferences = require('../../../models/UserPreferences');
-const MachineData = require("../../../models/MachineData");
 
 /**
  * @swagger

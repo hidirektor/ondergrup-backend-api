@@ -1,7 +1,6 @@
 const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

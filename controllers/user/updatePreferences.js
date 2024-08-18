@@ -1,5 +1,4 @@
 const UserPreferences = require('../../models/UserPreferences');
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

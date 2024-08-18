@@ -2,7 +2,6 @@ const Users = require('../../models/User');
 const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 const OTPLog = require("../../models/OTPLog");
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

@@ -1,17 +1,27 @@
 const { createActionLog } = require('../helpers/logger/actionLog');
+const { Users } = require('../models/User');
 
-const actionLogMiddleware = (operationSection, operationType, operationName) => {
+const actionLogMiddleware = (operationType, operationName) => {
     return async (req, res, next) => {
         try {
-            const { userID, userName } = req.body;
+            const { sourceUserID, affectedUserID, affectedMachineID, affectedMaintenanceID, affectedHydraulicUnitID, operationSection } = req.body;
+
+            let affectedUser, affectedUserNameData;
+
+            if(affectedUserID) {
+                affectedUser = await Users.findOne({ where: { userID: affectedUserID } });
+                if(affectedUser) {
+                    affectedUserNameData = affectedUser.nameSurname;
+                }
+            }
 
             await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: null,
-                affectedUserName: userName,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
+                sourceUserID: sourceUserID,
+                affectedUserID: affectedUserID,
+                affectedUserName: affectedUserNameData,
+                affectedMachineID: affectedMachineID,
+                affectedMaintenanceID: affectedMaintenanceID,
+                affectedHydraulicUnitID: affectedHydraulicUnitID,
                 operationSection,
                 operationType,
                 operationName,

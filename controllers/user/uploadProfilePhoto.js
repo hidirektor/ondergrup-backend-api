@@ -4,8 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
 const sharp = require('sharp');
-const {where} = require("sequelize");
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,

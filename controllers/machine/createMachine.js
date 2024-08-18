@@ -1,6 +1,4 @@
 const Machine = require('../../models/Machine');
-const ActionLog = require("../../models/ActionLog");
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

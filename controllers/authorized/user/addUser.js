@@ -3,7 +3,6 @@ const UserPreferences = require('../../../models/UserPreferences');
 const bcrypt = require('bcryptjs');
 const generateUserID = require('../../../helpers/userIDGenerator');
 const { v4: uuidv4 } = require('uuid');
-const {createActionLog} = require("../../../helpers/logger/actionLog");
 
 /**
  * @swagger
