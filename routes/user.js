@@ -16,9 +16,9 @@ const authMiddleware = require('../middleware/authMiddleware');
 const actionLogMiddleware = require('../middleware/actionLogMiddleware');
 
 router.post('/getProfile', authMiddleware, getProfile);
-router.post('/updateProfile', authMiddleware, updateProfile);
+router.post('/updateProfile', authMiddleware, actionLogMiddleware('UPDATE', 'Kullanıcı profili güncellendi.'), updateProfile);
 router.post('/getPreferences', authMiddleware, getPreferences);
-router.post('/updatePreferences', authMiddleware, updatePreferences);
+router.post('/updatePreferences', authMiddleware, actionLogMiddleware('UPDATE', 'Kullanıcı tercihleri güncellendi.'), updatePreferences);
 router.post('/uploadProfilePhoto', upload.single('file'), uploadProfilePhoto);
 router.post('/downloadProfilePhoto', downloadProfilePhoto);
 router.get('/getProfilePhoto/:userName', getProfilePhoto);
