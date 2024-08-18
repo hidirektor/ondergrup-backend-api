@@ -24,15 +24,11 @@ const minioClient = new Minio.Client({
  *           schema:
  *             type: object
  *             required:
- *               - userID
  *               - versionCode
  *               - versionTitle
  *               - versionDesc
  *               - file
  *             properties:
- *               userID:
- *                 type: string
- *                 description: User ID of source user
  *               versionCode:
  *                 type: string
  *                 description: Version code of the new version. Must be unique.

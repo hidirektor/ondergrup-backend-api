@@ -4,45 +4,62 @@ const Users = require('../models/User');
 const actionLogMiddleware = (operationType, operationName) => {
     return async (req, res, next) => {
         try {
-            const { operationPlatform, sourceUserID, affectedUserID, affectedUserName, affectedMachineID, affectedMaintenanceID, affectedHydraulicUnitID } = req.body;
+            const {
+                operationPlatform,
+                sourceUserID,
+                affectedUserID,
+                affectedUserName,
+                affectedMachineID,
+                affectedMaintenanceID,
+                affectedHydraulicUnitID
+            } = req.body;
 
-            let affectedUser = null, affectedUserIDData = null,  sourceUser = null, affectedNameSurnameData = null, affectedUserNameData = null, sourceNameSurnameData = null;
+            let affectedUser = null,
+                affectedUserIDData = null,
+                sourceUser = null,
+                affectedNameSurnameData = null,
+                affectedUserNameData = null,
+                sourceNameSurnameData = null;
 
-            if(sourceUserID && !sourceUserID.isEmpty()) {
+            if (sourceUserID && sourceUserID.trim() !== '') {
                 sourceUser = await Users.findOne({ where: { userID: sourceUserID }});
-                if(sourceUser) {
+                if (sourceUser) {
                     sourceNameSurnameData = sourceUser.nameSurname;
                 }
             }
 
-            if(affectedUserID && !affectedUserID.isEmpty()) {
+            if (affectedUserID && affectedUserID.trim() !== '') {
                 affectedUserIDData = affectedUserID;
                 affectedUser = await Users.findOne({ where: { userID: affectedUserID } });
-                if(affectedUser) {
+                if (affectedUser) {
                     affectedNameSurnameData = affectedUser.nameSurname;
+                    affectedUserNameData = affectedUser.userName;
                 }
             } else {
-                if(affectedUserName && !affectedUserName.isEmpty()) {
+                if (affectedUserName && affectedUserName.trim() !== '') {
                     affectedUser = await Users.findOne({ where: { userName: affectedUserName } });
-                    if(affectedUser) {
+                    if (affectedUser) {
                         affectedUserIDData = affectedUser.userID;
                     }
                 }
             }
 
-            await createActionLog({
-                sourceUserID: sourceUserID,
-                sourceNameSurname: sourceNameSurnameData,
-                affectedUserID: affectedUserIDData,
-                affectedUserName: affectedNameSurnameData,
-                affectedNameSurname: affectedNameSurnameData,
-                affectedMachineID: affectedMachineID,
-                affectedMaintenanceID: affectedMaintenanceID,
-                affectedHydraulicUnitID: affectedHydraulicUnitID,
-                operationPlatform,
-                operationType,
-                operationName,
-            });
+            const actionLogData = {
+                sourceUserID: sourceUserID || null,
+                sourceNameSurname: sourceNameSurnameData || null,
+                affectedUserID: affectedUserIDData || null,
+                affectedUserName: affectedUserNameData || null,
+                affectedNameSurname: affectedNameSurnameData || null,
+                affectedMachineID: affectedMachineID && affectedMachineID.trim() !== '' ? affectedMachineID : null,
+                affectedMaintenanceID: affectedMaintenanceID && affectedMaintenanceID.trim() !== '' ? affectedMaintenanceID : null,
+                affectedHydraulicUnitID: affectedHydraulicUnitID && affectedHydraulicUnitID.trim() !== '' ? affectedHydraulicUnitID : null,
+                operationPlatform: operationPlatform,
+                operationType: operationType,
+                operationName: operationName,
+                operationTime: Math.floor(Date.now() / 1000)
+            };
+
+            await createActionLog(actionLogData);
 
             next();
         } catch (error) {

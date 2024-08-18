@@ -15,7 +15,7 @@ const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
 router.post('/checkUpdates', checkUpdates);
 router.get('/checkUpdatesRaw', checkUpdatesRaw);
-router.post('/createVersion', authMiddleware, actionLogMiddleware('CREATE', 'Yeni STM32 sürümü oluşturuldu.'), upload.single('file'), createVersion);
+router.post('/createVersion', authMiddleware, upload.single('file'), actionLogMiddleware('CREATE', 'Yeni STM32 sürümü oluşturuldu.'), createVersion);
 router.post('/downloadNewVersion', downloadNewVersion);
 router.get('/downloadNewVersionRaw', downloadNewVersionRaw);
 
