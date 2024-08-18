@@ -88,22 +88,6 @@ module.exports = async (req, res) => {
         subUserDetails.isActive = true;
         subUserDetails.save();
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: subUserID,
-                affectedUserName: userName,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'UPDATE',
-                operationName: 'Sub User Activated.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(200).json({ message: 'SubUser activated successfully' });
     } catch (error) {
         console.error('Error activating SubUser:', error);

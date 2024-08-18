@@ -84,22 +84,6 @@ module.exports = async (req, res) => {
             lastUpdate: null,
         });
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: null,
-                affectedUserName: null,
-                affectedMachineID: machineID,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'CREATE',
-                operationName: 'Machine Created.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(201).json({ message: 'Machine created successfully.', payload: { machine } });
     } catch (error) {
         console.error('Error creating machine:', error);

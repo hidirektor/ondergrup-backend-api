@@ -118,22 +118,6 @@ module.exports = async (req, res) => {
             nightMode: false
         });
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: generatedUserID,
-                affectedUserName: userName,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'GENERAL',
-                operationType: 'REGISTER',
-                operationName: 'Registered.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(200).json({message: 'Successfully registered :)', payload: { newUser }});
     } catch (error) {
         if (error.name === 'SequelizeUniqueConstraintError') {

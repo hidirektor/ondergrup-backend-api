@@ -85,22 +85,6 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: subUserID,
-                affectedUserName: subUserName,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'DELETE',
-                operationName: 'Sub User Deleted.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         await subUser.destroy();
         await subUserDetails.destroy();
 

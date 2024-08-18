@@ -65,21 +65,5 @@ module.exports = async (req, res) => {
 
     await userPreferences.update(preferencesData);
 
-    try {
-        await createActionLog({
-            sourceUserID: userID,
-            affectedUserID: null,
-            affectedUserName: null,
-            affectedMachineID: null,
-            affectedMaintenanceID: null,
-            affectedHydraulicUnitID: null,
-            operationSection: 'GENERAL',
-            operationType: 'UPDATE',
-            operationName: 'Preferences Updated.',
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Action Log can not created.' });
-    }
-
     res.json({ message: 'Preferences updated successfully' });
 };

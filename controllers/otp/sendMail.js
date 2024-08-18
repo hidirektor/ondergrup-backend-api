@@ -108,22 +108,6 @@ module.exports = async (req, res) => {
             try {
                 await OTPLog.create({ userID, otpType: 'mail', otpCode, otpSentTime });
 
-                try {
-                    await createActionLog({
-                        sourceUserID: userID,
-                        affectedUserID: null,
-                        affectedUserName: null,
-                        affectedMachineID: null,
-                        affectedMaintenanceID: null,
-                        affectedHydraulicUnitID: null,
-                        operationSection: 'GENERAL',
-                        operationType: 'OTP',
-                        operationName: 'Otp Mail Sent.',
-                    });
-                } catch (error) {
-                    res.status(500).json({ message: 'Action Log can not created.' });
-                }
-
                 res.json({ message: 'Successfully sent otp code.', payload: { otpSentTime } });
             } catch (logError) {
                 console.error('Error logging OTP:', logError);

@@ -57,21 +57,5 @@ module.exports = async (req, res) => {
     user.isActive = true;
     await user.save();
 
-    try {
-        await createActionLog({
-            sourceUserID: userID,
-            affectedUserID: user.userID,
-            affectedUserName: userName,
-            affectedMachineID: null,
-            affectedMaintenanceID: null,
-            affectedHydraulicUnitID: null,
-            operationSection: 'EMBEDDED',
-            operationType: 'UPDATE',
-            operationName: 'User Activated.',
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Action Log can not created.' });
-    }
-
     res.json({ message: 'User activated successfully' });
 };

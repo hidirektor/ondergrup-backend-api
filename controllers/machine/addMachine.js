@@ -78,22 +78,6 @@ module.exports = async (req, res) => {
 
         await existingMachine.update({ ownerID });
 
-        try {
-            await createActionLog({
-                sourceUserID: ownerID,
-                affectedUserID: null,
-                affectedUserName: null,
-                affectedMachineID: machineID,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'ADD',
-                operationName: 'Machine Paired.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(201).json({ message: 'Machine ownerID updated successfully.', payload: { existingMachine } });
     } catch (error) {
         console.error('Error adding machine:', error);

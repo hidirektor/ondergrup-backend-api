@@ -103,22 +103,6 @@ module.exports = async (req, res) => {
         if (updated) {
             const updatedMaintenance = await Maintenance.findOne({ where: { id: maintenanceID } });
 
-            try {
-                await createActionLog({
-                    sourceUserID: userID,
-                    affectedUserID: null,
-                    affectedUserName: null,
-                    affectedMachineID: null,
-                    affectedMaintenanceID: maintenanceID,
-                    affectedHydraulicUnitID: null,
-                    operationSection: 'EMBEDDED',
-                    operationType: 'UPDATE',
-                    operationName: 'Maintenance Updated.',
-                });
-            } catch (error) {
-                res.status(500).json({ message: 'Action Log can not created.' });
-            }
-
             return res.status(200).json({ message: 'Maintenance record updated.', payload: { updatedMaintenance } });
         }
 

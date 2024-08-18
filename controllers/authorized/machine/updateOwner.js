@@ -77,21 +77,5 @@ module.exports = async (req, res) => {
     machine.ownerID = affectedUserID;
     await machine.save();
 
-    try {
-        await createActionLog({
-            sourceUserID: userID,
-            affectedUserID: affectedUserID,
-            affectedUserName: user.userName,
-            affectedMachineID: machineID,
-            affectedMaintenanceID: null,
-            affectedHydraulicUnitID: null,
-            operationSection: 'EMBEDDED',
-            operationType: 'UPDATE',
-            operationName: 'Machine Owner Updated.',
-        });
-    } catch (error) {
-        res.status(500).json({ message: 'Action Log can not created.' });
-    }
-
     res.json({ message: 'Machine owner updated successfully' });
 };

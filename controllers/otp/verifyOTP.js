@@ -94,22 +94,6 @@ module.exports = async (req, res) => {
         otpEntry.otpValidate = moment().unix();
         await otpEntry.save();
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: null,
-                affectedUserName: null,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'GENERAL',
-                operationType: 'OTP',
-                operationName: 'Otp Verified.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.json({ message: 'OTP verified successfully' });
     } catch (error) {
         console.error('Error verifying OTP:', error);

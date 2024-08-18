@@ -128,22 +128,6 @@ const createVersion = async (req, res) => {
             versionID
         });
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: null,
-                affectedUserName: null,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'CREATE',
-                operationName: 'Machine Software Created.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(201).json({ message: 'Version created successfully.', payload: { update } });
     } catch (error) {
         console.error('Error creating version:', error);

@@ -80,22 +80,6 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'Maintenance record not found' });
         }
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: null,
-                affectedUserName: null,
-                affectedMachineID: null,
-                affectedMaintenanceID: maintenanceID,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'DELETE',
-                operationName: 'Maintenance Deleted.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         await maintenance.destroy();
 
         res.json({ message: 'Maintenance record deleted successfully' });

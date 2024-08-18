@@ -117,22 +117,6 @@ const uploadProfilePhoto = async (req, res) => {
             fileID
         });
 
-        try {
-            await createActionLog({
-                sourceUserID: userID,
-                affectedUserID: null,
-                affectedUserName: null,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'GENERAL',
-                operationType: 'UPDATE',
-                operationName: 'Profile Photo Updated.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(201).json({ message: 'Profile photo uploaded successfully.', payload: { update } });
     } catch (error) {
         console.error('Error uploading profile photo:', error);

@@ -14,7 +14,7 @@ const swaggerDefinition = {
     },
     servers: [
         {
-            url: 'http://ondergrup.hidirektor.com.tr:3000',
+            url: 'https://ondergrup.hidirektor.com.tr/api/v2',
             description: 'Local server',
         },
     ],

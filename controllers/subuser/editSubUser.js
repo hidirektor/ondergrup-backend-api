@@ -148,22 +148,6 @@ module.exports = async (req, res) => {
 
         await subUser.save();
 
-        try {
-            await createActionLog({
-                sourceUserID: ownerID,
-                affectedUserID: userID,
-                affectedUserName: userName,
-                affectedMachineID: null,
-                affectedMaintenanceID: null,
-                affectedHydraulicUnitID: null,
-                operationSection: 'EMBEDDED',
-                operationType: 'EDIT',
-                operationName: 'Sub User Edited.',
-            });
-        } catch (error) {
-            res.status(500).json({ message: 'Action Log can not created.' });
-        }
-
         res.status(200).json({ message: 'SubUser updated successfully.', payload: { subUser, user } });
     } catch (error) {
         console.error('Error updating SubUser:', error);
