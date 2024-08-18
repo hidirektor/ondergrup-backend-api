@@ -1,10 +1,8 @@
 const nodemailer = require('nodemailer');
 const OTPLog = require('../../models/OTPLog');
 const Users = require('../../models/User');
-const generateOtpEmailContent = require('../../helpers/generateOtpEmailContent');
+const generateOtpEmailContent = require('../../helpers/emailContent/generateOtpEmailContent');
 const moment = require('moment');
-const ActionLog = require("../../models/ActionLog");
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger

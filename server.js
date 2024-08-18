@@ -9,6 +9,7 @@ require('./config/associations');
 const checkAndRefreshTokens = require('./helpers/tokenWorker');
 const fs = require('fs');
 const path = require('path');
+const startQueueListener = require('./helpers/rabbitmq/queueListener');
 
 const authRoutes = require('./routes/auth');
 const authorizedRoutes = require('./routes/authorized');
@@ -40,6 +41,8 @@ app.use('/api/v2', swaggerRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server);
+
+startQueueListener();
 
 io.on('connection', (socket) => {
     console.log('a user connected');
