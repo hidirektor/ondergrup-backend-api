@@ -11,15 +11,12 @@ const downloadNewVersionRaw = require('../controllers/update/downloadNewVersionR
 
 const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
+const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
 router.post('/checkUpdates', checkUpdates);
 router.get('/checkUpdatesRaw', checkUpdatesRaw);
-router.post('/createVersion', upload.single('file'), createVersion);
+router.post('/createVersion', authMiddleware(), actionLogMiddleware('CREATE', 'Yeni STM32 sürümü oluşturuldu.'), upload.single('file'), createVersion);
 router.post('/downloadNewVersion', downloadNewVersion);
 router.get('/downloadNewVersionRaw', downloadNewVersionRaw);
-
-//router.post('/checkUpdates', authMiddleware, checkUpdates);
-//router.post('/createVersion', authMiddleware, roleMiddleware(['SYSOP']), upload.single('file'), createVersion);
-//router.post('/downloadNewVersion', authMiddleware, downloadNewVersion);
 
 module.exports = router;
