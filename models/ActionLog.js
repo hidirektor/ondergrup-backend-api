@@ -9,7 +9,6 @@ const sequelize = require('../config/database');
  *       type: object
  *       required:
  *          - sourceUserID
- *          - sourceUserName
  *          - operationSection
  *          - operationType
  *          - operationName
@@ -20,15 +19,18 @@ const sequelize = require('../config/database');
  *         sourceUserID:
  *           type: string
  *           description: Unique identifier for the source user
- *         sourceUserName:
+ *         sourceNameSurname:
  *           type: string
- *           description: Source user name
+ *           description: Source name surname
  *         affectedUserID:
  *           type: string
  *           description: Unique identifier for the user.
  *         affectedUserName:
  *           type: string
  *           description: Name of operator.
+ *         affectedNameSurname:
+ *           type: string
+ *           description: Name surname of operator.
  *         affestedMachineID:
  *           type: string
  *           description: Affected machine id.
@@ -38,7 +40,7 @@ const sequelize = require('../config/database');
  *         affectedHydraulicUnitID:
  *           type: string
  *           description: Affected hydraulic unit id.
- *         operationSection:
+ *         operationPlatform:
  *           type: string
  *           description: Section seperator for HYDRAULIC and EMBEDDED
  *         operationType:
