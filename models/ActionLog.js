@@ -64,13 +64,13 @@ const sequelize = require('../config/database');
 const ActionLog = sequelize.define('ActionLog', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     sourceUserID: { type: DataTypes.STRING, allowNull: false },
-    sourceUserName: { type: DataTypes.STRING, allowNull: false },
+    sourceNameSurname: { type: DataTypes.STRING, allowNull: false },
     affectedUserID: { type: DataTypes.STRING, allowNull: true },
     affectedUserName: { type: DataTypes.STRING, allowNull: true },
     affectedMachineID: { type: DataTypes.STRING, allowNull: true },
     affectedMaintenanceID: { type: DataTypes.INTEGER, allowNull: true },
     affectedHydraulicUnitID: { type: DataTypes.STRING, allowNull: true },
-    operationSection: { type: DataTypes.STRING, allowNull: false },
+    operationPlatform: { type: DataTypes.STRING, allowNull: false },
     operationType: { type: DataTypes.STRING, allowNull: false },
     operationName: { type: DataTypes.STRING, allowNull: false },
     operationTime: {

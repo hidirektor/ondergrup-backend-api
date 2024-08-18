@@ -22,6 +22,7 @@ const deleteMaintenance = require('../controllers/authorized/maintenance/deleteM
 
 const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
+const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
 router.get('/getAllActions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllActions);
 router.get('/getAllMachines', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
@@ -29,7 +30,7 @@ router.get('/getAllMaintenances', authMiddleware, roleMiddleware(['SYSOP', 'ENGI
 router.get('/getAllVersions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllVersions);
 router.get('/getAllSubUsers', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllSubUsers);
 
-router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), updateOwner);
+router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), actionLogMiddleware('UPDATE', 'Makine sahibi değiştirildi.'), updateOwner);
 
 router.get('/getAllUsers', authMiddleware, roleMiddleware(['SYSOP']), getAllUsers);
 router.post('/deActivateUser', authMiddleware, roleMiddleware(['SYSOP']), deActivateUser);

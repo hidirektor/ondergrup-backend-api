@@ -15,7 +15,7 @@ const checkUser = require('../controllers/user/checkUser');
 const authMiddleware = require('../middleware/authMiddleware');
 const actionLogMiddleware = require('../middleware/actionLogMiddleware');
 
-router.post('/getProfile', authMiddleware, actionLogMiddleware('EMBEDDED', 'VIEW', 'Get User Profile'), getProfile);
+router.post('/getProfile', authMiddleware, getProfile);
 router.post('/updateProfile', authMiddleware, updateProfile);
 router.post('/getPreferences', authMiddleware, getPreferences);
 router.post('/updatePreferences', authMiddleware, updatePreferences);

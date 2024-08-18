@@ -3,20 +3,16 @@ const Users = require('../../models/User');
 
 const createActionLog = async ({
                                    sourceUserID,
+                                   sourceNameSurname,
                                    affectedUserID = null,
                                    affectedMachineID = null,
                                    affectedMaintenanceID = null,
                                    affectedHydraulicUnitID = null,
-                                   operationSection,
+                                   operationPlatform,
                                    operationType,
                                    operationName,
                                }) => {
     try {
-        const sourceUser = await Users.findOne({ where: { userID: sourceUserID } });
-        if (!sourceUser) {
-            throw new Error(`User with ID ${sourceUserID} not found. Request aborted.`);
-        }
-
         let affectedUserName = null;
 
         if (affectedUserID) {
@@ -29,13 +25,13 @@ const createActionLog = async ({
 
         const actionLogData = {
             sourceUserID: sourceUserID,
-            sourceUserName: sourceUser.userName,
+            sourceNameSurname: sourceNameSurname,
             affectedUserID: affectedUserID,
             affectedUserName: affectedUserName,
             affectedMachineID: affectedMachineID,
             affectedMaintenanceID: affectedMaintenanceID,
             affectedHydraulicUnitID: affectedHydraulicUnitID,
-            operationSection: operationSection,
+            operationPlatform: operationPlatform,
             operationType: operationType,
             operationName: operationName,
             operationTime: Math.floor(Date.now() / 1000)
