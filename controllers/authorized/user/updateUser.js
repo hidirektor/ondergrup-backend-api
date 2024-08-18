@@ -14,10 +14,6 @@ const bcrypt = require("bcryptjs");
  *           schema:
  *             type: object
  *             properties:
- *               userID:
- *                 type: string
- *                 description: User ID of the user whose profile to update
- *                 example: "123456789"
  *               userData:
  *                 type: object
  *                 description: Updated user profile data to be applied
@@ -59,7 +55,7 @@ const bcrypt = require("bcryptjs");
  */
 
 module.exports = async (req, res) => {
-    const { sourceUserID, userID, userData } = req.body;
+    const { userID, userData } = req.body;
 
     const user = await Users.findOne({ where: { userID } });
 

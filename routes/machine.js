@@ -16,9 +16,10 @@ const getMaintenancesAll = require('../controllers/machine/getMaintenancesAll');
 
 const authMiddleware = require('../middleware/authMiddleware');
 const roleMiddleware = require('../middleware/roleMiddleware');
+const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
-router.post('/createMachine', authMiddleware, create);
-router.post('/addMachine', authMiddleware, add);
+router.post('/createMachine', authMiddleware, actionLogMiddleware('ADD', 'Sisteme yeni makine eklendi.'), create);
+router.post('/addMachine', authMiddleware, actionLogMiddleware('SYNCH', 'Makine kullanıcı ile eşleştirildi.'), add);
 router.post('/getMachines', authMiddleware, getMachines);
 router.post('/updateMachine', updateMachine);
 router.get('/updateMachineRaw', updateMachineRaw);

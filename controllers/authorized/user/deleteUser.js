@@ -13,12 +13,8 @@ const Users = require('../../../models/User');
  *           schema:
  *             type: object
  *             required:
- *               - userID
  *               - userName
  *             properties:
- *               userID:
- *                 type: string
- *                 description: User ID of source user.
  *               userName:
  *                 type: string
  *                 description: Username of the user to delete
@@ -47,7 +43,7 @@ const Users = require('../../../models/User');
  */
 
 module.exports = async (req, res) => {
-    const { userID, userName } = req.body;
+    const { userName } = req.body;
 
     try {
         const user = await Users.findOne({ where: { userName } });

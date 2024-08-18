@@ -17,7 +17,6 @@ const { v4: uuidv4 } = require('uuid');
  *           schema:
  *             type: object
  *             required:
- *               - userID
  *               - userName
  *               - userType
  *               - nameSurname
@@ -93,7 +92,7 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports = async (req, res) => {
     const {
-        userID, userName, userType, nameSurname, eMail, phoneNumber, companyName, password
+        userName, userType, nameSurname, eMail, phoneNumber, companyName, password
     } = req.body;
 
     try {

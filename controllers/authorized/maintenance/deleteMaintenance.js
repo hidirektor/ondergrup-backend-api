@@ -13,12 +13,8 @@ const Maintenance = require('../../../models/Maintenance');
  *           schema:
  *             type: object
  *             required:
- *               - userID
  *               - maintenanceID
  *             properties:
- *               userID:
- *                 type: string
- *                 description: User ID of source user.
  *               maintenanceID:
  *                 type: integer
  *                 description: ID of the maintenance record to delete
@@ -68,7 +64,7 @@ const Maintenance = require('../../../models/Maintenance');
 
 module.exports = async (req, res) => {
     try {
-        const { userID, maintenanceID } = req.body;
+        const { maintenanceID } = req.body;
 
         if (!maintenanceID) {
             return res.status(400).json({ message: 'maintenanceID is required' });

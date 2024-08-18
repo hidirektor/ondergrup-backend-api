@@ -13,11 +13,12 @@ const getHydraulicStats = require('../controllers/hydraulic/getHydraulicStats');
 const getHydraulicDetails = require('../controllers/hydraulic/getHydraulicDetails');
 
 const authMiddleware = require('../middleware/authMiddleware');
+const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
 router.post('/createHydraulicUnit', upload.fields([
     { name: 'partListFile', maxCount: 1 },
     { name: 'schematicFile', maxCount: 1 }
-]), createHydraulicUnit);
+]), actionLogMiddleware('ADD', 'Hidrolik ünitesi oluşturuldu.'), createHydraulicUnit);
 router.post('/downloadPartList', downloadPartList);
 router.post('/downloadSchematic', downloadSchematic);
 router.get('/getPartList/:orderID', getPartList);

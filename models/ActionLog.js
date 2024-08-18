@@ -67,6 +67,7 @@ const ActionLog = sequelize.define('ActionLog', {
     sourceNameSurname: { type: DataTypes.STRING, allowNull: false },
     affectedUserID: { type: DataTypes.STRING, allowNull: true },
     affectedUserName: { type: DataTypes.STRING, allowNull: true },
+    affectedNameSurname: { type: DataTypes.STRING, allowNull: true },
     affectedMachineID: { type: DataTypes.STRING, allowNull: true },
     affectedMaintenanceID: { type: DataTypes.INTEGER, allowNull: true },
     affectedHydraulicUnitID: { type: DataTypes.STRING, allowNull: true },

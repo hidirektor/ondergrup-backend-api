@@ -14,13 +14,9 @@ const Machine = require("../../../models/Machine");
  *           schema:
  *             type: object
  *             required:
- *               - userID
  *               - machineID
  *               - userName
  *             properties:
- *               userID:
- *                 type: string
- *                 description: User ID of source user.
  *               machineID:
  *                 type: integer
  *                 description: ID of the machine to update
@@ -63,7 +59,7 @@ const Machine = require("../../../models/Machine");
  */
 
 module.exports = async (req, res) => {
-    const { userID, machineID, userName } = req.body;
+    const { machineID, userName } = req.body;
 
     const user = await Users.findOne({ where: { userName } });
     if (!user) return res.status(404).json({ message: 'User not found' });

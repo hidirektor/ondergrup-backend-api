@@ -5,6 +5,8 @@ const createActionLog = async ({
                                    sourceUserID,
                                    sourceNameSurname,
                                    affectedUserID = null,
+                                   affectedUserName = null,
+                                   affectedNameSurname = null,
                                    affectedMachineID = null,
                                    affectedMaintenanceID = null,
                                    affectedHydraulicUnitID = null,
@@ -13,21 +15,12 @@ const createActionLog = async ({
                                    operationName,
                                }) => {
     try {
-        let affectedUserName = null;
-
-        if (affectedUserID) {
-            const affectedUser = await Users.findOne({ where: { userID: affectedUserID } });
-            if (!affectedUser) {
-                throw new Error(`Affected user with ID ${affectedUserID} not found.`);
-            }
-            affectedUserName = affectedUser.userName;
-        }
-
         const actionLogData = {
             sourceUserID: sourceUserID,
             sourceNameSurname: sourceNameSurname,
             affectedUserID: affectedUserID,
             affectedUserName: affectedUserName,
+            affectedNameSurname: affectedNameSurname,
             affectedMachineID: affectedMachineID,
             affectedMaintenanceID: affectedMaintenanceID,
             affectedHydraulicUnitID: affectedHydraulicUnitID,
