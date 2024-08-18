@@ -38,7 +38,7 @@ const sequelize = require('../config/database');
 
 const Machine = sequelize.define('Machine', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    machineID: { type: DataTypes.STRING, unique: true, allowNull: false },
+    machineID: { type: DataTypes.STRING, allowNull: false },
     ownerID: { type: DataTypes.STRING, allowNull: true },
     machineType: { type: DataTypes.STRING, allowNull: false },
     createdAt: {
@@ -56,7 +56,13 @@ const Machine = sequelize.define('Machine', {
     timestamps: false,
     tableName: 'Machines',
     charset: 'utf8',
-    collate: 'utf8_general_ci'
+    collate: 'utf8_general_ci',
+    indexes: [
+        {
+            unique: true,
+            fields: ['machineID'],
+        },
+    ],
 });
 
 module.exports = Machine;

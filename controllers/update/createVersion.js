@@ -89,7 +89,7 @@ const minioClient = new Minio.Client({
 
 const createVersion = async (req, res) => {
     try {
-        const { userID, versionCode, versionTitle, versionDesc } = req.body;
+        const { versionCode, versionTitle, versionDesc } = req.body;
         const file = req.file;
 
         if (!versionCode || !versionTitle || !file) {

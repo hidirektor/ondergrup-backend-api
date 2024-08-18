@@ -67,7 +67,13 @@ const HydraulicUnit = sequelize.define('HydraulicUnit', {
     timestamps: false,
     tableName: 'HydraulicUnits',
     charset: 'utf8',
-    collate: 'utf8_general_ci'
+    collate: 'utf8_general_ci',
+    indexes: [
+        {
+            unique: true,
+            fields: ['orderID'],
+        },
+    ],
 });
 
 module.exports = HydraulicUnit;
