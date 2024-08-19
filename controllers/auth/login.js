@@ -1,6 +1,6 @@
 const Users = require('../../models/User');
 const bcrypt = require('bcryptjs');
-const { generateAccessToken, generateRefreshToken, invalidateToken } = require('../../helpers/tokenUtils');
+const { generateAccessToken, generateRefreshToken, invalidateToken, findRefreshToken} = require('../../helpers/tokenUtils');
 const redisClient = require('../../helpers/redisClient');
 
 /**
@@ -118,7 +118,10 @@ module.exports = async (req, res) => {
         if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
         let accessToken = await generateAccessToken({ userID: user.userID });
-        let refreshToken = await generateRefreshToken({ userID: user.userID });
+        let refreshToken = await findRefreshToken(user.userID);
+        if (!refreshToken) {
+            refreshToken = await generateRefreshToken({ userID: user.userID });
+        }
 
         res.json({
             message: 'Successfully logged in :)',

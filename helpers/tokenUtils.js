@@ -73,4 +73,23 @@ const refreshAccessToken = async (userID, userType) => {
     }
 };
 
-module.exports = { generateAccessToken, generateRefreshToken, verifyToken, invalidateToken, refreshAccessToken };
+const findRefreshToken = async (userID) => {
+    try {
+        const keys = await redisClient.keys('*');
+        for (const token of keys) {
+            const data = await redisClient.get(token);
+            if (data) {
+                const tokenData = JSON.parse(data);
+                if (tokenData.userID === userID && jwt.verify(token, process.env.JWT_REFRESH_SECRET)) {
+                    return token;
+                }
+            }
+        }
+        return null; // Eğer mevcut bir refresh token bulunamazsa
+    } catch (err) {
+        console.error('Error finding refresh token:', err);
+        throw new Error('Refresh token lookup failed');
+    }
+};
+
+module.exports = { generateAccessToken, generateRefreshToken, verifyToken, invalidateToken, refreshAccessToken, findRefreshToken };
