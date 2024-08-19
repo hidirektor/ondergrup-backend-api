@@ -30,9 +30,9 @@ services:
       MINIO_SECRET_KEY: 'o3jLtjbth7JRo2HHnG0rIrfBedqRWBpbPLiIIdr2'
       PORT: '3000'
       SMTP_HOST: 'mail.hidirektor.com.tr'
-      SMTP_PASS: 'Jjc4FA{{GIEn'
+      SMTP_PASS: 'Re7Mac1PV8TXFBkX5V'
       SMTP_PORT: '587'
-      SMTP_USER: 'verification@hidirektor.com.tr'
+      SMTP_USER: 'noreply@hidirektor.com.tr'
 
 networks:
   bridge-network:
