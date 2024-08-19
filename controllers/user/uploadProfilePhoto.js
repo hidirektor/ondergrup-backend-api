@@ -69,7 +69,10 @@ const uploadProfilePhoto = async (req, res) => {
 
         const userID = user.userID;
         const profilePhoto = await ProfilePhoto.findOne({where: {userID}});
+        const oldPhotoMinioID = "/profilePhotos/" + profilePhoto.fileID + ".png";
+        const arr = new Array(1);
         if (profilePhoto) {
+            await minioClient.removeObject(process.env.BUCKET_NAME, oldPhotoMinioID);
             await ProfilePhoto.destroy({where: {userID}});
         }
 
