@@ -1,7 +1,8 @@
 const Users = require('../../models/User');
-const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
 const OTPLog = require("../../models/OTPLog");
+const redisClient = require('../../helpers/redisClient');
+const { invalidateToken } = require('../../helpers/tokenUtils');
 
 /**
  * @swagger
@@ -80,14 +81,34 @@ module.exports = async (req, res) => {
             return res.status(404).json({ message: 'OTP not found' });
         }
 
-        await RefreshToken.destroy({ where: { userID: user.userID } });
+        // Kullanıcının mevcut tüm tokenlarını geçersiz kıl
+        redisClient.keys('*', async (err, keys) => {
+            if (err) {
+                console.error('Redis error:', err);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
+            for (const token of keys) {
+                redisClient.get(token, async (err, data) => {
+                    if (err || !data) {
+                        console.error('Error fetching token data:', err);
+                        return;
+                    }
 
-        user.password = hashedPassword;
-        await user.save();
+                    const tokenData = JSON.parse(data);
+                    if (tokenData.userID === user.userID) {
+                        await invalidateToken(token);
+                    }
+                });
+            }
 
-        res.json({ message: 'Password reset successfully' });
+            // Yeni şifreyi hashleyip kaydet
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            user.password = hashedPassword;
+            await user.save();
+
+            res.json({ message: 'Password reset successfully' });
+        });
     } catch (error) {
         console.error('Error resetting password:', error);
         res.status(500).json({ message: 'An unexpected error occurred while resetting the password.' });

@@ -1,27 +1,19 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const { verifyToken } = require('../helpers/tokenUtils');
 
 module.exports = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) return res.sendStatus(401);
+    if (!token) {
+        return res.sendStatus(401); // Unauthorized
+    }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userID = decoded.userID;
-
-        const user = await User.findOne({ where: { userID } });
-        const userType = user.userType;
-        if (!user) {
-            return res.sendStatus(401); // Unauthorized
-        }
-
+        const decoded = await verifyToken(token);
         req.user = {
-            userID,
-            userType
+            userID: decoded.userID,
+            userType: decoded.userType,
         };
-
         next();
     } catch (err) {
         console.error('Error in authMiddleware', err);

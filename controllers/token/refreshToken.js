@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const RefreshToken = require('../../models/RefreshToken');
+const redisClient = require('../../helpers/redisClient');
 const { generateAccessToken } = require('../../helpers/tokenUtils');
-
 /**
  * @swagger
  * /refreshToken:
@@ -59,21 +58,37 @@ module.exports = async (req, res) => {
     if (!userID || !refreshToken || !accessToken) return res.sendStatus(401);
 
     try {
-        const tokenData = await RefreshToken.findOne({ where: { refreshToken, userID } });
-        if (!tokenData) return res.sendStatus(403);
+        // Refresh token'ı Redis'ten al
+        redisClient.get(refreshToken, (err, data) => {
+            if (err || !data) {
+                return res.sendStatus(403); // Token bulunamadı
+            }
 
-        const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-        const decodedAccessToken = jwt.verify(accessToken, process.env.JWT_SECRET, { ignoreExpiration: true });
+            const tokenData = JSON.parse(data);
 
-        if (decodedAccessToken.userID !== decoded.userID || decoded.userID !== userID) {
-            return res.sendStatus(403);
-        }
+            // Token verilerini kontrol et
+            const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+            const decodedAccessToken = jwt.verify(accessToken, process.env.JWT_SECRET, { ignoreExpiration: true });
 
-        const newAccessToken = generateAccessToken({ userID: decoded.userID });
+            if (decodedAccessToken.userID !== decoded.userID || decoded.userID !== userID || tokenData.userID !== userID) {
+                return res.sendStatus(403);
+            }
 
-        await RefreshToken.update({ accessToken: newAccessToken }, { where: { refreshToken, userID } });
+            // Yeni bir access token oluştur
+            const newAccessToken = generateAccessToken({ userID: decoded.userID });
 
-        res.json({ message: 'Successfully generated access token.', payload: { accessToken: newAccessToken } });
+            // Yeni access token'ı Redis'te sakla
+            redisClient.set(newAccessToken, JSON.stringify({ userID: decoded.userID }), 'EX', 86400); // 1 gün
+
+            // Eski access token'ı geçersiz kıl (isteğe bağlı)
+            redisClient.del(accessToken, (err) => {
+                if (err) {
+                    console.error('Error deleting old access token:', err);
+                }
+            });
+
+            res.json({ message: 'Successfully generated access token.', payload: { accessToken: newAccessToken } });
+        });
     } catch (error) {
         res.sendStatus(403);
     }

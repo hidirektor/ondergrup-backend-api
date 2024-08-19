@@ -1,7 +1,6 @@
 const Users = require('../models/User');
 const SubUsers = require('../models/SubUser');
 const UserPreferences = require('../models/UserPreferences');
-const RefreshTokens = require('../models/RefreshToken');
 const Machines = require('../models/Machine');
 const MachineData = require('../models/MachineData');
 const Maintenances = require('../models/Maintenance');
@@ -28,10 +27,6 @@ ActionLog.belongsTo(Users, { foreignKey: 'affectedUserID', targetKey: 'userID' }
 // Users.userID > Machines.ownerID
 Users.hasOne(Machines, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'SET NULL' });
 Machines.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
-
-// Users.userID > RefreshTokens.userID
-Users.hasOne(RefreshTokens, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-RefreshTokens.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID' });
 
 // Machines.machineID > MachineData.machineID
 Machines.hasOne(MachineData, { foreignKey: 'machineID', sourceKey: 'machineID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });

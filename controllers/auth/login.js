@@ -1,7 +1,7 @@
 const Users = require('../../models/User');
-const RefreshToken = require('../../models/RefreshToken');
 const bcrypt = require('bcryptjs');
-const { generateAccessToken, generateRefreshToken } = require('../../helpers/tokenUtils');
+const { generateAccessToken, generateRefreshToken, invalidateToken } = require('../../helpers/tokenUtils');
+const redisClient = require('../../helpers/redisClient');
 
 /**
  * @swagger
@@ -117,26 +117,34 @@ module.exports = async (req, res) => {
 
         if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
-        const existingToken = await RefreshToken.findOne({ where: { userID: user.userID } });
-        let accessToken;
-        let refreshToken;
+        let accessToken = generateAccessToken({ userID: user.userID });
+        let refreshToken = generateRefreshToken({ userID: user.userID });
 
-        if (existingToken) {
-            // Var olan refresh token'ı kullan
-            accessToken = generateAccessToken({ userID: user.userID });
-            refreshToken = existingToken.refreshToken;
-            // Access token'ı güncelle
-            await RefreshToken.update({ accessToken }, { where: { userID: user.userID } });
-        } else {
-            // Yeni refresh token üret
-            accessToken = generateAccessToken({ userID: user.userID });
-            refreshToken = generateRefreshToken({ userID: user.userID });
-            await RefreshToken.create({ refreshToken, accessToken, userID: user.userID });
-        }
+        // Önceki token'ları sil
+        redisClient.keys('*', async (err, keys) => {
+            if (err) {
+                console.error('Redis error:', err);
+                return;
+            }
 
-        await RefreshToken.destroy({ where: { userID: user.userID } });
+            for (const token of keys) {
+                redisClient.get(token, async (err, data) => {
+                    if (err || !data) {
+                        console.error('Error fetching token data:', err);
+                        return;
+                    }
 
-        await RefreshToken.create({ refreshToken, accessToken, userID: user.userID });
+                    const tokenData = JSON.parse(data);
+                    if (tokenData.userID === user.userID) {
+                        await invalidateToken(token);
+                    }
+                });
+            }
+        });
+
+        // Yeni token'ları Redis'e kaydet
+        redisClient.set(accessToken, JSON.stringify({ userID: user.userID, userType: user.userType }), 'EX', 86400); // 1 gün
+        redisClient.set(refreshToken, JSON.stringify({ userID: user.userID, userType: user.userType }), 'EX', 604800); // 7 gün
 
         res.json({ message: 'Successfully logged in :)', payload: { userID: user.userID, userType: user.userType, accessToken, refreshToken } });
     } catch (error) {

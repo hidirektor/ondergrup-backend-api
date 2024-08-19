@@ -1,4 +1,5 @@
-const RefreshToken = require('../../models/RefreshToken');
+const { invalidateToken } = require('../../helpers/tokenUtils');
+const redisClient = require('../../helpers/redisClient');
 
 /**
  * @swagger
@@ -58,12 +59,7 @@ module.exports = async (req, res) => {
     const { token } = req.body;
 
     try {
-        const refreshToken = await RefreshToken.findOne({ where: { accessToken: token } });
-        if (!refreshToken) {
-            return res.status(404).json({ message: 'Token not found' });
-        }
-
-        await RefreshToken.destroy({ where: { accessToken: token } });
+        await invalidateToken(token);
 
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {

@@ -19,7 +19,7 @@ router.post('/getProfile', authMiddleware, getProfile);
 router.post('/updateProfile', authMiddleware, actionLogMiddleware('UPDATE', 'Kullanıcı profili güncellendi.'), updateProfile);
 router.post('/getPreferences', authMiddleware, getPreferences);
 router.post('/updatePreferences', authMiddleware, actionLogMiddleware('UPDATE', 'Kullanıcı tercihleri güncellendi.'), updatePreferences);
-router.post('/uploadProfilePhoto', upload.single('file'), uploadProfilePhoto);
+router.post('/uploadProfilePhoto', authMiddleware, upload.single('file'), uploadProfilePhoto);
 router.post('/downloadProfilePhoto', downloadProfilePhoto);
 router.get('/getProfilePhoto/:userName', getProfilePhoto);
 router.post('/checkUser', checkUser);

@@ -13,7 +13,7 @@ services:
     volumes:
       - .:/app
     networks:
-      - bridge-network
+      - ondergrup-network
     environment:
       BUCKET_NAME: 'backend-api'
       DB_HOST: '85.95.231.92'
@@ -33,7 +33,11 @@ services:
       SMTP_PASS: 'D+[b);Zr[&oR'
       SMTP_PORT: '587'
       SMTP_USER: 'iot@hidirektor.com.tr'
+      REDIS_HOST: 'redis'
+      REDIS_PORT: '6379'
+      REDIS_USERNAME: 'ondergrupredisadmin'
+      REDIS_PASSWORD: 'onderredis1456'
 
 networks:
-  bridge-network:
-    driver: bridge
+  ondergrup-network:
+    external: true
