@@ -1,39 +1,76 @@
 const jwt = require('jsonwebtoken');
 const redisClient = require('./redisClient');
 
-const generateAccessToken = (payload) => {
+const generateAccessToken = async (payload) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
-    redisClient.set(token, JSON.stringify(payload), 'EX', 86400); // 1 gün
+    console.log('AccessToken:', token); // Token'ı loglayın
+    await redisClient.set(token, JSON.stringify(payload));
+    await redisClient.expire(token, 86400); // 86400 saniye (1 gün)
     return token;
 };
 
-const generateRefreshToken = (payload) => {
+const generateRefreshToken = async (payload) => {
     const token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET);
-    redisClient.set(token, JSON.stringify(payload), 'EX', 604800); // 7 gün (bir hafta)
+    console.log('RefreshToken:', token); // Token'ı loglayın
+    await redisClient.set(token, JSON.stringify(payload));
+    await redisClient.expire(token, 604800); // 604800 saniye (7 gün)
     return token;
 };
 
 const verifyToken = (token) => {
-    return new Promise((resolve, reject) => {
-        redisClient.get(token, (err, data) => {
-            if (err || !data) {
-                return reject('Token not found');
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await redisClient.get(token);
+            if (!data) {
+                return reject('Token not found in Redis');
             }
             jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-                if (err) return reject('Token invalid');
+                if (err) {
+                    console.error('JWT verify error:', err);
+                    return reject('Token invalid');
+                }
                 resolve(decoded);
             });
-        });
+        } catch (err) {
+            console.error('Redis get error:', err);
+            reject('Token not found');
+        }
     });
 };
 
-const invalidateToken = (token) => {
-    return new Promise((resolve) => {
-        redisClient.del(token, (err) => {
-            if (err) console.error('Redis error:', err);
-            resolve();
-        });
-    });
+const invalidateToken = async (token) => {
+    try {
+        await redisClient.del(token);
+    } catch (err) {
+        console.error('Redis error:', err);
+    }
 };
 
-module.exports = { generateAccessToken, generateRefreshToken, verifyToken, invalidateToken };
+const refreshAccessToken = async (userID, userType) => {
+    try {
+        // Önceki token'ları sil
+        const keys = await redisClient.keys('*');
+        const deletePromises = keys.map(async (token) => {
+            const data = await redisClient.get(token);
+            if (data) {
+                const tokenData = JSON.parse(data);
+                if (tokenData.userID === userID) {
+                    await invalidateToken(token);
+                }
+            }
+        });
+        await Promise.all(deletePromises);
+
+        // Yeni AccessToken oluştur ve Redis'e kaydet
+        const accessToken = jwt.sign({ userID }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        await redisClient.set(accessToken, JSON.stringify({ userID, userType }));
+        await redisClient.expire(accessToken, 86400); // 86400 saniye (1 gün)
+
+        return accessToken;
+    } catch (err) {
+        console.error('Error refreshing access token:', err);
+        throw new Error('Token refresh failed');
+    }
+};
+
+module.exports = { generateAccessToken, generateRefreshToken, verifyToken, invalidateToken, refreshAccessToken };

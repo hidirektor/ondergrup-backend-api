@@ -61,7 +61,6 @@ io.on('connection', (socket) => {
 sequelize.sync({ force: false, alter: true }).then(async () => {
     server.listen(process.env.PORT, () => {
         console.log(`Server running on port ${process.env.PORT || 3000}`);
-        checkAndRefreshTokens();
     });
 }).catch((error) => {
     console.error('Unable to connect to the database:', error);

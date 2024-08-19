@@ -117,36 +117,18 @@ module.exports = async (req, res) => {
 
         if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
-        let accessToken = generateAccessToken({ userID: user.userID });
-        let refreshToken = generateRefreshToken({ userID: user.userID });
+        let accessToken = await generateAccessToken({ userID: user.userID });
+        let refreshToken = await generateRefreshToken({ userID: user.userID });
 
-        // Önceki token'ları sil
-        redisClient.keys('*', async (err, keys) => {
-            if (err) {
-                console.error('Redis error:', err);
-                return;
-            }
-
-            for (const token of keys) {
-                redisClient.get(token, async (err, data) => {
-                    if (err || !data) {
-                        console.error('Error fetching token data:', err);
-                        return;
-                    }
-
-                    const tokenData = JSON.parse(data);
-                    if (tokenData.userID === user.userID) {
-                        await invalidateToken(token);
-                    }
-                });
+        res.json({
+            message: 'Successfully logged in :)',
+            payload: {
+                userID: user.userID,
+                userType: user.userType,
+                accessToken,
+                refreshToken
             }
         });
-
-        // Yeni token'ları Redis'e kaydet
-        redisClient.set(accessToken, JSON.stringify({ userID: user.userID, userType: user.userType }), 'EX', 86400); // 1 gün
-        redisClient.set(refreshToken, JSON.stringify({ userID: user.userID, userType: user.userType }), 'EX', 604800); // 7 gün
-
-        res.json({ message: 'Successfully logged in :)', payload: { userID: user.userID, userType: user.userType, accessToken, refreshToken } });
     } catch (error) {
         console.error('Error logging in:', error);
         if (error.name === 'SequelizeDatabaseError') {

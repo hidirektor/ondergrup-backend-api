@@ -1,11 +1,14 @@
-const redis = require('redis');
-const client = redis.createClient({
-    socket: {
-        username: process.env.REDIS_USERNAME,
-        password: process.env.REDIS_PASSWORD,
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT
-    }
+const Redis = require('ioredis');
+
+const client = new Redis({
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+    //username: process.env.REDIS_USERNAME,
+    //password: process.env.REDIS_PASSWORD,
+    retryStrategy: (times) => {
+        const delay = Math.min(times * 50, 2000);
+        return delay;
+    },
 });
 
 client.on('error', (err) => {
@@ -15,11 +18,5 @@ client.on('error', (err) => {
 client.on('connect', () => {
     console.log('Connected to Redis');
 });
-
-client.connect().then(() => {
-    console.log('Connected to Redis');
-}).catch((err) => {
-    console.log(err.message);
-})
 
 module.exports = client;
