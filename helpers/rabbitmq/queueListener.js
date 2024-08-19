@@ -41,7 +41,7 @@ const startQueueListener = () => {
                     };
 
                     if (userInfo.type === 'welcomeMail') {
-                        mailOptions.subject = 'ÖnderLifte Hoşgeldiniz';
+                        mailOptions.subject = `Sn. ${userInfo.name} ÖnderLifte Hoşgeldiniz`;
                         mailOptions.html = generateWelcomeEmailContent();
                     } else if (userInfo.type === 'alertMail') {
                         mailOptions.subject = 'Important System Alert';

@@ -1,6 +1,6 @@
 const amqp = require('amqplib/callback_api');
 
-const sendMail = async (type, userEmail, userName = null) => {
+const sendMail = async (type, userEmail, nameSurname = null) => {
     amqp.connect('amqp://rabbitmqadminonder:rabbitmq1456@85.95.231.92:5672', (error0, connection) => {
         if (error0) {
             throw error0;
@@ -11,7 +11,7 @@ const sendMail = async (type, userEmail, userName = null) => {
             }
 
             const queue = type === 'welcomeMail' ? 'welcome_emails' : 'alert_emails';
-            const msg = JSON.stringify({ type, email: userEmail, name: userName });
+            const msg = JSON.stringify({ type, email: userEmail, name: nameSurname });
 
             channel.assertQueue(queue, {
                 durable: false
