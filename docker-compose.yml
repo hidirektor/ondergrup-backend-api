@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
-    restart: unless-stopped
+    restart: always
     volumes:
       - .:/app
     networks:
