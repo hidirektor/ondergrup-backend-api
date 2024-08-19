@@ -3,7 +3,6 @@ const redisClient = require('./redisClient');
 
 const generateAccessToken = async (payload) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
-    console.log('AccessToken:', token); // Token'ı loglayın
     await redisClient.set(token, JSON.stringify(payload));
     await redisClient.expire(token, 86400); // 86400 saniye (1 gün)
     return token;
@@ -11,7 +10,6 @@ const generateAccessToken = async (payload) => {
 
 const generateRefreshToken = async (payload) => {
     const token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET);
-    console.log('RefreshToken:', token); // Token'ı loglayın
     await redisClient.set(token, JSON.stringify(payload));
     await redisClient.expire(token, 604800); // 604800 saniye (7 gün)
     return token;
