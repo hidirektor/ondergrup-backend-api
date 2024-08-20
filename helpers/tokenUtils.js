@@ -45,7 +45,6 @@ const verifyToken = (token) => {
                     console.error('JWT verify error:', err);
                     return reject('Token invalid');
                 }
-                console.log('Token decoded successfully:', decoded);
                 resolve({ ...decoded, userType: tokenData.userType });
             });
         } catch (err) {
