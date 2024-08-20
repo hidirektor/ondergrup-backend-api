@@ -1,6 +1,7 @@
 const amqp = require('amqplib/callback_api');
 const nodemailer = require('nodemailer');
 const generateWelcomeEmailContent = require("../emailContent/generateWelcomeEmailContent");
+const generateAlertEmailContent = require("../emailContent/generateAlertEmailContent");
 
 const startQueueListener = () => {
     const transporter = nodemailer.createTransport({
@@ -13,7 +14,7 @@ const startQueueListener = () => {
         }
     });
 
-    amqp.connect('amqp://rabbitmqadminonder:rabbitmq1456@85.95.231.92:5672', (error0, connection) => {
+    amqp.connect(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@85.95.231.92:${process.env.RABBITMQ_PORT}`, (error0, connection) => {
         if (error0) {
             throw error0;
         }
@@ -33,28 +34,41 @@ const startQueueListener = () => {
 
                 channel.consume(queue, (msg) => {
                     const userInfo = JSON.parse(msg.content.toString());
-                    const mailOptions = {
-                        from: process.env.SMTP_USER,
-                        to: userInfo.email,
-                        subject: '',
-                        html: '',
-                    };
+                    if (userInfo.type === 'welcome_emails') {
+                        const mailOptions = {
+                            from: process.env.SMTP_USER,
+                            to: userInfo.email,
+                            subject: `Sn. ${userInfo.name} ÖnderLifte Hoşgeldiniz`,
+                            html: generateWelcomeEmailContent(),
+                        };
 
-                    if (userInfo.type === 'welcomeMail') {
-                        mailOptions.subject = `Sn. ${userInfo.name} ÖnderLifte Hoşgeldiniz`;
-                        mailOptions.html = generateWelcomeEmailContent();
-                    } else if (userInfo.type === 'alertMail') {
-                        mailOptions.subject = 'Important System Alert';
-                        mailOptions.text = `Dear user,\n\nThis is an important system alert.\n\nBest regards,\nThe Team`;
+                        transporter.sendMail(mailOptions, (error, info) => {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                            }
+                        });
+
+                    } else if (userInfo.type === 'alert_emails') {
+                        const { title, desc, users } = userInfo;
+                        users.forEach(user => {
+                            const mailOptions = {
+                                from: process.env.SMTP_USER,
+                                to: user.email,
+                                subject: `Sn. ${user.name}`,
+                                html: generateAlertEmailContent(title, user.name, desc),
+                            };
+
+                            transporter.sendMail(mailOptions, (error, info) => {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log(`Email sent to ${user.email}: ` + info.response);
+                                }
+                            });
+                        });
                     }
-
-                    transporter.sendMail(mailOptions, (error, info) => {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                    });
                 }, {
                     noAck: true
                 });

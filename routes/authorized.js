@@ -16,6 +16,8 @@ const addUser = require('../controllers/authorized/user/addUser');
 const updateRole = require('../controllers/authorized/user/updateRole');
 const updateUser = require('../controllers/authorized/user/updateUser');
 
+const sendAlertMail = require('../controllers/authorized/admin/sendAlertMail');
+
 const createMaintenance = require('../controllers/authorized/maintenance/createMaintenance');
 const editMaintenance = require('../controllers/authorized/maintenance/editMaintenance');
 const deleteMaintenance = require('../controllers/authorized/maintenance/deleteMaintenance');
@@ -31,6 +33,7 @@ router.get('/getAllVersions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER
 router.get('/getAllSubUsers', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllSubUsers);
 
 router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), actionLogMiddleware('UPDATE', 'Makine sahibi değiştirildi.'), updateOwner);
+router.post('/sendAlertMail', authMiddleware, sendAlertMail);
 
 router.get('/getAllUsers', authMiddleware, roleMiddleware(['SYSOP']), getAllUsers);
 router.post('/deActivateUser', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı deaktif edildi.'), deActivateUser);

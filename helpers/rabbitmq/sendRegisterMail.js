@@ -1,7 +1,7 @@
 const amqp = require('amqplib/callback_api');
 
-const sendMail = async (type, userEmail, nameSurname = null) => {
-    amqp.connect('amqp://rabbitmqadminonder:rabbitmq1456@85.95.231.92:5672', (error0, connection) => {
+const sendRegisterMail = async (type, userEmail, nameSurname = null) => {
+    amqp.connect(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@85.95.231.92:${process.env.RABBITMQ_PORT}`, (error0, connection) => {
         if (error0) {
             throw error0;
         }
@@ -28,4 +28,4 @@ const sendMail = async (type, userEmail, nameSurname = null) => {
     });
 };
 
-module.exports = sendMail;
+module.exports = sendRegisterMail;

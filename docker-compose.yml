@@ -37,6 +37,9 @@ services:
       REDIS_PORT: '6379'
       REDIS_USERNAME: 'ondergrupredisadmin'
       REDIS_PASSWORD: 'onderredis1456'
+      RABBITMQ_USERNAME: 'rabbitmqadminonder'
+      RABBITMQ_PASSWORD: 'rabbitmq1456'
+      RABBITMQ_PORT: '5672'
 
 networks:
   ondergrup-network:

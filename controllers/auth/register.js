@@ -3,7 +3,7 @@ const UserPreferences = require('../../models/UserPreferences');
 const bcrypt = require('bcryptjs');
 const generateUserID = require('../../helpers/userIDGenerator');
 const { v4: uuidv4 } = require('uuid');
-const sendMail = require('../../helpers/rabbitmq/rabbitmq');
+const sendRegisterMail = require('../../helpers/rabbitmq/sendRegisterMail');
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ module.exports = async (req, res) => {
             nightMode: false
         });
 
-        sendMail('welcomeMail', eMail, nameSurname);
+        sendRegisterMail('welcome_emails', eMail, nameSurname);
 
         res.status(200).json({message: 'Successfully registered :)', payload: { newUser }});
     } catch (error) {
