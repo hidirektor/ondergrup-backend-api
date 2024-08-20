@@ -2,6 +2,7 @@ const Version = require('../../models/Version');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
+const {verifyToken} = require("../../helpers/tokenUtils");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -28,6 +29,7 @@ const minioClient = new Minio.Client({
  *               - versionTitle
  *               - versionDesc
  *               - file
+ *               - accessToken
  *             properties:
  *               versionCode:
  *                 type: string
@@ -45,6 +47,9 @@ const minioClient = new Minio.Client({
  *                 type: string
  *                 format: binary
  *                 description: Hex file (.hex) to upload. Only .hex files are allowed.
+ *               accessToken:
+ *                 type: string
+ *                 example: safasdf12easdasd23
  *     responses:
  *       201:
  *         description: Version created successfully
@@ -85,11 +90,22 @@ const minioClient = new Minio.Client({
 
 const createVersion = async (req, res) => {
     try {
-        const { versionCode, versionTitle, versionDesc } = req.body;
+        const { versionCode, versionTitle, versionDesc, accessToken } = req.body;
         const file = req.file;
 
-        if (!versionCode || !versionTitle || !file) {
-            return res.status(400).json({ message: 'versionCode, versionTitle, and file are required' });
+        if (!versionCode || !versionTitle || !file || !accessToken) {
+            return res.status(400).json({ message: 'versionCode, versionTitle, file and accessToken are required' });
+        }
+
+        try {
+            const decoded = await verifyToken(accessToken);
+            req.user = {
+                userID: decoded.userID,
+                userType: decoded.userType,
+            };
+        } catch (err) {
+            console.error('Error in authMiddleware', err);
+            res.sendStatus(403); // Forbidden
         }
 
         const fileExtension = path.extname(file.originalname);

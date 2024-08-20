@@ -28,8 +28,8 @@ const swaggerSpecs = require('./helpers/swaggerOptions');
 fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpecs, null, 2));
 
 app.use(cors());
+app.use(bodyParser.json());
 
-app.use(express.json());
 app.use('/api/v2/auth', authRoutes);
 app.use('/api/v2/authorized', authorizedRoutes);
 app.use('/api/v2/hydraulic', hydraulicRoutes);
@@ -45,18 +45,6 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 startQueueListener();
-
-io.on('connection', (socket) => {
-    console.log('a user connected');
-
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-
-    socket.on('locationUpdate', (data) => {
-        io.emit('locationUpdate', data);
-    });
-});
 
 sequelize.sync({ force: false, alter: false }).then(async () => {
     server.listen(process.env.PORT, () => {

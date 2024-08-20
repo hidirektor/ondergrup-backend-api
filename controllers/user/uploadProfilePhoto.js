@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const Minio = require('minio');
 const sharp = require('sharp');
+const {verifyToken} = require("../../helpers/tokenUtils");
 
 const minioClient = new Minio.Client({
     endPoint: process.env.MINIO_ENDPOINT,
@@ -26,6 +27,8 @@ const minioClient = new Minio.Client({
  *           schema:
  *             type: object
  *             properties:
+ *               accessToken:
+ *                 type: string
  *               userName:
  *                 type: string
  *               file:
@@ -55,8 +58,19 @@ const minioClient = new Minio.Client({
 
 const uploadProfilePhoto = async (req, res) => {
     try {
-        const { userName } = req.body;
+        const { userName, accessToken } = req.body;
         const file = req.file;
+
+        try {
+            const decoded = await verifyToken(accessToken);
+            req.user = {
+                userID: decoded.userID,
+                userType: decoded.userType,
+            };
+        } catch (err) {
+            console.error('Error in authMiddleware', err);
+            res.sendStatus(403); // Forbidden
+        }
 
         if (!userName || !file) {
             return res.status(400).json({ message: 'userName and file are required' });
