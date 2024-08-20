@@ -117,8 +117,8 @@ module.exports = async (req, res) => {
 
         if (!user.isActive) return res.status(401).json({ message: 'User account is inactive' });
 
-        let accessToken = await generateAccessToken({ userID: user.userID });
-        let refreshToken = await generateRefreshToken({ userID: user.userID });
+        let accessToken = await generateAccessToken({ userID: user.userID, userType: user.userType });
+        let refreshToken = await generateRefreshToken({ userID: user.userID, userType: user.userType });
 
         res.json({
             message: 'Successfully logged in :)',

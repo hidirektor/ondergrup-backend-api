@@ -15,19 +15,18 @@ const getMaintenances = require('../controllers/machine/getMaintenances');
 const getMaintenancesAll = require('../controllers/machine/getMaintenancesAll');
 
 const authMiddleware = require('../middleware/authMiddleware');
-const roleMiddleware = require('../middleware/roleMiddleware');
 const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
-router.post('/createMachine', authMiddleware, actionLogMiddleware('ADD', 'Sisteme yeni makine eklendi.'), create);
-router.post('/addMachine', authMiddleware, actionLogMiddleware('SYNCH', 'Makine kullanıcı ile eşleştirildi.'), add);
-router.post('/getMachines', authMiddleware, getMachines);
+router.post('/createMachine', authMiddleware([]), actionLogMiddleware('ADD', 'Sisteme yeni makine eklendi.'), create);
+router.post('/addMachine', authMiddleware([]), actionLogMiddleware('SYNCH', 'Makine kullanıcı ile eşleştirildi.'), add);
+router.post('/getMachines', authMiddleware([]), getMachines);
 router.post('/updateMachine', updateMachine);
 router.get('/updateMachineRaw', updateMachineRaw);
 router.get('/checkMachineID', checkMachine);
 router.get('/checkMachineIDRaw', checkMachineRaw);
-router.post('/getErrors', authMiddleware, getErrors);
-router.post('/getErrorsAll', authMiddleware, getErrorsAll);
-router.post('/getMaintenances', authMiddleware, getMaintenances);
-router.post('/getMaintenancesAll', authMiddleware, getMaintenancesAll);
+router.post('/getErrors', authMiddleware([]), getErrors);
+router.post('/getErrorsAll', authMiddleware([]), getErrorsAll);
+router.post('/getMaintenances', authMiddleware([]), getMaintenances);
+router.post('/getMaintenancesAll', authMiddleware([]), getMaintenancesAll);
 
 module.exports = router;

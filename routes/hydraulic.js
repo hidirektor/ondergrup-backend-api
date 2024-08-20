@@ -12,7 +12,6 @@ const getOrderNumber = require('../controllers/hydraulic/getHydraulicUnitNumber'
 const getHydraulicStats = require('../controllers/hydraulic/getHydraulicStats');
 const getHydraulicDetails = require('../controllers/hydraulic/getHydraulicDetails');
 
-const authMiddleware = require('../middleware/authMiddleware');
 const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
 router.post('/createHydraulicUnit', upload.fields([

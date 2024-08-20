@@ -9,7 +9,7 @@ const resetPass = require('../controllers/auth/resetPass');
 const authMiddleware = require('../middleware/authMiddleware');
 const actionLogMiddleware = require('../middleware/actionLogMiddleware');
 
-router.post('/changePass', authMiddleware, actionLogMiddleware('UPDATE', 'Şifre değiştirildi.'), changePass);
+router.post('/changePass', authMiddleware([]), actionLogMiddleware('UPDATE', 'Şifre değiştirildi.'), changePass);
 router.post('/login', login);
 router.post('/logout', logout);
 router.post('/register', register);

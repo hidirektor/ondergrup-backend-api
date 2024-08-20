@@ -23,28 +23,27 @@ const editMaintenance = require('../controllers/authorized/maintenance/editMaint
 const deleteMaintenance = require('../controllers/authorized/maintenance/deleteMaintenance');
 
 const authMiddleware = require('../middleware/authMiddleware');
-const roleMiddleware = require('../middleware/roleMiddleware');
 const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
-router.get('/getAllActions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllActions);
-router.get('/getAllMachines', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
-router.get('/getAllMaintenances', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllMaintenances);
-router.get('/getAllVersions', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllVersions);
-router.get('/getAllSubUsers', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), getAllSubUsers);
+router.get('/getAllActions', authMiddleware(['SYSOP', 'ENGINEER']), getAllActions);
+router.get('/getAllMachines', authMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), getAllMachines);
+router.get('/getAllMaintenances', authMiddleware(['SYSOP', 'ENGINEER']), getAllMaintenances);
+router.get('/getAllVersions', authMiddleware(['SYSOP', 'ENGINEER']), getAllVersions);
+router.get('/getAllSubUsers', authMiddleware(['SYSOP', 'ENGINEER']), getAllSubUsers);
 
-router.put('/updateOwner', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER']), actionLogMiddleware('UPDATE', 'Makine sahibi değiştirildi.'), updateOwner);
-router.post('/sendAlertMail', authMiddleware, sendAlertMail);
+router.put('/updateOwner', authMiddleware(['SYSOP', 'ENGINEER']), actionLogMiddleware('UPDATE', 'Makine sahibi değiştirildi.'), updateOwner);
+router.post('/sendAlertMail', authMiddleware(['SYSOP', 'ENGINEER']), sendAlertMail);
 
-router.get('/getAllUsers', authMiddleware, roleMiddleware(['SYSOP']), getAllUsers);
-router.post('/deActivateUser', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı deaktif edildi.'), deActivateUser);
-router.post('/activateUser', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı aktif edildi.'), activateUser);
-router.post('/deleteUser', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('DELETE', 'Kullanıcı silindi.'), deleteUser);
-router.post('/addUser', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('ADD', 'Kullanıcı oluşturuldu.'), addUser);
-router.put('/updateRole', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı rolü güncellendi.'), updateRole);
-router.post('/updateUser', authMiddleware, roleMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı profili güncellendi.'),  updateUser);
+router.get('/getAllUsers', authMiddleware(['SYSOP']), getAllUsers);
+router.post('/deActivateUser', authMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı deaktif edildi.'), deActivateUser);
+router.post('/activateUser', authMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı aktif edildi.'), activateUser);
+router.post('/deleteUser', authMiddleware(['SYSOP']), actionLogMiddleware('DELETE', 'Kullanıcı silindi.'), deleteUser);
+router.post('/addUser', authMiddleware(['SYSOP']), actionLogMiddleware('ADD', 'Kullanıcı oluşturuldu.'), addUser);
+router.put('/updateRole', authMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı rolü güncellendi.'), updateRole);
+router.post('/updateUser', authMiddleware(['SYSOP']), actionLogMiddleware('UPDATE', 'Kullanıcı profili güncellendi.'),  updateUser);
 
-router.post('/createMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), createMaintenance);
-router.put('/editMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), actionLogMiddleware('EDIT', 'Bakım kaydı güncellendi.'), editMaintenance);
-router.delete('/deleteMaintenance', authMiddleware, roleMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), actionLogMiddleware('DELETE', 'Bakım kaydı silindi.'), deleteMaintenance);
+router.post('/createMaintenance', authMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), createMaintenance);
+router.put('/editMaintenance', authMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), actionLogMiddleware('EDIT', 'Bakım kaydı güncellendi.'), editMaintenance);
+router.delete('/deleteMaintenance', authMiddleware(['SYSOP', 'ENGINEER', 'TECHNICIAN']), actionLogMiddleware('DELETE', 'Bakım kaydı silindi.'), deleteMaintenance);
 
 module.exports = router;

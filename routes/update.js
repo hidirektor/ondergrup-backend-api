@@ -11,8 +11,6 @@ const createVersion = require('../controllers/update/createVersion');
 const downloadNewVersion = require('../controllers/update/downloadNewVersion');
 const downloadNewVersionRaw = require('../controllers/update/downloadNewVersionRaw');
 
-const authMiddleware = require('../middleware/authMiddleware');
-const roleMiddleware = require('../middleware/roleMiddleware');
 const actionLogMiddleware = require("../middleware/actionLogMiddleware");
 
 router.post('/checkUpdates', checkUpdates);
