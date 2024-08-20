@@ -105,7 +105,7 @@ const createVersion = async (req, res) => {
             };
         } catch (err) {
             console.error('Error in authMiddleware', err);
-            res.sendStatus(403); // Forbidden
+            return res.status(403); // Forbidden
         }
 
         const fileExtension = path.extname(file.originalname);
