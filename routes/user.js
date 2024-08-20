@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const upload = multer();
+const upload = multer({
+    limits: { fileSize: 10 * 1024 * 1024 } // 20MB
+});
 
 const getProfile = require('../controllers/user/getProfile');
 const updateProfile = require('../controllers/user/updateProfile');
