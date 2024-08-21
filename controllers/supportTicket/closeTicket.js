@@ -40,13 +40,13 @@ module.exports = async (req, res) => {
     try {
         const { id } = req.body;
 
-        const ticket = await SupportTicket.findByPk(id);
+        const ticket = await SupportTicket.findOne({ where: { id }});
 
         if (!ticket) {
             return res.status(404).json({ error: 'Ticket not found' });
         }
 
-        ticket.status = "Closed";
+        ticket.ticketStatus = "Closed";
         await ticket.save();
 
         return res.status(200).json({ message: 'Ticket closed successfully' });
