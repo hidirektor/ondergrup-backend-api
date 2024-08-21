@@ -5,6 +5,7 @@ const SupportTicket = sequelize.define('Tickets', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     ownerID: { type: DataTypes.STRING, allowNull: false },
     title: { type: DataTypes.STRING, allowNull: false },
+    subject: { type: DataTypes.STRING, allowNull: false },
     ticketStatus: { type: DataTypes.STRING, allowNull: false },
     responses: { type: DataTypes.STRING, allowNull: false },
     createdDate: {
