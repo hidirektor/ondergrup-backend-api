@@ -61,6 +61,6 @@ ActionLog.belongsTo(Machines, { foreignKey: 'affectedMachineID', targetKey: 'mac
 Maintenances.hasOne(ActionLog, { foreignKey: 'affectedMaintenanceID', sourceKey: 'id', onUpdate: 'CASCADE' });
 ActionLog.belongsTo(Maintenances, { foreignKey: 'affectedMaintenanceID', targetKey: 'id' });
 
-// Users.userID > Tickets.userID
-Users.hasOne(Tickets, { foreignKey: 'userID', sourceKey: 'userID', as: 'tickets', onUpdate: 'CASCADE' });
-Tickets.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID', as: 'user' });
+// Users.userID > Tickets.ownerID
+Users.hasOne(Tickets, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE' });
+Tickets.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
