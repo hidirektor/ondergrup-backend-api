@@ -7,6 +7,7 @@ const Maintenances = require('../models/Maintenance');
 const MachineErrors = require('../models/MachineError');
 const OTPLog = require('../models/OTPLog');
 const ActionLog = require('../models/ActionLog');
+const Tickets = require('../models/SupportTicket');
 
 // Users.userID > SubUsers.userID
 Users.hasOne(SubUsers, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
@@ -59,3 +60,7 @@ ActionLog.belongsTo(Machines, { foreignKey: 'affectedMachineID', targetKey: 'mac
 // Maintenances.id > ActionLog.affectedMaintenanceID
 Maintenances.hasOne(ActionLog, { foreignKey: 'affectedMaintenanceID', sourceKey: 'id', onUpdate: 'CASCADE' });
 ActionLog.belongsTo(Maintenances, { foreignKey: 'affectedMaintenanceID', targetKey: 'id' });
+
+// Users.userID > Tickets.userID
+Users.hasOne(Tickets, { foreignKey: 'userID', sourceKey: 'userID', as: 'tickets', onUpdate: 'CASCADE' });
+Tickets.belongsTo(Users, { foreignKey: 'userID', targetKey: 'userID', as: 'user' });
