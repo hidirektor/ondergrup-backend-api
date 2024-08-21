@@ -13,7 +13,6 @@ const SupportTicket = sequelize.define('Tickets', {
         allowNull: true,
         defaultValue: () => Math.floor(Date.now() / 1000)
     }
-
 }, {
     timestamps: false,
     tableName: 'Tickets',
