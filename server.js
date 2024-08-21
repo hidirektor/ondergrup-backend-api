@@ -48,7 +48,7 @@ const io = new Server(server);
 
 startQueueListener();
 
-sequelize.sync({ force: true, alter: false }).then(async () => {
+sequelize.sync({ force: false, alter: false }).then(async () => {
     server.listen(process.env.PORT, () => {
         console.log(`Server running on port ${process.env.PORT || 3000}`);
     });
