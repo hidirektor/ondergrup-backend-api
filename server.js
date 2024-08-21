@@ -23,6 +23,7 @@ const tokenRoutes = require('./routes/token');
 const updateRoutes = require('./routes/update');
 const userRoutes = require('./routes/user');
 const swaggerRoutes = require('./routes/swagger');
+const ticketRoutes = require('./routes/supportTicket');
 
 const swaggerSpecs = require('./helpers/swaggerOptions');
 fs.writeFileSync('./swagger.json', JSON.stringify(swaggerSpecs, null, 2));
@@ -39,6 +40,7 @@ app.use('/api/v2/subUser', subUserRoutes);
 app.use('/api/v2/token', tokenRoutes);
 app.use('/api/v2/updateChecker', updateRoutes);
 app.use('/api/v2/user', userRoutes);
+app.use('/api/v2/ticket', ticketRoutes);
 app.use('/api/v2', swaggerRoutes);
 
 const server = http.createServer(app);
