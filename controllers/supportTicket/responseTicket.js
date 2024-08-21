@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
     try {
         const { id, userID, comment } = req.body;
 
-        const ticket = await SupportTicket.findByPk(id);
+        const ticket = await SupportTicket.findOne({ where: { id } });
 
         if (!ticket) {
             return res.status(404).json({ error: 'Ticket not found' });

@@ -7,7 +7,7 @@ const SupportTicket = sequelize.define('Tickets', {
     title: { type: DataTypes.STRING, allowNull: false },
     subject: { type: DataTypes.STRING, allowNull: false },
     ticketStatus: { type: DataTypes.STRING, allowNull: false },
-    responses: { type: DataTypes.STRING, allowNull: false },
+    responses: { type: DataTypes.TEXT, allowNull: false },
     createdDate: {
         type: DataTypes.BIGINT,
         allowNull: true,

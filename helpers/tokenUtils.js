@@ -33,10 +33,8 @@ const verifyToken = (token) => {
         try {
             const data = await redisClient.get(token);
             if (!data) {
-                console.error('Token not found in Redis');
                 return reject('Token not found in Redis');
             }
-            console.log('Token found in Redis:', data);
 
             const tokenData = JSON.parse(data); // Redis'ten gelen veriyi JSON olarak ayrıştırın
 
