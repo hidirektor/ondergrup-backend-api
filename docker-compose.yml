@@ -40,6 +40,8 @@ services:
       RABBITMQ_USERNAME: 'rabbitmqadminonder'
       RABBITMQ_PASSWORD: 'rabbitmq1456'
       RABBITMQ_PORT: '5672'
+      ONESIGNAL_REST_API: 'N2NmMTBlZGQtNmI1MC00ZWYxLWI4N2MtM2I3OTc4MDMyMjgz'
+      ANDROID_APP_ID: '9cbe059f-be21-4512-a1f6-5a9fc0f77506'
 
 networks:
   ondergrup-network:
