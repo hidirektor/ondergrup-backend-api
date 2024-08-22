@@ -4,7 +4,6 @@ const Users = require('../../models/User');
 const https = require('https');
 const xml2js = require('xml2js');
 const moment = require('moment');
-const {createActionLog} = require("../../helpers/logger/actionLog");
 
 /**
  * @swagger
