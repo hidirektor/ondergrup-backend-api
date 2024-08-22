@@ -13,7 +13,7 @@ const actionLogMiddleware = require('../middleware/actionLogMiddleware');
 
 router.post('/createTicket', authMiddleware(['NORMAL']), actionLogMiddleware('CREATE', 'Destek talebi oluşturuldu.'), createTicket);
 router.delete('/deleteTicket', authMiddleware(['ENGINEER', 'SYSOP']), actionLogMiddleware('DELETE', 'Destek talebi silindi.'), deleteTicket);
-router.post('/responseTicket', authMiddleware(['TECHNICIAN', 'ENGINEER', 'SYSOP']), responseTicket);
+router.post('/responseTicket', authMiddleware([]), responseTicket);
 router.post('/getTickets', authMiddleware(['NORMAL']), getTickets);
 router.get('/getAllTickets', authMiddleware(['ENGINEER', 'SYSOP']), getAllTickets);
 router.post('/closeTicket', authMiddleware(['ENGINEER', 'SYSOP']), actionLogMiddleware('CLOSE', 'Destek talebi kapatıldı.'), closeTicket);
