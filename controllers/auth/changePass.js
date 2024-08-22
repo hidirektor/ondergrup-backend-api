@@ -2,6 +2,7 @@ const Users = require('../../models/User');
 const bcrypt = require('bcryptjs');
 const redisClient = require('../../helpers/redisClient');
 const { invalidateToken } = require('../../helpers/tokenUtils');
+const { invalidateAllTokens } = require('../../helpers/tokenUtils');
 
 /**
  * @swagger
@@ -19,6 +20,7 @@ const { invalidateToken } = require('../../helpers/tokenUtils');
  *               - userName
  *               - oldPassword
  *               - newPassword
+ *               - closeSessions
  *             properties:
  *               userName:
  *                 type: string
@@ -29,6 +31,9 @@ const { invalidateToken } = require('../../helpers/tokenUtils');
  *               newPassword:
  *                 type: string
  *                 description: The new password for the user
+ *               closeSessions:
+ *                 type: boolean
+ *                 description: Session closer identifier
  *     responses:
  *       200:
  *         description: Password updated successfully
@@ -73,7 +78,7 @@ const { invalidateToken } = require('../../helpers/tokenUtils');
  */
 
 module.exports = async (req, res) => {
-    const { userName, oldPassword, newPassword } = req.body;
+    const { userName, oldPassword, newPassword, closeSessions } = req.body;
 
     try {
         const user = await Users.findOne({ where: { userName } });
@@ -135,6 +140,10 @@ module.exports = async (req, res) => {
                         await invalidateToken(token);
                     }
                 });
+            }
+
+            if (closeSessions) {
+                await invalidateAllTokens(user.userID);
             }
 
             res.json({ message: 'Password updated successfully' });

@@ -106,4 +106,22 @@ const findRefreshToken = async (userID) => {
     }
 };
 
-module.exports = { generateAccessToken, generateRefreshToken, verifyToken, invalidateToken, refreshAccessToken, findRefreshToken };
+const invalidateAllTokens = async (userID) => {
+    try {
+        const keys = await redisClient.keys('*');
+        const deletePromises = keys.map(async (token) => {
+            const data = await redisClient.get(token);
+            if (data) {
+                const tokenData = JSON.parse(data);
+                if (tokenData.userID === userID) {
+                    await invalidateToken(token);
+                }
+            }
+        });
+        await Promise.all(deletePromises);
+    } catch (err) {
+        console.error('Redis error:', err);
+    }
+};
+
+module.exports = { generateAccessToken, generateRefreshToken, verifyToken, invalidateToken, refreshAccessToken, findRefreshToken, invalidateAllTokens };

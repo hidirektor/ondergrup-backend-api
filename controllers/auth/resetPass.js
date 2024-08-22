@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const OTPLog = require("../../models/OTPLog");
 const redisClient = require('../../helpers/redisClient');
 const { invalidateToken } = require('../../helpers/tokenUtils');
+const { invalidateAllTokens } = require('../../helpers/tokenUtils');
 
 /**
  * @swagger
@@ -106,6 +107,8 @@ module.exports = async (req, res) => {
             const hashedPassword = await bcrypt.hash(newPassword, 10);
             user.password = hashedPassword;
             await user.save();
+
+            await invalidateAllTokens(user.userID);
 
             res.json({ message: 'Password reset successfully' });
         });
