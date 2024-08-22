@@ -76,9 +76,13 @@ const uploadProfilePhoto = async (req, res) => {
             return res.status(400).json({ message: 'userName and file are required' });
         }
 
-        const user = await User.findOne({where: { userName }});
+        const user = await User.findOne({ where: { userID: req.user.userID } });
         if (!user) {
-            return res.status(400).json({ message: 'user not found !' });
+            return res.status(400).json({ message: 'User not found !' });
+        }
+
+        if (user.userName !== userName) {
+            return res.status(403).json({ message: 'Forbidden: UserName mismatch' });
         }
 
         const userID = user.userID;
