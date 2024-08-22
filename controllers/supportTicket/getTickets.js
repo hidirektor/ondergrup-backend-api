@@ -31,7 +31,7 @@ const SupportTicket = require('../../models/SupportTicket');
 
 module.exports = async (req, res) => {
     try {
-        const { userID } = req.query;
+        const { userID } = req.body;
 
         let tickets;
         if (userID) {
@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
                 return res.status(404).json({ error: 'Size ait destek talebi bulunamadı' });
             }
         } else {
-            return res.status(404).json({ error: 'Size ait destek talebi bulunamadı' });
+            return res.status(404).json({ error: 'userID boş olamaz.' });
         }
 
         return res.status(200).json(tickets);
