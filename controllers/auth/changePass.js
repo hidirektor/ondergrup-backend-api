@@ -87,67 +87,39 @@ module.exports = async (req, res) => {
         const validPassword = await bcrypt.compare(oldPassword, user.password);
         if (!validPassword) return res.status(401).json({ message: 'Invalid current password' });
 
-        // Kullanıcının Redis'te token'ı olup olmadığını kontrol et
-        redisClient.keys('*', async (err, keys) => {
-            if (err) {
-                console.error('Redis error:', err);
-                return res.status(500).json({ message: 'Internal server error' });
-            }
+        const keys = await redisClient.keys('*');
+        const tokenDataList = await Promise.all(keys.map(key => new Promise((resolve, reject) => {
+            redisClient.get(key, (err, data) => {
+                if (err) return reject(err);
+                resolve({ key, data: JSON.parse(data) });
+            });
+        })));
 
-            let isAuthenticated = false;
-            for (const token of keys) {
-                redisClient.get(token, (err, data) => {
-                    if (err || !data) {
-                        console.error('Error fetching token data:', err);
-                        return res.status(500).json({ message: 'Internal server error' });
-                    }
+        const isAuthenticated = tokenDataList.some(tokenData => tokenData.data.userID === user.userID);
 
-                    const tokenData = JSON.parse(data);
-                    if (tokenData.userID === user.userID) {
-                        isAuthenticated = true;
-                    }
-                });
-            }
+        if (!isAuthenticated) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
 
-            if (!isAuthenticated) {
-                return res.status(401).json({ message: 'User not authenticated' });
-            }
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (user.lastPasswordChange && (currentTime - user.lastPasswordChange) < 7 * 24 * 60 * 60) {
+            return res.status(400).json({ message: 'Password can only be changed once every 7 days' });
+        }
 
-            const currentTime = Math.floor(Date.now() / 1000);
-            if (user.lastPasswordChange && (currentTime - user.lastPasswordChange) < 7 * 24 * 60 * 60) {
-                return res.status(400).json({ message: 'Password can only be changed once every 7 days' });
-            }
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+            return res.status(400).json({ message: 'New password cannot be the same as the old password' });
+        }
 
-            const isSamePassword = await bcrypt.compare(newPassword, user.password);
-            if (isSamePassword) {
-                return res.status(400).json({ message: 'New password cannot be the same as the old password' });
-            }
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.lastPasswordChange = currentTime;
+        await user.save();
 
-            user.password = await bcrypt.hash(newPassword, 10);
-            user.lastPasswordChange = currentTime;
-            await user.save();
+        if (closeSessions) {
+            await invalidateAllTokens(user.userID);
+        }
 
-            // Şifre değiştikten sonra, kullanıcının mevcut tüm token'larını geçersiz kıl
-            for (const token of keys) {
-                redisClient.get(token, async (err, data) => {
-                    if (err || !data) {
-                        console.error('Error fetching token data:', err);
-                        return;
-                    }
-
-                    const tokenData = JSON.parse(data);
-                    if (tokenData.userID === user.userID) {
-                        await invalidateToken(token);
-                    }
-                });
-            }
-
-            if (closeSessions) {
-                await invalidateAllTokens(user.userID);
-            }
-
-            res.json({ message: 'Password updated successfully' });
-        });
+        res.json({ message: 'Password updated successfully' });
     } catch (error) {
         console.error('Error updating password:', error);
         res.status(500).json({ message: 'Internal server error' });
