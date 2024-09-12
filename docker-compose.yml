@@ -15,33 +15,35 @@ services:
     networks:
       - ondergrup-network
     environment:
-      BUCKET_NAME: 'backend-api'
-      DB_HOST: '85.95.231.92'
-      DB_NAME: 'ondergrup_iot'
-      DB_PASS: 'onderadmin1456'
-      DB_PORT: '3306'
-      DB_USER: 'root'
-      EMAIL_SUBJECT: 'Doğrulama Kodunuz!'
-      JWT_REFRESH_SECRET: 'onder-backend-api-secret_refresh_%23JSHUJ776X$'
-      JWT_SECRET: 'onder-backend-api-secret_%23JSHUJ776X$'
-      MINIO_ACCESS_KEY: 'P83jLrCv2pWsE18XQpCO'
-      MINIO_ENDPOINT: '85.95.231.92'
-      MINIO_PORT: '9099'
-      MINIO_SECRET_KEY: 'o3jLtjbth7JRo2HHnG0rIrfBedqRWBpbPLiIIdr2'
-      PORT: '3000'
-      SMTP_HOST: 'mail.hidirektor.com.tr'
-      SMTP_PASS: 'D+[b);Zr[&oR'
-      SMTP_PORT: '587'
-      SMTP_USER: 'iot@hidirektor.com.tr'
-      REDIS_HOST: 'redis'
-      REDIS_PORT: '6379'
-      REDIS_USERNAME: 'ondergrupredisadmin'
-      REDIS_PASSWORD: 'onderredis1456'
-      RABBITMQ_USERNAME: 'rabbitmqadminonder'
-      RABBITMQ_PASSWORD: 'rabbitmq1456'
-      RABBITMQ_PORT: '5672'
-      ONESIGNAL_REST_API: 'N2NmMTBlZGQtNmI1MC00ZWYxLWI4N2MtM2I3OTc4MDMyMjgz'
-      ANDROID_APP_ID: '9cbe059f-be21-4512-a1f6-5a9fc0f77506'
+      BUCKET_NAME: ${BUCKET_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_PASS: ${DB_PASS}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      EMAIL_SUBJECT: ${EMAIL_SUBJECT}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_PORT: ${MINIO_PORT}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      PORT: ${PORT}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_USERNAME: ${REDIS_USERNAME}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      ONESIGNAL_REST_API: ${ONESIGNAL_REST_API}
+      ANDROID_APP_ID: ${ANDROID_APP_ID}
+
 
 networks:
   ondergrup-network:
