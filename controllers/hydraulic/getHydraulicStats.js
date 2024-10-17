@@ -57,14 +57,14 @@ const getHydraulicStats = async (req, res) => {
 
         const hidrosCountResult = await HydraulicUnit.count({
             where: {
-                hydraulicType: 'Hidros'
+                hydraulicType: 'PowerPack'
             }
         });
 
         const statistics = {
             "Sipariş Sayısı": totalOrdersResult,
             "Klasik": klasikCountResult,
-            "Hidros": hidrosCountResult
+            "PowerPack": hidrosCountResult
         };
 
         return res.status(200).json({ message: 'Successfully retrieved hyrdaulic stats.', payload: { statistics }});
