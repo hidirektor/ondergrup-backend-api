@@ -8,6 +8,8 @@ const MachineErrors = require('../models/MachineError');
 const OTPLog = require('../models/OTPLog');
 const ActionLog = require('../models/ActionLog');
 const Tickets = require('../models/SupportTicket');
+const License = require('../models/License');
+const LicenseRecords = require('../models/LicenseRecords');
 
 // Users.userID > SubUsers.userID
 Users.hasOne(SubUsers, { foreignKey: 'userID', sourceKey: 'userID', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
@@ -64,3 +66,15 @@ ActionLog.belongsTo(Maintenances, { foreignKey: 'affectedMaintenanceID', targetK
 // Users.userID > Tickets.ownerID
 Users.hasOne(Tickets, { foreignKey: 'ownerID', sourceKey: 'userID', onUpdate: 'CASCADE' });
 Tickets.belongsTo(Users, { foreignKey: 'ownerID', targetKey: 'userID' });
+
+// License.licenseID > LicenseRecords.licenseID
+License.hasMany(LicenseRecords, {
+    foreignKey: 'licenseID',
+    sourceKey: 'licenseID',
+    onDelete: 'CASCADE', // Optional: Deletes all associated records when a license is deleted
+    onUpdate: 'CASCADE'
+});
+LicenseRecords.belongsTo(License, {
+    foreignKey: 'licenseID',
+    targetKey: 'licenseID'
+});
