@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
         if (recordExists) {
             return res.json({
                 message: 'License is valid',
-                licenseID: license.licenseID,
+                payload: license,
             });
         } else {
             return res.status(404).json({ message: 'License not found in records' });
