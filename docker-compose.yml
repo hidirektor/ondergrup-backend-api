@@ -10,10 +10,10 @@ services:
     ports:
       - '3000:3000'
     restart: unless-stopped
-    volumes:
-      - .:/app
+    #volumes:
+    #  - .:/app
     networks:
-      - ondergrup-network
+      - iot-network
     environment:
       BUCKET_NAME: ${BUCKET_NAME}
       DB_HOST: ${DB_HOST}
@@ -44,7 +44,6 @@ services:
       ONESIGNAL_REST_API: ${ONESIGNAL_REST_API}
       ANDROID_APP_ID: ${ANDROID_APP_ID}
 
-
 networks:
-  ondergrup-network:
+  iot-network:
     external: true
