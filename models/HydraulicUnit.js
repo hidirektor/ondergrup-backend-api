@@ -57,6 +57,10 @@ const HydraulicUnit = sequelize.define('HydraulicUnit', {
     partListID: { type: DataTypes.STRING, allowNull: false },
     schematicID: { type: DataTypes.STRING, allowNull: false },
     hydraulicType: {type: DataTypes.STRING, allowNull: false },
+    unitParameters: {
+        type: DataTypes.TEXT('long'),
+        allowNull: false,
+    },
     createdDate: {
         type: DataTypes.BIGINT,
         allowNull: true,

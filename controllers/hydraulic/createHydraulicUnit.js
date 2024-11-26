@@ -48,6 +48,9 @@ const minioClient = new Minio.Client({
  *                 type: string
  *                 format: binary
  *                 description: PDF file containing the schematic
+ *               unitParameters:
+ *                 type: string
+ *                 description: Selected program parameters per hydraulic unit
  *     responses:
  *       201:
  *         description: Hydraulic Unit created successfully
@@ -88,13 +91,13 @@ const minioClient = new Minio.Client({
 
 const createHydraulicUnit = async (req, res) => {
     try {
-        const { userName, orderID, hydraulicType } = req.body;
+        const { userName, orderID, hydraulicType, unitParameters } = req.body;
         const files = req.files;
         const partListFile = files.partListFile ? files.partListFile[0] : null;
         const schematicFile = files.schematicFile ? files.schematicFile[0] : null;
 
-        if (!userName || !orderID || !hydraulicType || !partListFile || !schematicFile) {
-            return res.status(400).json({ message: 'userName, orderID, hydraulicType, partListFile and schematicFile are required' });
+        if (!userName || !orderID || !hydraulicType || !partListFile || !schematicFile || !unitParameters) {
+            return res.status(400).json({ message: 'userName, orderID, hydraulicType, partListFile, schematicFile and unitParameters are required' });
         }
 
         const partListFileExtension = path.extname(partListFile.originalname);
@@ -144,7 +147,8 @@ const createHydraulicUnit = async (req, res) => {
             orderID,
             partListID,
             schematicID,
-            hydraulicType
+            hydraulicType,
+            unitParameters
         });
 
         res.status(201).json({ message: 'Hydraulic Unit created successfully.', payload: { update } });
