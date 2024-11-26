@@ -1,5 +1,14 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
+
+const upload = multer({
+    limits: { files: 7 }, // Maksimum 7 dosya yüklenebilir
+    fileFilter: (req, file, cb) => {
+        // Dosya türü kontrolü yapılabilir
+        cb(null, true); // Burada dosya türü filtrelemek isterseniz logic ekleyebilirsiniz
+    }
+}).array('files'); // 'files' alanı üzerinden birden fazla dosya almayı sağlar
 
 const getAllMachines = require('../controllers/authorized/machine/getAllMachines');
 const getAllActions = require('../controllers/authorized/actionlog/getAllActions');
@@ -19,6 +28,7 @@ const updateUser = require('../controllers/authorized/user/updateUser');
 const sendToAll = require('../controllers/authorized/notification/sendToAll');
 
 const sendAlertMail = require('../controllers/authorized/admin/sendAlertMail');
+const sendErrorReport = require('../controllers/authorized/admin/sendBugReport');
 
 const createMaintenance = require('../controllers/authorized/maintenance/createMaintenance');
 const editMaintenance = require('../controllers/authorized/maintenance/editMaintenance');
@@ -35,6 +45,7 @@ router.get('/getAllSubUsers', authMiddleware(['SYSOP', 'ENGINEER']), getAllSubUs
 
 router.put('/updateOwner', authMiddleware(['SYSOP', 'ENGINEER']), actionLogMiddleware('UPDATE', 'Makine sahibi değiştirildi.'), updateOwner);
 router.post('/sendAlertMail', authMiddleware(['SYSOP', 'ENGINEER']), sendAlertMail);
+router.post('/sendErrorReport', upload, sendErrorReport);
 
 router.post('/sendToAll', authMiddleware(['SYSOP', 'ENGINEER']), sendToAll);
 
