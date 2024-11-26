@@ -3,12 +3,19 @@ const multer = require('multer');
 const router = express.Router();
 
 const upload = multer({
-    limits: { files: 7 }, // Maksimum 7 dosya yüklenebilir
+    limits: { files: 7 },
     fileFilter: (req, file, cb) => {
-        // Dosya türü kontrolü yapılabilir
-        cb(null, true); // Burada dosya türü filtrelemek isterseniz logic ekleyebilirsiniz
+        cb(null, true);
     }
-}).array('files'); // 'files' alanı üzerinden birden fazla dosya almayı sağlar
+}).fields([
+    { name: 'attachment0', maxCount: 1 },
+    { name: 'attachment1', maxCount: 1 },
+    { name: 'attachment2', maxCount: 1 },
+    { name: 'attachment3', maxCount: 1 },
+    { name: 'attachment4', maxCount: 1 },
+    { name: 'attachment5', maxCount: 1 },
+    { name: 'attachment6', maxCount: 1 }
+]);
 
 const getAllMachines = require('../controllers/authorized/machine/getAllMachines');
 const getAllActions = require('../controllers/authorized/actionlog/getAllActions');
