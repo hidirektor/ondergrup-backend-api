@@ -15,14 +15,15 @@ const sendErrorReport = async (req, res) => {
     try {
         const { errorTitle, errorDesc } = req.body;
         const files = [];
+
         for (let i = 0; i <= 6; i++) {
             if (req.files[`attachment${i}`]) {
                 files.push(...req.files[`attachment${i}`]);
             }
         }
 
-        if (!errorTitle || !errorDesc || files.length === 0) {
-            return res.status(400).json({ message: 'errorTitle, errorDesc, and at least one file are required' });
+        if (!errorTitle || !errorDesc) {
+            return res.status(400).json({ message: 'errorTitle and errorDesc are required' });
         }
 
         const transporter = nodemailer.createTransport({
@@ -40,10 +41,9 @@ const sendErrorReport = async (req, res) => {
             to: 'recep@onderlift.com, hidirektor@gmail.com',
             subject: `Bug Report: ${errorTitle}`,
             text: errorDesc,
-            attachments: [] // Array to store file attachments
+            attachments: [] // Initialize an empty array for file attachments
         };
 
-        // Process each file, store it in MinIO, and add its URL to the attachments array
         for (let file of files) {
             const fileID = uuidv4();
             const fileExtension = path.extname(file.originalname).toLowerCase();
@@ -57,17 +57,14 @@ const sendErrorReport = async (req, res) => {
                 ACL: 'public-read',
             };
 
-            // Upload the file to MinIO
             await minioClient.putObject(params.Bucket, params.Key, params.Body, params.ContentType);
 
-            // Add the file URL to the email attachments
             mailOptions.attachments.push({
                 filename: file.originalname,
                 path: `http://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${process.env.BUCKET_NAME}/errorReports/${fileName}`
             });
         }
 
-        // Send the email with the attachments
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.error("Error sending email: ", error);
