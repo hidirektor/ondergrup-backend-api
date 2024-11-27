@@ -4,6 +4,7 @@ const multer = require('multer');
 const upload = multer();
 
 const createHydraulicUnit = require('../controllers/hydraulic/createHydraulicUnit');
+const deleteHydraulicUnit = require('../controllers/hydraulic/deleteHydraulicUnit');
 const downloadPartList = require('../controllers/hydraulic/downloadPartList');
 const downloadSchematic = require('../controllers/hydraulic/downloadSchematic');
 const getPartList = require('../controllers/hydraulic/getPartList');
@@ -19,6 +20,7 @@ router.post('/createHydraulicUnit', upload.fields([
     { name: 'partListFile', maxCount: 1 },
     { name: 'schematicFile', maxCount: 1 }
 ]), authMiddleware(['SYSOP', 'ENGINEER']), actionLogMiddleware('ADD', 'Hidrolik ünitesi oluşturuldu.'), createHydraulicUnit);
+router.post('/deleteHydraulicUnit', authMiddleware(['SYSOP', 'ENGINEER']), deleteHydraulicUnit);
 router.post('/downloadPartList', downloadPartList);
 router.post('/downloadSchematic', downloadSchematic);
 router.get('/getPartList/:orderID', getPartList);

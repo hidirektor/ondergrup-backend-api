@@ -53,7 +53,7 @@ const HydraulicUnit = sequelize.define('HydraulicUnit', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     userID: { type: DataTypes.STRING, allowNull: false },
     userName: { type: DataTypes.STRING, allowNull: false },
-    orderID: { type: DataTypes.STRING, allowNull: false },
+    orderID: { type: DataTypes.STRING, allowNull: false, unique: true },
     partListID: { type: DataTypes.STRING, allowNull: false },
     schematicID: { type: DataTypes.STRING, allowNull: false },
     hydraulicType: {type: DataTypes.STRING, allowNull: false },
